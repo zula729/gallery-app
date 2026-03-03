@@ -17,81 +17,179 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 
-model = KeyBERT('distilbert-base-nli-mean-tokens')
-root_dir = Path(r'C:\Users\azhar\Desktop\visualization')
-all_words: list[str] = []
-classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
+ROOT = Path(r'C:\Users\azhar\Desktop\visualization')
+FILES: list[Path] = list(ROOT.rglob('*.pdf')) + list(ROOT.rglob('*.docx'))
+
+class DocumentProcessor:
+    def read_text(self, file_path: Path) -> str:
+        if file_path.suffix.lower() == '.pdf':
+            return self._read_pdf(file_path)
+        elif file_path.suffix.lower() == '.docx':
+            return self._read_docx(file_path)
+        return ""
+
+    def _read_pdf(self, path: Path):
+        doc = fitz.open(path)
+        text = ""
+        for page in doc:
+            text += page.get_text()
+        return text
+    
+    def _read_docx(self, path: Path):
+        doc = docx.Document(path)
+        text = ""
+        for para in doc.paragraphs:
+            text += para.text
+        return text
 
 
-def docx_reader(file_path: str) -> str:
-    doc = docx.Document(file_path)
-    text = ""
-    for para in doc.paragraphs:
-        text += para.text
-    return text
+class FirebaseClient:
+    def __init__(self, cred_path):
+        self.db_url = "https://visualization-88a6b-default-rtdb.europe-west1.firebasedatabase.app/"
+        if not firebase_admin._apps:
+            cred = credentials.Certificate(cred_path)
+            firebase_admin.initialize_app(cred, {"databaseURL": self.db_url})
+        self.ref = db.reference('Keywords from projects')
+
+    def upload_data(self):
+        for file_path in FILES:
+            keywords, folder_id = extract_keywords(file_path)
+            if keywords is None:
+                print(file_path)
+                print("NONE VALUE TO DATA BASE")
+                continue
+            db_key = f"{folder_id}"
+            self.ref.child(db_key).set({
+                "keywords": keywords,
+                "semester": self.get_semester(file_path),
+            })
+
+    @staticmethod
+    def get_semester(path: Path) -> str | None:
+        for part in path.parts:
+            if part.lower().startswith("podzim"):
+                return part
+        return None
 
 
-def pdf_readred(file_path: Path) -> str:
-    doc = fitz.open(file_path)
-    text = ""
-    for page in doc:
-        text += page.get_text()
-    return text
+
+class NLPAnalyzer:
+    def __init__(self):
+        self.kb_model = KeyBERT('distilbert-base-nli-mean-tokens')
+        self.classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
+
+    def get_keywords(self, file_path):
+        if self.is_macos_artifact(file_path):
+            return None, None
+        
+        vectorizer = CountVectorizer(
+            token_pattern=r"(?u)\b[^\W\d_]{2,}\b" # only words without numbers
+        )
+        folder_id = None
+        try:
+            for part in file_path.parts:
+                if part[0].isdigit():
+                    folder_id = part[:6]
+                    break
+            text = extract_text(file_path)
+
+            extracted = extracted = self.kb_model.extract_keywords(
+                text,
+                top_n=5,
+                vectorizer=vectorizer
+            )
+            keywords = [kw[0] for kw in extracted]
+            # Musim tady udelat lepsi filtr(zatim nevim jake vsechna problema slova budu mit, ale posdle toho budu je tridit)
+            # keywords = remove_garbage_and_numeric_keywords(keywords)
+            return keywords, folder_id
+        except Exception as e:
+            print(f"Chyba tady: {file_path.name}: {e}")
+        return [], ''
+
+    def get_category(self, word, categories):
+        # Логика из classify_word
+        pass
+
+    def is_macos_artifact(self, path: Path) -> bool:
+        for part in path.parts:
+            p = part.lower()
+            if p.startswith("__macosx") or p.startswith("._") or p == ".ds_store":
+                return True
+        return False
+    
+    def extract_authors_from_folder_name(folder_name: str):
+        # Паттерн: цифры, потом дефис, потом текст до следующего дефиса или конца
+        # Мы ищем то, что идет СРАЗУ после первых цифр и дефиса
+        match = re.search(r'^\d+-(.*?)(?:-|$)', folder_name)
+        
+        if match:
+            raw_names = match.group(1) # Получаем "Pekar_Matej-pekar_boril" или "Burlutskyi_Ivan-Burlutskyi-Beranger..."
+            
+            # Заменяем нижнее подчеркивание на пробел и чистим дефисы
+            # Чтобы из "Pekar_Matej" получить "Pekar Matej"
+            clean_names = raw_names.replace('_', ' ').replace('-', ', ')
+            return clean_names
+        return "Unknown Author"
 
 
-def init_firebase() -> None:
-    if not firebase_admin._apps:
-        cred = credentials.Certificate("credentials.json")
-        firebase_admin.initialize_app(cred, {
-            "databaseURL": "https://visualization-88a6b-default-rtdb.europe-west1.firebasedatabase.app/"
-        })
-    return
-
-
-def extract_text(file_path: Path) -> str:
-    if file_path.suffix.lower() == '.pdf':
-        return pdf_readred(file_path)
-    elif file_path.suffix.lower() == '.docx':
-        return docx_reader(file_path)
-    return ""
-
-
-def is_real_word(word: str) -> bool:
-    return zipf_frequency(word, "en") > 2.5 or zipf_frequency(word, "cs") > 2.5 
-
-
-def remove_garbage_and_numeric_keywords(keywords):
-    clean = []
-    for kw in keywords:
-        if not re.search(r"\d", kw):
-            if " " in kw:
-                clean.append(kw)
-            else:
-                if is_real_word(kw):
+class Filter:
+    def __init__(self):
+        pass
+    def remove_garbage_and_numeric_keywords(self, keywords):
+        clean = []
+        for kw in keywords:
+            if not re.search(r"\d", kw):
+                if " " in kw:
                     clean.append(kw)
-    return clean
+                else:
+                    if self.is_real_word(kw):
+                        clean.append(kw)
+        return clean
+    
+    def is_real_word(word: str) -> bool:
+        return zipf_frequency(word, "en") > 2.5 or zipf_frequency(word, "cs") > 2.5 
 
 
-def data_to_database(files: list[Path], ref) -> None:
-    for file_path in files:
-        keywords, folder_id = extract_keywords(file_path)
-        if keywords is None:
-            print(file_path)
-            print("NONE VALUE TO DATA BASE")
-            continue
-        db_key = f"{folder_id}"
-        ref.child(db_key).set({
-            "keywords": keywords,
-            "semester": get_semester(file_path),
-        })
-    return
+class Lable:
+    def __init__(self):
+        pass
 
 
-def get_semester(path: Path) -> str | None:
-    for part in path.parts:
-        if part.lower().startswith("podzim"):
-            return part
-    return None
+    def build_candidate_labels(self, categories: dict[str, list[str]]) -> list[str]:
+        labels = []
+        for cat, words in categories.items():
+            if words:
+                words_str = [str(w) for w in words] 
+                label = f"{cat}: {', '.join(words_str)}"
+            else:
+                label = cat
+            labels.append(label)
+        return labels
+
+    def classify_word(self, word: str, categories: dict[str, list[str]]) -> str:
+        candidate_labels = self.build_candidate_labels(categories)
+        result = classifier(
+            word,
+            candidate_labels=candidate_labels,
+            multi_label=False
+        )
+        best_label = result["labels"][0]
+        best_score = result["scores"][0]
+
+        if best_score >= 0.3:
+            category = best_label.split(":")[0]
+        else:
+            category = "UNDEFINED"
+        return category
+
+    def categorize_keywords(self, keywords: list[str], categories: dict[str, list[str]]) -> dict[str, list[str]]:
+        categorized = {cat: [] for cat in categories}
+
+        for kw in keywords:
+            cat = self.classify_word(kw, categories)
+            categorized.setdefault(cat, []).append(kw)
+        return categorized
+
 
 
 def create_json(files: list[Path]) -> None:
@@ -103,42 +201,6 @@ def create_json(files: list[Path]) -> None:
         json.dump(keywords_dict, f, ensure_ascii=False, indent=2) 
     return
 
-
-def is_macos_artifact(path: Path) -> bool:
-    for part in path.parts:
-        p = part.lower()
-        if p.startswith("__macosx") or p.startswith("._") or p == ".ds_store":
-            return True
-    return False
-
-
-def extract_keywords(file_path: Path) -> tuple[list[str], str] | tuple[None, None]:
-    if is_macos_artifact(file_path):
-        return None, None
-    
-    vectorizer = CountVectorizer(
-        token_pattern=r"(?u)\b[^\W\d_]{2,}\b" # only words without numbers
-    )
-    folder_id = None
-    try:
-        for part in file_path.parts:
-            if part[0].isdigit():
-                folder_id = part[:6]
-                break
-        text = extract_text(file_path)
-
-        extracted = extracted = model.extract_keywords(
-            text,
-            top_n=5,
-            vectorizer=vectorizer
-        )
-        keywords = [kw[0] for kw in extracted]
-        # Musim tady udelat lepsi filtr(zatim nevim jake vsechna problema slova budu mit, ale posdle toho budu je tridit)
-        # keywords = remove_garbage_and_numeric_keywords(keywords)
-        return keywords, folder_id
-    except Exception as e:
-        print(f"Chyba tady: {file_path.name}: {e}")
-    return [], ''
 
 
 def get_data_from_json(file_path: str) -> dict:
@@ -152,43 +214,6 @@ def load_categories(yaml_path: str) -> dict[str, list[str]]:
         data = yaml.safe_load(f)
     return data
 
-
-def build_candidate_labels(categories: dict[str, list[str]]) -> list[str]:
-    labels = []
-    for cat, words in categories.items():
-        if words:
-            words_str = [str(w) for w in words] 
-            label = f"{cat}: {', '.join(words_str)}"
-        else:
-            label = cat
-        labels.append(label)
-    return labels
-
-
-def classify_word(word: str, categories: dict[str, list[str]]) -> str:
-    candidate_labels = build_candidate_labels(categories)
-    result = classifier(
-        word,
-        candidate_labels=candidate_labels,
-        multi_label=False
-    )
-    best_label = result["labels"][0]
-    best_score = result["scores"][0]
-
-    if best_score >= 0.3:
-        category = best_label.split(":")[0]
-    else:
-        category = "UNDEFINED"
-    return category
-
-
-def categorize_keywords(keywords: list[str], categories: dict[str, list[str]]) -> dict[str, list[str]]:
-    categorized = {cat: [] for cat in categories}
-
-    for kw in keywords:
-        cat = classify_word(kw, categories)
-        categorized.setdefault(cat, []).append(kw)
-    return categorized
 
 
 def check_counts(json_path: str, db_ref_path: str):
@@ -206,21 +231,6 @@ def check_counts(json_path: str, db_ref_path: str):
     print(f"Ключей в JSON: {json_count}")
     print(f"Ключей в Firebase: {db_count}")
     print(f"Разница: {json_count - db_count}")
-
-
-def extract_authors_from_folder_name(folder_name: str):
-    # Паттерн: цифры, потом дефис, потом текст до следующего дефиса или конца
-    # Мы ищем то, что идет СРАЗУ после первых цифр и дефиса
-    match = re.search(r'^\d+-(.*?)(?:-|$)', folder_name)
-    
-    if match:
-        raw_names = match.group(1) # Получаем "Pekar_Matej-pekar_boril" или "Burlutskyi_Ivan-Burlutskyi-Beranger..."
-        
-        # Заменяем нижнее подчеркивание на пробел и чистим дефисы
-        # Чтобы из "Pekar_Matej" получить "Pekar Matej"
-        clean_names = raw_names.replace('_', ' ').replace('-', ', ')
-        return clean_names
-    return "Unknown Author"
 
 
 def main() -> None:
