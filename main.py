@@ -38,7 +38,7 @@ class KeywordExtractor:
     def __init__(self, model_name: str = 'distilbert-base-nli-mean-tokens'):
         self.model = KeyBERT(model_name)
         self.vectorizer = CountVectorizer(
-            token_pattern=r"(?u)\b[^\W\d_]{2,}\b"  # words only, no numbers
+            token_pattern=r"(?u)\b[^\W\d_]{2,}\b"
         )
         self.ner = pipeline("ner", model="dslim/bert-base-NER", aggregation_strategy="simple")
 
@@ -55,7 +55,7 @@ class KeywordExtractor:
     def is_macos_artifact(path: Path) -> bool:
         for part in path.parts:
             p = part.lower()
-            if p.startswith("__macosx") or p.startswith("._") or p == ".ds_store":
+            if p.startswith("__macosx") or p.startswith("._") or p == ".ds_store" or p == "__MACOSX":
                 return True
         return False
 
@@ -125,8 +125,12 @@ class FirebaseClient:
     def upload(self, files: list[Path], extractor: KeywordExtractor, doc_processor: DocumentProcessor):
         for file_path in files:
             keywords, folder_id, author = extractor.extract_from_file(file_path, doc_processor)
-            if keywords is None or folder_id is None:
+            if keywords is None:
                 print("NONE VALUE TO DATA BASE")
+                print(file_path)
+                continue
+            if keywords == "":
+                print("WRONG PDF OR DOCX FILE")
                 print(file_path)
                 continue
             self.ref.child(f"{folder_id}").set({
@@ -206,6 +210,10 @@ class ProjectUtils:
         keywords_dict: dict[str, list[str]] = {}
         for file_path in files:
             keywords, folder_id, author= extractor.extract_from_file(file_path, doc_processor)
+            if keywords == "":
+                print("WRONG PDF OR DOCX FILE")
+                print(file_path)
+                continue
             if folder_id is not None:
                 keywords_dict[folder_id] = keywords, author or []
         with open(output_path, "w", encoding="utf-8") as f:
@@ -234,7 +242,12 @@ class Pipeline:
 
     @property
     def files(self) -> list[Path]:
-        return list(self.root_dir.rglob('*.pdf')) + list(self.root_dir.rglob('*.docx'))
+        all_files = list(self.root_dir.rglob('*.pdf')) + list(self.root_dir.rglob('*.docx'))
+        result = []
+        for f in all_files:
+            if "report" in f.name.lower():
+                result.append(f)
+        return result
 
     def run_upload(self) -> None:
         self.firebase.upload(self.files, self.extractor, self.doc_processor)
@@ -247,9 +260,10 @@ class Pipeline:
         all_keywords: list[str] = [
             kw
             for kws in self.utils.load_json(json_path).values()
-            for kw in kws
+            for kw in kws[0]
         ]
         return self.classifier.categorize(all_keywords, categories)
+
 
 def repair_pdf(input_path: Path, output_path: Path) -> None:
         ocrmypdf.ocr(
@@ -260,15 +274,15 @@ def repair_pdf(input_path: Path, output_path: Path) -> None:
             deskew=True,
         )
 
-def repair_all_pdfs(self, root_dir: Path) -> None:
-    repaired_dir = root_dir / "repaired"
-    repaired_dir.mkdir(exist_ok=True)
+def repair_all_pdfs(root_dir: Path) -> None:
     for pdf in root_dir.rglob("*.pdf"):
-        out = repaired_dir / pdf.name
+        tmp = pdf.with_suffix(".tmp.pdf")
         try:
-            self.repair_pdf(pdf, out)
+            repair_pdf(pdf, tmp)
+            tmp.replace(pdf)
             print(f"Repaired: {pdf.name}")
         except Exception as e:
+            tmp.unlink(missing_ok=True)
             print(f"Failed: {pdf.name} — {e}")
 
 
@@ -278,19 +292,11 @@ def main() -> None:
         cred_path="credentials.json",
     )
     # pipeline.run_upload()
-    pipeline.run_export_json()
-    # files = pipeline.files
-    # repair_pdf(r"C:\Users\azhar\Desktop\visualization\podzim2024\524688-Kraus_Jozef-FeelViz\Visualization_Short_Report.pdf", r"C:\Users\azhar\Desktop\repair\report_fixed.pdf")
-    # for f in folders:
-    #     print(f"Folder: {f} -> Author: {ProjectUtils.extract_authors(f)}")
-    # file_path_name_text = r"C:\Users\azhar\Desktop\visualization\podzim2025\484353-Kutalek_Jiri-ProjectFiles_Group4_Demovic_Kutalek_Polak\pv251_footballviz-main\report.pdf"
-    # a = pipeline.utils.extract_authors_from_file(Path(file_path_name_text), pipeline.doc_processor)
-    # print(a)
-    # Uncomment the steps you want to run:
-    # pipeline.run_export_json()
-    # pipeline.run_upload()
-    # result = pipeline.run_categorize("keywords.json", "tags.yaml")
-    # print(result)
+    # for file in pipeline.files:
+    #     text = pipeline.doc_processor.read_text(file)
+    #     print(pipeline.extractor.extract_authors_from_file(text))
+    pipeline.run_categorize("keywords.json", "tags_test.yaml")
+    pass
 
 if __name__ == "__main__":
     main()
