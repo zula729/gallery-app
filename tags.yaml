@@ -16,6 +16,12 @@ FOOD:
   - nutrition
   - recipes
   - cooked
+  - proteins
+  - protein
+  - garlic
+  - espresso
+  - coffees
+  - coffee
 PYTHON:
   - python
 WEB:
@@ -24,11 +30,18 @@ WEB:
   - url
   - website
   - google
+  - webpage
+  - browsers
+  - app
+  - web
+  - javascript
 TRANSPORT:
   - race
   - traffic
   - volkswagen
   - driving
+  - drivers
+  - speeding
 MEDICINE:
   - cancer
   - pandemic
@@ -44,6 +57,7 @@ MEDICINE:
   - bacteria
   - antibiotics
   - molecular
+  - bacterial
 POLITICS:
   - republican
   - economics
@@ -67,6 +81,11 @@ SOCIAL_MEDIA:
   - imdb
   - screentime
   - spotify
+  - movie
+  - subscriptions
+  - subscription
+  - songs
+  - popularity
 BOOK:
   - fantasy
   - book
@@ -76,6 +95,10 @@ BOOK:
 STUDY:
   - lessons
   - learning
+  - homework
+  - library
+  - semester
+  - daily
 DEMOGRAPHY:
   - demography
   - gender
@@ -90,6 +113,8 @@ SPORT:
   - championships
   - footballers
   - bikes
+  - championship
+  - competitive
 SCIENCE:
   - nasa
   - genomic
@@ -100,4 +125,9 @@ SCIENCE:
 CZECHIAANDSLOVAKIA:
   - slovak
   - brno
+  - slovakia
+  - bohemia
+DISASTER:
+  - accidents
+  - earthquakes
 
