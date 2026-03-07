@@ -111,6 +111,19 @@ class KeywordExtractor:
             print(f"Error processing {file_path.name}: {e}")
             return [], ''
 
+class KeywordFilter:
+    def filter(self, keywords: set[str]) -> list[str]:
+        return [kw for kw in keywords if self._is_valid(kw)]
+
+    def _is_valid(self, kw: str) -> bool:
+        if re.search(r"\d", kw):          # reject anything with digits
+            return False
+        if " " in kw:                      # multi-word phrases always pass
+            return True
+        return self._is_real_word(kw)
+
+    def _is_real_word(self, word:    str) -> bool:
+        return zipf_frequency(word, "en") > 2.5 or zipf_frequency(word, "cs") > 2.5 
 
 class FirebaseClient:
     DB_URL = "https://visualization-88a6b-default-rtdb.europe-west1.firebasedatabase.app/"
@@ -122,7 +135,7 @@ class FirebaseClient:
             firebase_admin.initialize_app(cred, {"databaseURL": self.DB_URL})
         self.ref = db.reference(self.REF_PATH)
 
-    def upload(self, files: list[Path], extractor: KeywordExtractor, doc_processor: DocumentProcessor):
+    def upload(self, files: list[Path], extractor: KeywordExtractor, doc_processor: DocumentProcessor, keyword_filer: KeywordFilter):
         for file_path in files:
             keywords, folder_id, author = extractor.extract_from_file(file_path, doc_processor)
             if keywords is None:
@@ -133,6 +146,7 @@ class FirebaseClient:
                 print("WRONG PDF OR DOCX FILE")
                 print(file_path)
                 continue
+            keywords = keyword_filer.filter(keywords)
             self.ref.child(f"{folder_id}").set({
                 "keywords": keywords,
                 "semester": self._get_semester(file_path),
@@ -146,29 +160,17 @@ class FirebaseClient:
                 return part
         return None
 
-
-class KeywordFilter:
-    def filter(self, keywords: list[str]) -> list[str]:
-        return [kw for kw in keywords if self._is_valid(kw)]
-
-    def _is_valid(self, kw: str) -> bool:
-        if re.search(r"\d", kw):          # reject anything with digits
-            return False
-        if " " in kw:                      # multi-word phrases always pass
-            return True
-        return self._is_real_word(kw)
-
-    def _is_real_word(self, word: str) -> bool:
-        return zipf_frequency(word, "en") > 2.5 or zipf_frequency(word, "cs") > 2.5 
-
+    def fetch_all(self) -> dict:
+        return self.ref.get() or {}
 
 class KeywordClassifier:
-    def __init__(self, model_name: str = "facebook/bart-large-mnli", threshold: float = 0.3):
+    def __init__(self, model_name: str = "cross-encoder/nli-deberta-v3-large", threshold: float = 0.5):
         self.classifier = pipeline("zero-shot-classification", model=model_name)
         self.threshold = threshold
+        self._cache: dict[str, str] = {}  # simple dict cache
 
     def categorize(
-        self, keywords: list[str], categories: dict[str, list[str]]
+        self, keywords: set[str], categories: dict[str, list[str]]
     ) -> dict[str, list[str]]:
         """Assign each keyword to the best-matching category."""
         categorized: dict[str, list[str]] = {cat: [] for cat in categories}
@@ -180,6 +182,9 @@ class KeywordClassifier:
         return categorized
 
     def _classify_single(self, word: str, candidate_labels: list[str]) -> str:
+        if word in self._cache:
+            return self._cache[word]
+        
         result = self.classifier(word, candidate_labels=candidate_labels, multi_label=False)
         best_label: str = result["labels"][0]
         best_score: float = result["scores"][0]
@@ -205,15 +210,21 @@ class ProjectUtils:
         files: list[Path],
         extractor: KeywordExtractor,
         doc_processor: DocumentProcessor,
+        keyword_filter: KeywordFilter,
         output_path: str = "keywords.json",
     ) -> None:
         keywords_dict: dict[str, list[str]] = {}
         for file_path in files:
             keywords, folder_id, author= extractor.extract_from_file(file_path, doc_processor)
+            if keywords is None:
+                print("NONE VALUE TO DATA BASE")
+                print(file_path)
+                continue
             if keywords == "":
                 print("WRONG PDF OR DOCX FILE")
                 print(file_path)
-                continue
+                continue 
+            keywords = keyword_filter.filter(keywords)
             if folder_id is not None:
                 keywords_dict[folder_id] = keywords, author or []
         with open(output_path, "w", encoding="utf-8") as f:
@@ -250,18 +261,18 @@ class Pipeline:
         return result
 
     def run_upload(self) -> None:
-        self.firebase.upload(self.files, self.extractor, self.doc_processor)
+        self.firebase.upload(self.files, self.extractor, self.doc_processor, self.keyword_filter)
 
     def run_export_json(self, output_path: str = "keywords.json") -> None:
-        self.utils.save_keywords_json(self.files, self.extractor, self.doc_processor, output_path)
+        self.utils.save_keywords_json(self.files, self.extractor, self.doc_processor, self.keyword_filter, output_path)
 
     def run_categorize(self, json_path: str, yaml_path: str) -> dict[str, list[str]]:
         categories = self.utils.load_categories(yaml_path)
-        all_keywords: list[str] = [
+        all_keywords: set[str] = {
             kw
             for kws in self.utils.load_json(json_path).values()
             for kw in kws[0]
-        ]
+        }
         return self.classifier.categorize(all_keywords, categories)
 
 
@@ -285,18 +296,67 @@ def repair_all_pdfs(root_dir: Path) -> None:
             tmp.unlink(missing_ok=True)
             print(f"Failed: {pdf.name} — {e}")
 
+def build_hypothesis(cat: str, examples: list[str]) -> str:
+    if not examples:
+        return f"This text is about {cat}."
+    examples_str = ", ".join(examples)
+    return f"This text is about {cat}, such as {examples_str}."
+
 
 def main() -> None:
-    pipeline = Pipeline(
-        root_dir=Path(r'C:\Users\azhar\Desktop\visualization'),
-        cred_path="credentials.json",
-    )
-    # pipeline.run_upload()
+    # pipeline = Pipeline(
+    #     root_dir=Path(r'C:\Users\azhar\Desktop\visualization'),
+    #     cred_path="credentials.json",
+    # )
+    # pipeline.run_export_json()
     # for file in pipeline.files:
     #     text = pipeline.doc_processor.read_text(file)
     #     print(pipeline.extractor.extract_authors_from_file(text))
-    pipeline.run_categorize("keywords.json", "tags_test.yaml")
-    pass
+    # print(pipeline.run_categorize("keywords.json", "tags_test.yaml"))
+
+    firebase = FirebaseClient(cred_path="credentials.json")
+    db_data = firebase.fetch_all()
+    print(db_data)
+    kw1: set[str] = {
+            kw
+            for entry in db_data.values()
+            if isinstance(entry, dict) and "keywords" in entry  # safely skip entries without keywords
+            for kw in entry["keywords"]
+        }
+
+    utilities = ProjectUtils()
+    tags = utilities.load_categories("tags.yaml")
+    kw2: set[str] = {
+        word
+        for examples in tags.values()
+        for word in examples
+    }
+    keywords_not_in_tags: set[str] = kw1 - kw2
+    
+    classifier = pipeline("zero-shot-classification", model="cross-encoder/nli-deberta-v3-large")
+    final_result: dict[str, list[str]] = {cat: list(examples) for cat, examples in tags.items()}
+    final_result["UNDEFINED"] = []
+
+    for kw in keywords_not_in_tags:
+        scores = {}
+        for cat, examples in tags.items():
+            hypothesis = f"This text is about {cat}, such as {', '.join(examples)}."
+            result = classifier(
+                kw,
+                candidate_labels=[hypothesis],
+                multi_label=False,
+                hypothesis_template="{}"
+            )
+            scores[cat] = result['scores'][0]
+
+        best_cat = max(scores, key=scores.get)
+        best_score = scores[best_cat]
+
+        final_result[best_cat if best_score >= 0.6 else "UNDEFINED"].append(kw) 
+        print(f"{kw} → {best_cat} (score: {best_score:.2f})")
+
+    with open("categorized_keywords.yaml", "w", encoding="utf-8") as f:
+        yaml.dump(final_result, f, allow_unicode=True, default_flow_style=False)
 
 if __name__ == "__main__":
     main()

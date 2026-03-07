@@ -1,9 +1,21 @@
 ANIMALS:
   - dog
   - hound
+  - breeds
+  - cowstructors
+  - kennel
 FOOD:
   - recepie
   - food
+  - spaghetti
+  - popcorn
+  - bakery
+  - buttermilk
+  - nutritional
+  - dinner
+  - nutrition
+  - recipes
+  - cooked
 PYTHON:
   - python
 WEB:
@@ -12,22 +24,80 @@ WEB:
   - url
   - website
   - google
-CARS:
+TRANSPORT:
   - race
   - traffic
+  - volkswagen
+  - driving
 MEDICINE:
   - cancer
   - pandemic
+  - diabetes
+  - heartdisease
+  - doctor
+  - cardiovascular
+  - health
+  - diabetes
+  - bacteria
+  - diet
+  - vaccinations
+  - bacteria
+  - antibiotics
+  - molecular
+POLITICS:
+  - republican
+  - economics
+  - politician
+  - democratic
+  - police
+  - elections
+  - elections
+  - presidential
+  - politicians
+  - parties
+  - candidates
 SOCIAL_MEDIA:
   - trends
   - popular
   - tweet
+  - cinema
+  - youtube
+  - movies
+  - films
+  - imdb
+  - screentime
+  - spotify
 BOOK:
   - fantasy
   - book
+  - kingkiller
+  - supernatural
+  - romance
 STUDY:
   - lessons
   - learning
-
-
+DEMOGRAPHY:
+  - demography
+  - gender
+  - female 
+  - male
+  - girlfriend
+SPORT:
+  - bike
+  - logosfootball
+  - football
+  - games
+  - championships
+  - footballers
+  - bikes
+SCIENCE:
+  - nasa
+  - genomic
+  - bioinformatics
+  - cloning  
+  - research
+  - genome
+CZECHIAANDSLOVAKIA:
+  - slovak
+  - brno
 
