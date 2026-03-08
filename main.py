@@ -161,9 +161,9 @@ class FirebaseClient:
     def upload_metadata(self, files: list[Path], extractor: KeywordExtractor):
         for file_path in files:
             folder_id, author, technology = extractor.extract_metadata(file_path)
-            self.ref.child(f"{folder_id}").set({
+            self.ref.child(f"{folder_id}").update({
                 "semester": self._get_semester(file_path),
-                "author": author
+                "author": author, 
                 "technology": technology, 
             })
 
@@ -180,7 +180,7 @@ class FirebaseClient:
                 print(file_path)
                 continue
             keywords = keyword_filer.filter(keywords)
-            self.ref.child(f"{folder_id}").set({
+            self.ref.child(f"{folder_id}").update({
                 "keywords": keywords,
             })
 
@@ -246,7 +246,8 @@ class ProjectUtils:
     ) -> None:
         keywords_dict: dict[str, list[str]] = {}
         for file_path in files:
-            keywords, folder_id, author= extractor.extract_from_file(file_path, doc_processor)
+            keywords = extractor.extract_keywords_from_file(file_path, doc_processor)
+            folder_id, author, technology = extractor.extract_metadata(file_path)
             if keywords is None:
                 print("NONE VALUE TO DATA BASE")
                 print(file_path)
@@ -291,18 +292,35 @@ class ProjectUtils:
             except Exception as e:
                 tmp.unlink(missing_ok=True)
                 print(f"Failed: {pdf.name} — {e}")
+    
+    @staticmethod
+    def save_categories_yaml(data: dict, output_path: str = "categorized_keywords.yaml") -> None:
+        with open(output_path, "w", encoding="utf-8") as f:
+            yaml.dump(data, f, allow_unicode=True, default_flow_style=False)
 
 
 class Pipeline:
     def __init__(self, root_dir: Path, cred_path: str = "credentials.json"):
         self.root_dir = root_dir
         self.doc_processor = DocumentProcessor()
-        self.extractor = KeywordExtractor()
         self.keyword_filter = KeywordFilter()
-        self.classifier = KeywordClassifier()
         self.firebase = FirebaseClient(cred_path)
         self.utils = ProjectUtils()
+        self._extractor = None    # lazy
+        self._classifier = None   # lazy
+    
+    @property
+    def extractor(self) -> KeywordExtractor:
+        if self._extractor is None:
+            self._extractor = KeywordExtractor()
+        return self._extractor
 
+    @property
+    def classifier(self) -> KeywordClassifier:
+        if self._classifier is None:
+            self._classifier = KeywordClassifier()
+        return self._classifier
+    
     @property
     def files(self) -> list[Path]:
         all_files = list(self.root_dir.rglob('*.pdf')) + list(self.root_dir.rglob('*.docx'))
@@ -347,25 +365,24 @@ class Pipeline:
         result_clean: dict[str, list[str]] = {cat: [] for cat in tags}
         result_clean["UNDEFINED"] = []
 
+        # hypotheses se sestaví JEDNOU před hlavním looopem
+        hypotheses = [
+            f"This text is about {cat}, such as {', '.join(examples if isinstance(examples, list) else [])}."
+            for cat, examples in tags.items()
+        ]
+        cat_names = list(tags.keys())
+
         for kw in keywords_not_in_tags:
-            scores = {}
-            for cat, examples in tags.items():
-                if examples is None:
-                    examples_list = []
-                elif isinstance(examples, str):
-                    examples_list = [examples]
-                else:
-                    examples_list = examples
-
-                hypothesis = f"This text is about {cat}, such as {', '.join(examples_list)}."
-                result = self.classifier.classifier(
-                    kw,
-                    candidate_labels=[hypothesis],
-                    multi_label=False,
-                    hypothesis_template="{}"
-                )
-                scores[cat] = result['scores'][0]
-
+            result = self.classifier.classifier(
+                kw,
+                candidate_labels=hypotheses,
+                multi_label=False,
+                hypothesis_template="{}"
+            )
+            scores = {
+                cat_names[hypotheses.index(label)]: score
+                for label, score in zip(result['labels'], result['scores'])
+            }
             best_cat = max(scores, key=scores.get)
             best_score = scores[best_cat]
             chosen = best_cat if best_score >= 0.6 else "UNDEFINED"
@@ -373,12 +390,7 @@ class Pipeline:
             result_clean[chosen].append(kw)
             print(f"{kw} → {chosen} (score: {best_score:.2f})")
 
-        with open("categorized_keywords.yaml", "w", encoding="utf-8") as f:
-            yaml.dump(result_clean, f, allow_unicode=True, default_flow_style=False)
-
-
-
-
+        self.utils.save_categories_yaml(result_clean)
 
 def main() -> None:
     pipeline = Pipeline(
@@ -386,6 +398,24 @@ def main() -> None:
         cred_path="credentials.json",
     )
     pipeline.run_categorize("tags.yaml")
+    # firebase = FirebaseClient(cred_path="credentials.json")
+    # db_data = firebase.fetch_all()
+    # utilities = ProjectUtils()
+    # kw1 = set()
+    # for _, data in db_data.items():
+    #     kw_list = data.get('keywords')
+    #     if isinstance(kw_list, list):
+    #         kw1.update(kw_list)
+
+    # tags = utilities.load_categories("tags.yaml")
+
+    # kw2: set[str] = set()
+    # for _, data in tags.items():
+    #     if isinstance(data, list):
+    #         kw2.update(data)
+
+    # keywords_not_in_tags: set[str] = kw1 - kw2
+    # print(keywords_not_in_tags)
     
     # pipeline.run_export_json()
     # for file in pipeline.files:

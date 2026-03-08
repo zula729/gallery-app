@@ -4,6 +4,8 @@ ANIMALS:
   - breeds
   - cowstructors
   - kennel
+  - dogs
+  - nymphs
 FOOD:
   - recepie
   - food
@@ -22,6 +24,9 @@ FOOD:
   - espresso
   - coffees
   - coffee
+  - cocoa
+  - tea
+  - italian
 PYTHON:
   - python
 WEB:
@@ -35,6 +40,8 @@ WEB:
   - app
   - web
   - javascript
+  - firefox
+  - mozilla
 TRANSPORT:
   - race
   - traffic
@@ -58,6 +65,10 @@ MEDICINE:
   - antibiotics
   - molecular
   - bacterial
+  - cdc
+  - coronavirus
+  - migraine
+  - pcr
 POLITICS:
   - republican
   - economics
@@ -74,18 +85,12 @@ SOCIAL_MEDIA:
   - trends
   - popular
   - tweet
-  - cinema
   - youtube
-  - movies
-  - films
-  - imdb
   - screentime
-  - spotify
-  - movie
   - subscriptions
   - subscription
-  - songs
   - popularity
+  - tweets
 BOOK:
   - fantasy
   - book
@@ -99,6 +104,10 @@ STUDY:
   - library
   - semester
   - daily
+  - workflow
+  - brainstorm
+  - seminars
+  - seminar
 DEMOGRAPHY:
   - demography
   - gender
@@ -109,12 +118,13 @@ SPORT:
   - bike
   - logosfootball
   - football
-  - games
   - championships
   - footballers
   - bikes
   - championship
-  - competitive
+  - manager
+  - locals
+  - greatest
 SCIENCE:
   - nasa
   - genomic
@@ -122,12 +132,131 @@ SCIENCE:
   - cloning  
   - research
   - genome
-CZECHIAANDSLOVAKIA:
+  - chromosomal
+  - genes
+  - tectonic
+  - seismic
+  - mathematical
+DISASTER:
+  - accidents
+  - earthquakes
+DATA_SCIENCE:
+  - pandas
+  - trends
+  - graphs
+  - data
+  - analysis
+  - randomized
+MUSIC:
+  - spotify
+  - songs
+  - reggae
+  - blues
+  - musical
+MOVIES:
+  - movies
+  - movie
+  - cinema
+  - imdb
+  - films
+  - tarantino
+  - popcorn
+GAMES:
+  - games
+  - rpg
+  - playtime
+  - duels
+  - competitive
+  - grenades
+  - match
+  - matches
+GEOGRAPHY:
+  - geospatial
+  - antarctica
+  - global
+  - colombia
+  - delhi
+  - migration
+  - migrants
+  - immigration
   - slovak
   - brno
   - slovakia
   - bohemia
-DISASTER:
-  - accidents
-  - earthquakes
-
+  - czechia
+  - czech
+  - geografické
+TIME:
+  - daily
+  - yearly
+  - decades
+  - june
+  - july
+  - autumn
+  - winter
+  - tonight
+SPACE:
+  - nasa
+  - meteorites
+  - meteorite
+  - meteors
+TECHNOLOGY:
+  - software
+  - developer
+  - tools
+  - technologies
+  - processors
+  - engineering
+  - computational
+  - graphs
+  - informatics
+  - github
+  - wikimedia
+OTHER:
+  - third
+  - regulars
+  - valuable
+  - downloaded
+  - indoors
+  - emotional
+  - critical
+  - jednotlivých
+  - vynechat
+  - lollipop
+  - wife
+UNDEFINED:
+  - bedtime
+  - flight
+  - rich
+  - biggest
+  - sleep
+  - disturbed
+  - airline
+  - solar
+  - titanic
+  - anime
+  - rebranding
+  - overcrowding
+  - trip
+  - economic
+  - photovoltaic
+  - driver
+  - apartment
+  - airlines
+  - waitress
+  - tourists
+  - touristy
+  - trading
+  - uber
+  - violin
+  - asleep
+  - cheaper
+  - trade
+  - cheapest
+  - renters
+  - renewable
+  - economy
+  - bed
+  - designers
+  - lab
+  - green
