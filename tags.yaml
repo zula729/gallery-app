@@ -111,7 +111,7 @@ STUDY:
 DEMOGRAPHY:
   - demography
   - gender
-  - female 
+  - female
   - male
   - girlfriend
 SPORT:
@@ -129,7 +129,7 @@ SCIENCE:
   - nasa
   - genomic
   - bioinformatics
-  - cloning  
+  - cloning
   - research
   - genome
   - chromosomal
@@ -224,7 +224,6 @@ OTHER:
   - vynechat
   - lollipop
   - wife
-UNDEFINED:
   - bedtime
   - flight
   - rich

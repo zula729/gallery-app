@@ -397,32 +397,6 @@ def main() -> None:
         root_dir=Path(r'C:\Users\azhar\Desktop\visualization'),
         cred_path="credentials.json",
     )
-    pipeline.run_categorize("tags.yaml")
-    # firebase = FirebaseClient(cred_path="credentials.json")
-    # db_data = firebase.fetch_all()
-    # utilities = ProjectUtils()
-    # kw1 = set()
-    # for _, data in db_data.items():
-    #     kw_list = data.get('keywords')
-    #     if isinstance(kw_list, list):
-    #         kw1.update(kw_list)
-
-    # tags = utilities.load_categories("tags.yaml")
-
-    # kw2: set[str] = set()
-    # for _, data in tags.items():
-    #     if isinstance(data, list):
-    #         kw2.update(data)
-
-    # keywords_not_in_tags: set[str] = kw1 - kw2
-    # print(keywords_not_in_tags)
-    
-    # pipeline.run_export_json()
-    # for file in pipeline.files:
-    #     text = pipeline.doc_processor.read_text(file)
-    #     print(pipeline.extractor.extract_authors_from_file(text))
-    # print(pipeline.run_categorize("keywords.json", "tags_test.yaml"))
-
 
 if __name__ == "__main__":
     main()
