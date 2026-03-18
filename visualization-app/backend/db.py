@@ -4,6 +4,7 @@ from pathlib import Path
 from document import DocumentProcessor
 from nlp import KeywordFilter, KeywordExtractor
 
+
 class FirebaseClient:
     DB_URL = "https://visualization-88a6b-default-rtdb.europe-west1.firebasedatabase.app/"
     REF_PATH = "Keywords from projects"

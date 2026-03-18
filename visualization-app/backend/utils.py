@@ -1,6 +1,5 @@
 import yaml
 import json
-import ocrmypdf
 from pathlib import Path
 from nlp import KeywordFilter, KeywordExtractor
 from document import DocumentProcessor
