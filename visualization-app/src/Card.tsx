@@ -5,7 +5,7 @@ function Card() {
   return (
     <div className="rounded-2xl bg-white">
       <div className="flex flex-col">
-        <div className="border border-gray-400 shadow-lg/20 rounded-xl w-60 pb-3">
+        <div className="border border-gray-400 shadow-lg/20 rounded-xl w-80 pb-3">
           <img className="object-cover rounded-t-xl w-full h-30"src={image}/>
           <div className="flex flex-col pl-2 pr-2 pt-2">
             <h2 className="text-2xl font-semibold">Project's name</h2>

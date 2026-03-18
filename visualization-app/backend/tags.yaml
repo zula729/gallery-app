@@ -27,8 +27,7 @@ FOOD:
   - cocoa
   - tea
   - italian
-PYTHON:
-  - python
+  - waitress
 WEB:
   - browser
   - html
@@ -49,6 +48,12 @@ TRANSPORT:
   - driving
   - drivers
   - speeding
+  - flight
+  - airline
+  - airlines
+  - driver
+  - uber
+  - trip
 MEDICINE:
   - cancer
   - pandemic
@@ -81,6 +86,10 @@ POLITICS:
   - politicians
   - parties
   - candidates
+  - economic
+  - economy
+  - trading
+  - trade
 SOCIAL_MEDIA:
   - trends
   - popular
@@ -114,6 +123,8 @@ DEMOGRAPHY:
   - female
   - male
   - girlfriend
+  - wife
+  - overcrowding
 SPORT:
   - bike
   - logosfootball
@@ -137,6 +148,7 @@ SCIENCE:
   - tectonic
   - seismic
   - mathematical
+  - lab
 DISASTER:
   - accidents
   - earthquakes
@@ -153,6 +165,7 @@ MUSIC:
   - reggae
   - blues
   - musical
+  - violin
 MOVIES:
   - movies
   - movie
@@ -161,6 +174,8 @@ MOVIES:
   - films
   - tarantino
   - popcorn
+  - anime
+  - titanic
 GAMES:
   - games
   - rpg
@@ -186,6 +201,9 @@ GEOGRAPHY:
   - czechia
   - czech
   - geografické
+  - tourists
+  - touristy
+  - apartment
 TIME:
   - daily
   - yearly
@@ -212,50 +230,24 @@ TECHNOLOGY:
   - informatics
   - github
   - wikimedia
-OTHER:
-  - third
-  - regulars
-  - valuable
   - downloaded
+  - designers
+  - lollipop
+ENERGY:
+  - solar
+  - photovoltaic
+  - renewable
+  - green
+LIFESTYLE:
+  - sleep
+  - bed
+  - bedtime
+  - asleep
   - indoors
   - emotional
-  - critical
-  - jednotlivých
-  - vynechat
-  - lollipop
-  - wife
-  - bedtime
-  - flight
-  - rich
-  - biggest
-  - sleep
-  - disturbed
-  - airline
-  - solar
-  - titanic
-  - anime
+BUSINESS:
   - rebranding
-  - overcrowding
-  - trip
-  - economic
-  - photovoltaic
-  - driver
-  - apartment
-  - airlines
-  - waitress
-  - tourists
-  - touristy
-  - trading
-  - uber
-  - violin
-  - asleep
+  - rich
+  - valuable
   - cheaper
-  - trade
   - cheapest
-  - renters
-  - renewable
-  - economy
-  - bed
-  - designers
-  - lab
-  - green
