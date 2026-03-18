@@ -1,6 +1,7 @@
 import Header from "./Header";
 import Footer from "./Footer";
 import Sidebar from "./Sidebar";
+import Card from "./Card"
 
 function App() {
   return (
@@ -8,8 +9,9 @@ function App() {
       <Header />
       <div className="flex flex-1"> 
         <Sidebar />
-        <main className="flex-1 p-6">
+        <main className="flex-1 p-2">
           <h2 className="text-2xl font-bold">Hlavní obsah</h2>
+          <Card />
           <p></p>
         </main>
       </div>
