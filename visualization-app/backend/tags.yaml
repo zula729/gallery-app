@@ -6,6 +6,7 @@ ANIMALS:
   - kennel
   - dogs
   - nymphs
+
 FOOD:
   - recepie
   - food
@@ -28,6 +29,7 @@ FOOD:
   - tea
   - italian
   - waitress
+
 WEB:
   - browser
   - html
@@ -41,6 +43,7 @@ WEB:
   - javascript
   - firefox
   - mozilla
+
 TRANSPORT:
   - race
   - traffic
@@ -54,6 +57,7 @@ TRANSPORT:
   - driver
   - uber
   - trip
+
 MEDICINE:
   - cancer
   - pandemic
@@ -74,6 +78,7 @@ MEDICINE:
   - coronavirus
   - migraine
   - pcr
+
 POLITICS:
   - republican
   - economics
@@ -90,6 +95,7 @@ POLITICS:
   - economy
   - trading
   - trade
+
 SOCIAL_MEDIA:
   - trends
   - popular
@@ -100,23 +106,23 @@ SOCIAL_MEDIA:
   - subscription
   - popularity
   - tweets
+
 BOOK:
   - fantasy
   - book
   - kingkiller
   - supernatural
   - romance
-STUDY:
-  - lessons
-  - learning
-  - homework
-  - library
-  - semester
-  - daily
-  - workflow
-  - brainstorm
-  - seminars
-  - seminar
+
+# STUDY:
+# - homework
+# - library
+# - daily
+# - workflow
+# - brainstorm
+# - seminars
+# - seminar
+
 DEMOGRAPHY:
   - demography
   - gender
@@ -125,6 +131,7 @@ DEMOGRAPHY:
   - girlfriend
   - wife
   - overcrowding
+
 SPORT:
   - bike
   - logosfootball
@@ -136,6 +143,7 @@ SPORT:
   - manager
   - locals
   - greatest
+
 SCIENCE:
   - nasa
   - genomic
@@ -149,9 +157,11 @@ SCIENCE:
   - seismic
   - mathematical
   - lab
+
 DISASTER:
   - accidents
   - earthquakes
+
 DATA_SCIENCE:
   - pandas
   - trends
@@ -159,6 +169,7 @@ DATA_SCIENCE:
   - data
   - analysis
   - randomized
+
 MUSIC:
   - spotify
   - songs
@@ -166,6 +177,7 @@ MUSIC:
   - blues
   - musical
   - violin
+
 MOVIES:
   - movies
   - movie
@@ -176,6 +188,7 @@ MOVIES:
   - popcorn
   - anime
   - titanic
+
 GAMES:
   - games
   - rpg
@@ -185,6 +198,7 @@ GAMES:
   - grenades
   - match
   - matches
+
 GEOGRAPHY:
   - geospatial
   - antarctica
@@ -204,20 +218,21 @@ GEOGRAPHY:
   - tourists
   - touristy
   - apartment
+
 TIME:
   - daily
   - yearly
   - decades
   - june
   - july
-  - autumn
-  - winter
   - tonight
+
 SPACE:
   - nasa
   - meteorites
   - meteorite
   - meteors
+
 TECHNOLOGY:
   - software
   - developer
@@ -233,11 +248,13 @@ TECHNOLOGY:
   - downloaded
   - designers
   - lollipop
+
 ENERGY:
   - solar
   - photovoltaic
   - renewable
   - green
+
 LIFESTYLE:
   - sleep
   - bed
@@ -245,6 +262,7 @@ LIFESTYLE:
   - asleep
   - indoors
   - emotional
+
 BUSINESS:
   - rebranding
   - rich

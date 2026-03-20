@@ -1,0 +1,186 @@
+Python:
+  - python
+
+JavaScript:
+  - javascript
+
+TypeScript:
+  - typescript
+
+Java:
+  - java
+
+R:
+  - r
+
+SQL:
+  - sql
+
+D3.js:
+  - d3
+  - d3.js
+
+React:
+  - react
+
+Vue:
+  - vue
+
+GeoPandas:
+  - geopandas
+
+Visx:
+  - visx
+
+Dash:
+  - dash
+
+Pandas:
+  - pandas
+
+NumPy:
+  - numpy
+
+Matplotlib:
+  - matplotlib
+
+Plotly:
+  - plotly
+
+Tableau:
+  - tableau
+
+Docker:
+  - docker
+
+GeoJSON:
+  - geojson
+
+DuckDB:
+  - duckdb
+
+HTML:
+  - html
+
+CSS:
+  - css
+
+Jupyter Notebook:
+  - jupyter
+
+Scikit-learn:
+  - sklearn
+
+TensorFlow:
+  - tensorflow
+
+PyTorch:
+  - pytorch
+
+Keras:
+  - keras
+
+Requests:
+  - requests
+
+Pathlib:
+  - pathlib
+
+Figma:
+  - figma
+
+PowerBI:
+  - powerbi
+
+Streamlit:
+  - streamlit
+
+Vite:
+  - vite
+
+Tailwind:
+  - tailwind
+
+NetworkX:
+  - networkx
+
+Leaflet:
+  - leaflet
+
+Flask:
+  - flask
+
+Django:
+  - django
+
+FastAPI:
+  - fastapi
+
+Node.js:
+  - node
+
+Express.js:
+  - express
+  - express.js
+
+Circlify:
+  - circlify
+
+Apache:
+  - apache
+
+ECharts:
+  - echarts
+
+Next.js:
+  - next.js
+
+SQLite:
+  - sqlite
+
+SvelteKit:
+  - sveltekit
+
+SMUI:
+  - smui
+
+Ray:
+  - ray
+
+Vega:
+  - vega
+
+"C#":
+  - "c#"
+
+.NET:
+  - .net
+
+DemoFile.Net:
+  - demofile.net
+
+SciPy:
+  - scipy
+
+Recharts:
+  - recharts
+
+Chart.js:
+  - chart.js
+  - chart
+
+Render:
+  - render
+
+Lucide:
+  - lucide
+
+npm:
+  - npm
+
+CSV:
+  - csv
+  - cvs
+
+Excel:
+  - excel
