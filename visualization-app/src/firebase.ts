@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, onValue, get, child } from "firebase/database";
+import { getDatabase } from "firebase/database";
 
 // Tvůj konfigurační objekt z Firebase konzole
 const firebaseConfig = {

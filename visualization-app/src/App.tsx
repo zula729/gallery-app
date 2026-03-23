@@ -10,6 +10,13 @@ import { ref, onValue } from "firebase/database";
 
 function App() {
     const [card, setCard] = useState<CardType []>([]);
+    const [search, setSearch] = useState("");
+    const filtered = card.filter(c =>
+        c.author?.toLowerCase().includes(search.toLowerCase()) ||
+        c.keywords?.some(kw => kw.toLowerCase().includes(search.toLowerCase())) ||
+        c.technology?.some(tech => tech.toLowerCase().includes(search.toLowerCase())) ||
+        c.tags?.some(tag => tag.toLowerCase().includes(search.toLowerCase()))
+    );  
     useEffect(() => {
     const cardsRef = ref(db, "Keywords from projects"); 
 
@@ -36,12 +43,14 @@ function App() {
     <div className="flex flex-col min-h-screen">
         <Header />
             <div className="flex flex-1"> 
-                <Sidebar />
+                <div className="sticky top-0 self-start h-screen">
+                    <Sidebar />
+                </div>
                 <main className="flex-1 p-2 ml-4">
                     <h2 className="text-4xl font-semibold ">Gallery</h2>
-                    <div> <Searchbar /> </div>
+                    <div> <Searchbar value={search} onChange={setSearch} /> </div>
                     <div className="flex flex-row pt-2 gap-8 flex-wrap mt-4">
-                        {card.map(c => (
+                        {filtered.map(c => (
                             <Card key={c.id} card={c} />
                         ))}
                         </div>
