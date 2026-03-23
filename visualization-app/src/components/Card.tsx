@@ -1,7 +1,12 @@
 import image from "../assets/image.png"
 import Label from "./Label";
 
-import type { CardProps } from "../types/CardType";
+import type { CardType  } from "../types/CardType";
+
+type CardProps = {
+  card: CardType 
+}
+
 
 function Card({ card } : CardProps) {
   return (

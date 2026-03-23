@@ -7,7 +7,3 @@ export type CardType  = {
   technology: string[];
   image?: string;
 }
-
-export type CardProps = {
-    card: CardType;  // ← поле называется именно "card"
-}
