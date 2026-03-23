@@ -1,10 +1,37 @@
 import Header from "./Header";
 import Footer from "./Footer";
 import Sidebar from "./Sidebar";
-import Card from "./Card";
 import Searchbar from "./Searchbar"
+import type { CardType  } from "./types/CardType ";
+import Card from "./Card"; 
+import { useEffect, useState } from "react";
+import { db } from "./firebase";
+import { ref, onValue } from "firebase/database";
 
 function App() {
+    const [card, setCard] = useState<CardType []>([]);
+    useEffect(() => {
+    const cardsRef = ref(db, "Keywords from projects"); 
+
+    const unsubscribe = onValue(cardsRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                const parsed: CardType [] = Object.entries(data).map(([id, entry]: any) => ({
+                    id,
+                    author: entry.author,
+                    keywords: entry.keywords,
+                    semestr: entry.semester,
+                    tags: entry.tags,
+                    technology: entry.technology,
+                }));
+                setCard(parsed);
+            } else {
+                setCard([]); 
+            }
+        });
+        return () => unsubscribe();
+    }, []);
+    
     return (
     <div className="flex flex-col min-h-screen">
         <Header />
@@ -14,8 +41,10 @@ function App() {
                     <h2 className="text-4xl font-semibold ">Gallery</h2>
                     <div> <Searchbar /> </div>
                     <div className="flex flex-row pt-2 gap-8 flex-wrap mt-4">
-                        <Card /> <Card /> <Card /> <Card /> <Card />
-                    </div>
+                        {card.map(c => (
+                            <Card key={c.id} card={c} />
+                        ))}
+                        </div>
                 </main>
             </div>
         <Footer />
