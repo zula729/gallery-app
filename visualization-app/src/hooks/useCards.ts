@@ -14,9 +14,10 @@ export function useCards(){
                     id,
                     author: entry.author,
                     keywords: entry.keywords,
+                    name: entry.name,
                     semestr: entry.semester,
                     tags: entry.tags,
-                    technology: entry.technology,
+                    technology: entry.technology
                 }));
                 setCard(parsed);
             } else {
