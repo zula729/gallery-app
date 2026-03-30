@@ -23,37 +23,25 @@ FOOD:
   - protein
   - garlic
   - espresso
-  - coffees
   - coffee
   - cocoa
   - tea
   - italian
   - waitress
 
-WEB:
+browser:
   - browser
-  - html
-  - url
-  - website
   - google
-  - webpage
-  - browsers
-  - app
-  - web
-  - javascript
   - firefox
-  - mozilla
 
 TRANSPORT:
   - race
   - traffic
   - volkswagen
   - driving
-  - drivers
   - speeding
   - flight
   - airline
-  - airlines
   - driver
   - uber
   - trip
@@ -66,14 +54,11 @@ MEDICINE:
   - doctor
   - cardiovascular
   - health
-  - diabetes
   - bacteria
   - diet
   - vaccinations
-  - bacteria
   - antibiotics
   - molecular
-  - bacterial
   - cdc
   - coronavirus
   - migraine
@@ -86,12 +71,9 @@ POLITICS:
   - democratic
   - police
   - elections
-  - elections
   - presidential
-  - politicians
   - parties
   - candidates
-  - economic
   - economy
   - trading
   - trade
@@ -102,7 +84,6 @@ SOCIAL_MEDIA:
   - tweet
   - youtube
   - screentime
-  - subscriptions
   - subscription
   - popularity
   - tweets
@@ -113,15 +94,6 @@ BOOK:
   - kingkiller
   - supernatural
   - romance
-
-# STUDY:
-# - homework
-# - library
-# - daily
-# - workflow
-# - brainstorm
-# - seminars
-# - seminar
 
 DEMOGRAPHY:
   - demography
@@ -136,8 +108,6 @@ SPORT:
   - bike
   - logosfootball
   - football
-  - championships
-  - footballers
   - bikes
   - championship
   - manager
@@ -150,7 +120,6 @@ SCIENCE:
   - bioinformatics
   - cloning
   - research
-  - genome
   - chromosomal
   - genes
   - tectonic
@@ -179,7 +148,6 @@ MUSIC:
   - violin
 
 MOVIES:
-  - movies
   - movie
   - cinema
   - imdb
@@ -197,7 +165,16 @@ GAMES:
   - competitive
   - grenades
   - match
-  - matches
+
+CZECHIA:
+  - czechia
+  - czech
+  - bohemia
+  - brno
+
+SLOVAKIA:
+  - slovakia
+  - slovak
 
 GEOGRAPHY:
   - geospatial
@@ -206,17 +183,9 @@ GEOGRAPHY:
   - colombia
   - delhi
   - migration
-  - migrants
   - immigration
-  - slovak
-  - brno
-  - slovakia
-  - bohemia
-  - czechia
-  - czech
   - geografické
   - tourists
-  - touristy
   - apartment
 
 TIME:
@@ -230,7 +199,6 @@ TIME:
 SPACE:
   - nasa
   - meteorites
-  - meteorite
   - meteors
 
 TECHNOLOGY:
@@ -267,5 +235,4 @@ BUSINESS:
   - rebranding
   - rich
   - valuable
-  - cheaper
   - cheapest

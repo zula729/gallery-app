@@ -3,7 +3,7 @@ import Label from "./Label";
 
 import type { CardType  } from "../types/CardType";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 type CardProps = {
   card: CardType 
@@ -15,14 +15,29 @@ type LabelWithType = {
 }
 
 function Card({ card } : CardProps) {
-  const [expanded, setExpanded] = useState(false)
-  const allLabels: LabelWithType[] = [
-    ...(card.keywords ?? []).sort((a, b) => a.localeCompare(b)).map(kw => ({ text: kw, type: "keyword" as const })),
-    ...(card.tags ?? []).sort((a, b) => a.localeCompare(b)).map(tag => ({ text: tag, type: "tag" as const })),
-    ...(card.technology ?? []).sort((a, b) => a.localeCompare(b)).map(tech => ({ text: tech, type: "technology" as const })),
-  ].filter(label => label !== undefined && label.text && label.text.trim() !== "");
+    const [expanded, setExpanded] = useState(false)
+    const allLabels: LabelWithType[] = [
+        ...(card.keywords ?? []).sort((a, b) => a.localeCompare(b)).map(kw => ({ text: kw, type: "keyword" as const })),
+        ...(card.tags ?? []).sort((a, b) => a.localeCompare(b)).map(tag => ({ text: tag, type: "tag" as const })),
+        ...(card.technology ?? []).sort((a, b) => a.localeCompare(b)).map(tech => ({ text: tech, type: "technology" as const })),
+        ].filter(label => label !== undefined && label.text && label.text.trim() !== "");
+    const [isOverflowing, setIsOverflowing] = useState(false);
+    const labelsRef = useRef<HTMLDivElement>(null);
 
-  return (
+    useEffect(() => {
+        const el = labelsRef.current;
+        if (!el) return;
+
+        // временно убираем max-h чтобы измерить реальную высоту
+        el.style.maxHeight = "none";
+        const fullHeight = el.scrollHeight;
+        el.style.maxHeight = "";  // возвращаем обратно
+
+        // сравниваем с видимой высотой (max-h-18 = 72px)
+        setIsOverflowing(fullHeight > 72);
+    }, [allLabels]);  // только когда лейблы меняются, НЕ при expanded
+
+    return (
     <div className="rounded-2xl bg-white">
         <div className="flex flex-col">
             <div className={`border border-gray-400 shadow-lg/20 rounded-xl w-90 pb-3`}>
@@ -33,21 +48,25 @@ function Card({ card } : CardProps) {
                         <p className="text-sm text-gray-500">{card.author}</p>
                         <p className="text-m">{card.semestr}</p>
                     </div>
-                <hr className="mt-3 mb-2 border-gray-300"></hr>
-                <div>
-                    <div className={`flex flex-row pt-2 gap-1 flex-wrap overflow-hidden transition-all duration-300
-                        ${expanded ? "max-h-screen" : "max-h-18"}`}>
-                        {allLabels.map((label) => (
-                            <Label key={label.text} text={label.text} type={label.type}/>
-                        ))}
+                    <hr className="mt-3 mb-2 border-gray-300"></hr>
+                    <div>
+                        <div 
+                        ref={labelsRef}
+                        className={`flex flex-row pt-2 gap-1 flex-wrap overflow-hidden transition-all duration-300
+                            ${expanded ? "max-h-screen" : "max-h-18"}`}>
+                            {allLabels.map((label) => (
+                                <Label key={label.text} text={label.text} type={label.type}/>
+                            ))}
+                        </div>
+                        {(isOverflowing || expanded) && (
+                            <button
+                                onClick={() => setExpanded(prev => !prev)}
+                                className="text-xs text-gray-500 hover:text-gray-800 cursor-pointer mt-1 text-left"
+                            >
+                                {expanded ? "↑ less" : "more ↓"}
+                            </button>
+                        )}
                     </div>
-                    <button
-                        onClick={() => setExpanded(prev => !prev)}
-                        className="text-xs text-gray-500 hover:text-gray-800 cursor-pointer mt-1 text-left"
-                    >
-                    {expanded ? "↑ less" : "more ↓"}
-                    </button>
-                </div>
             
                 </div>
             </div>
