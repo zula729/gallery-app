@@ -2,12 +2,16 @@ type FilterGroupProps = {
     items: string[];
     selected: string[];
     onToggle: (item: string) => void;
+    sorted?: boolean;
 }
 
-function FilterGroup({ items, selected, onToggle }: FilterGroupProps) {
+function FilterGroup({ items, selected, onToggle, sorted = true }: FilterGroupProps) {
     const formatLabel = (item: string) => 
         item.charAt(0).toUpperCase() + item.slice(1).toLowerCase().replace(/_/g, " ");
-    const sortedItems = [...items].sort((a, b) => a.localeCompare(b)); 
+    
+    const sortedItems = sorted 
+        ? [...items].sort((a, b) => a.localeCompare(b)) 
+        : items;
     return (
         <div className="flex flex-wrap gap-2 mt-3 items-center">
             {sortedItems.map(item => (

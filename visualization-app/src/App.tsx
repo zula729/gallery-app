@@ -47,6 +47,7 @@ function App() {
                         selected={selectedCategories}
                         onToggle={toggleCategory}
                         onClear={() => setSelectedCategories([])}
+                        cards={cards}
                         />
                     </div>
                     <div className="flex flex-row pt-2 gap-8 flex-wrap mt-4">
