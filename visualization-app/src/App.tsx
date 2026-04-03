@@ -6,8 +6,7 @@ import Card from "./components/Card";
 import FilterPanel from "./components/FilterPanel";
 import { useState } from "react";
 import { useCards } from "./hooks/useCards";
-import { TECHNOLOGY } from "./types/filterOptions"; // добавь импорт
-
+import { TECHNOLOGY } from "./types/filterOptions"; 
 
 function App() {
     const cards = useCards();
