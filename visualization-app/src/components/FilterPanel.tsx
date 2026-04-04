@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import FilterGroup from "./FilterGroup";
 import { TAGS, TECHNOLOGY, SEMESTR } from "../types/filterOptions";
 import type { FilterPanelProps } from "../types/FilterPanel";
-import { Trash2 } from "lucide-react";
+import { Trash } from "lucide-react";
 
 function FilterPanel({ selected, onToggle, onClear, cards = [], techMode, onTechModeChange }: FilterPanelProps) {
     const [isOpen, setIsOpen] = useState(false);
@@ -32,31 +32,42 @@ const sortedTechnology = useMemo(() => {
 
     return (
         <div>
-            <button onClick={() => setIsOpen(prev => !prev)}
-                className="text-gray-600 hover:text-gray-900 mt-2 font-semibold">
-                {isOpen ? "▲" : "▼"} Filters {selected.length > 0 && `(${selected.length})`}
-            </button>
+            <div className="flex items-center gap-2">
+                <button onClick={() => setIsOpen(prev => !prev)}
+                    className="text-gray-500 hover:text-gray-700 mt-2 font-semibold">
+                    {isOpen ? "▲" : "▼"} Filters {selected.length > 0 && `(${selected.length})`}
+                </button>
+                {selected.length > 0 && (
+                        <button onClick={onClear} className="text-xs text-red-400 hover:text-red-600 mt-2.5">
+                            <Trash size={16} />
+                        </button>
+                    )}  
+            </div>
 
             <div className={`overflow-hidden transition-all duration-400 ease-in-out
                 ${isOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"}`}>
                 <div className="pt-4 font-semibold"> Categories
                     <FilterGroup items={TAGS} selected={selected} onToggle={onToggle} />
                 </div>
-                <div className="pt-4 font-semibold flex items-center gap-3">
+                <div className="pt-4 font-semibold flex items-center gap-3 ">
                     Technology
-                    <div className="flex text-xs font-medium rounded-lg overflow-hidden border border-gray-300">
+                    <div className="flex text-xs font-medium bg-gray-100 rounded-full p-0.5 gap-0.5 ">
                         <button
                             onClick={() => onTechModeChange("OR")}
-                            className={`px-2 py-0.5 transition-colors ${
-                                techMode === "OR" ? "bg-amber-200 text-black" : "bg-white text-gray-500 hover:bg-gray-100"
+                            className={`px-3 py-0.5 rounded-full transition-all duration-200 ${
+                                techMode === "OR"
+                                    ? "bg-white text-gray-800 shadow-sm"
+                                    : "text-gray-400 hover:text-gray-600 cursor-pointer"
                             }`}
                         >
                             OR
                         </button>
                         <button
                             onClick={() => onTechModeChange("AND")}
-                            className={`px-2 py-0.5 transition-colors ${
-                                techMode === "AND" ? "bg-amber-200 text-black" : "bg-white text-gray-500 hover:bg-gray-100"
+                            className={`px-3 py-0.5 rounded-full transition-all duration-200 ${
+                                techMode === "AND"
+                                    ? "bg-white text-gray-800 shadow-sm"
+                                    : "text-gray-400 hover:text-gray-600 cursor-pointer"
                             }`}
                         >
                             AND
@@ -67,11 +78,7 @@ const sortedTechnology = useMemo(() => {
                 <div className="pt-4 font-semibold"> Semester
                     <FilterGroup items={SEMESTR} selected={selected} onToggle={onToggle} />
                 </div>
-                {selected.length > 0 && (
-                    <button onClick={onClear} className="text-xs text-red-400 hover:text-red-600 mt-2">
-                        <Trash2 size={16} />
-                    </button>
-                )}
+                
             </div>
         </div>
     )

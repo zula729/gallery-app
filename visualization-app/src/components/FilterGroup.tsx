@@ -21,7 +21,7 @@ function FilterGroup({ items, selected, onToggle, sorted = true }: FilterGroupPr
                     className={`rounded-xl p-0.5 pl-2 pr-2 font-medium transition-colors cursor-pointer
                         ${selected.includes(item)
                             ? "bg-amber-200 text-black"
-                            : "bg-gray-200 text-black hover:bg-gray-300"
+                            : "bg-gray-200 text-gray-600 hover:text-black hover:bg-gray-300"
                         }`}
                 >
                     {formatLabel(item)}

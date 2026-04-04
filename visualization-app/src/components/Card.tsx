@@ -27,15 +27,12 @@ function Card({ card } : CardProps) {
     useEffect(() => {
         const el = labelsRef.current;
         if (!el) return;
-
-        // временно убираем max-h чтобы измерить реальную высоту
         el.style.maxHeight = "none";
         const fullHeight = el.scrollHeight;
-        el.style.maxHeight = "";  // возвращаем обратно
+        el.style.maxHeight = "";
 
-        // сравниваем с видимой высотой (max-h-18 = 72px)
         setIsOverflowing(fullHeight > 72);
-    }, [allLabels]);  // только когда лейблы меняются, НЕ при expanded
+    }, [allLabels]);
 
     return (
     <div className="rounded-2xl bg-white">
@@ -52,20 +49,22 @@ function Card({ card } : CardProps) {
                     <div>
                         <div 
                         ref={labelsRef}
-                        className={`flex flex-row pt-2 gap-1 flex-wrap overflow-hidden transition-all duration-300
+                        className={`flex flex-row pt-2 gap-1 flex-wrap overflow-hidden transition duration-300 
                             ${expanded ? "max-h-screen" : "max-h-18"}`}>
                             {allLabels.map((label) => (
                                 <Label key={label.text} text={label.text} type={label.type}/>
                             ))}
                         </div>
-                        {(isOverflowing || expanded) && (
-                            <button
-                                onClick={() => setExpanded(prev => !prev)}
-                                className="text-xs text-gray-500 hover:text-gray-800 cursor-pointer mt-1 text-left"
-                            >
-                                {expanded ? "↑ less" : "more ↓"}
-                            </button>
-                        )}
+                        <div className="h-5 mt-1">
+                            {(isOverflowing || expanded) && (
+                                <button
+                                    onClick={() => setExpanded(prev => !prev)}
+                                    className="text-xs text-gray-500 hover:text-gray-800 cursor-pointer text-left"
+                                >
+                                    {expanded ? "↑ less" : "more ↓"}
+                                </button>
+                            )}
+                        </div>
                     </div>
             
                 </div>
