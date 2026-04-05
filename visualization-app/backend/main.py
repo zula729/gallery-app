@@ -272,22 +272,12 @@ class FirebaseClient:
         missing = {fid: name for fid, name in local_ids.items() if fid not in db_ids}
         present = {fid: name for fid, name in local_ids.items() if fid in db_ids}
 
-        print(f"\n{'='*60}")
-        print(f"Папок на диске:      {len(local_ids)}")
-        print(f"Записей в Firebase:  {len(db_ids)}")
-        print(f"{'='*60}")
-
+        print(f"dirs: {len(local_ids)}")
+        print(f"firebase:  {len(db_ids)}")
         if missing:
-            print(f"\n❌ НЕТ в базе ({len(missing)}):")
+            print(f"not in database ({len(missing)}):")
             for fid, name in sorted(missing.items()):
-                print(f"   {fid}  →  {name}")
-        else:
-            print("\n✅ Все папки есть в базе!")
-
-        print(f"\n✅ Есть в базе ({len(present)}):")
-        for fid, name in sorted(present.items()):
-            print(f"   {fid}  →  {name}")
-        print(f"{'='*60}\n")
+                print(f"{fid}->{name}")
 
         return missing  # удобно для дальнейшей обработки
 
