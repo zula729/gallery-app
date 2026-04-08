@@ -160,9 +160,9 @@ class FirebaseClient:
             if tags is None:
                 continue
             self.ref.child(f"{folder_id}").update({
-                "semester": self._get_semester(file_path),
-                "author": author,
-                "technology": technology,
+                # "semester": self._get_semester(file_path),
+                # "author": author,
+                # "technology": technology,
                 "tags": list(tags)
             })
 
@@ -270,7 +270,6 @@ class FirebaseClient:
         db_ids = set(db_data.keys())
 
         missing = {fid: name for fid, name in local_ids.items() if fid not in db_ids}
-        present = {fid: name for fid, name in local_ids.items() if fid in db_ids}
 
         print(f"dirs: {len(local_ids)}")
         print(f"firebase:  {len(db_ids)}")
@@ -449,7 +448,7 @@ def main() -> None:
         root_dir=Path(r'C:\Users\azhar\Desktop\visualization'),
         cred_path="credentials.json",
     )
-    pipeline.run_find_missing()
+    # pipeline.run_upload()
 
 if __name__ == "__main__":
     main()
