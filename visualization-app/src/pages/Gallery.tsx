@@ -43,8 +43,8 @@ export function Gallery() {
 
     return (
         <main className="flex-1 p-2 ml-4">
-            <h2 className="text-4xl font-semibold ">Gallery</h2>
-            <div> <Searchbar value={search} onChange={setSearch} /> </div>
+            <h2 className="text-4xl font-semibold">Gallery</h2>
+            <h3 className="text-lg font-semibold pt-4 mr-25">Search <Searchbar value={search} onChange={setSearch} /></h3>
             <div>
                 <FilterPanel
                 selected={selectedCategories}
