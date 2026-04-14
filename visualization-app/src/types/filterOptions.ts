@@ -5,7 +5,4 @@ export const TAGS = Object.keys(tagsYaml) as string[];
 
 export const TECHNOLOGY = Object.keys(techYaml) as string[];
 
-export const SEMESTR = [
-    "podzim2024", 
-    "podzim2025"
-]
+export const SEMESTR = ['podzim2024', 'podzim2025'];

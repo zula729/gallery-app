@@ -1,74 +1,77 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import {
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend,
+    ResponsiveContainer
+} from 'recharts';
+import { TAGS, SEMESTR } from '../types/filterOptions';
+import { useMemo, useState } from 'react';
+import { useCards } from '../hooks/useCards';
 
-// #region Sample data
-const data = [
-  {
-    name: 'Page A',
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: 'Page B',
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: 'Page C',
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: 'Page D',
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: 'Page E',
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: 'Page F',
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: 'Page G',
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
+function SimpleBarChart() {
+    const cards = useCards();
+    const [selectedTags, setSelectedTags] = useState<string[]>(TAGS);
+    const [selectedSemesters, setSelectedSemesters] = useState<string[]>(SEMESTR);
 
-// #endregion
-const SimpleBarChart = () => {
-  return (
-    <BarChart
-      style={{ width: '100%', maxWidth: '700px', maxHeight: '70vh', aspectRatio: 1.618 }}
-      responsive
-      data={data}
-      margin={{
-        top: 5,
-        right: 0,
-        left: 0,
-        bottom: 5,
-      }}
-    >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="name" />
-      <YAxis width="auto" />
-      <Tooltip />
-      <Legend />
-      <Bar dataKey="pv" fill="#8884d8" activeBar={{ fill: 'pink', stroke: 'blue' }} radius={[10, 10, 0, 0]} />
-      <Bar dataKey="uv" fill="#82ca9d" activeBar={{ fill: 'gold', stroke: 'purple' }} radius={[10, 10, 0, 0]} />
-    </BarChart>
-  );
-};
+    const data = useMemo(() => {
+        const freq: Record<string, Record<string, number>> = {};
+        cards.forEach((card) => {
+            card.tags?.forEach((tag) => {
+                const matchTag = TAGS.find((t) => t.toLowerCase() === tag.trim().toLowerCase());
+                const semester = card.semestr ?? 'unknown';
+                if (
+                    matchTag &&
+                    selectedTags.includes(matchTag) &&
+                    selectedSemesters.includes(semester)
+                ) {
+                    if (!freq[matchTag]) freq[matchTag] = {};
+                    freq[matchTag][semester] = (freq[matchTag][semester] ?? 0) + 1;
+                }
+            });
+        });
+
+        return Object.entries(freq)
+            .map(([tag, semesters]) => ({ tag, ...semesters }))
+            .sort((a, b) => a.tag.localeCompare(b.tag));
+    }, [cards, selectedTags, selectedSemesters]);
+
+    const toggleTag = (tag: string) => {
+        setSelectedTags((prev) =>
+            prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+        );
+    };
+
+    const toggleSemester = (semester: string) => {
+        setSelectedSemesters((prev) =>
+            prev.includes(semester) ? prev.filter((s) => s !== semester) : [...prev, semester]
+        );
+    };
+
+    return (
+        <div>
+            <ResponsiveContainer width="90%" height={400}>
+                <BarChart data={data} margin={{ top: 5, right: 0, left: 0, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="tag" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    {SEMESTR.map((semester, i) => (
+                        <Bar
+                            key={semester}
+                            dataKey={semester}
+                            fill={i === 0 ? '#8884d8' : '#82ca9d'}
+                            radius={[10, 10, 0, 0]}
+                        />
+                    ))}
+                </BarChart>
+            </ResponsiveContainer>
+        </div>
+    );
+}
 
 export default SimpleBarChart;
