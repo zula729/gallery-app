@@ -7,7 +7,7 @@ function Sidebar() {
   return (
     <div className="sidebar h-screen w-52 pt-4 pr-3 pl-3 shadow-lg">
     <p className="px-3 text-[20px] font-semibold uppercase tracking-widest text-gray-800 mb-2 pb-4">
-        Visualization App
+        PV251 Projects
     </p>
     <p className="px-3 text-[11px] font-semibold uppercase tracking-widest text-gray-800 mb-2">
         Navigation
