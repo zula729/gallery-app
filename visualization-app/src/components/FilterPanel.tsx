@@ -34,7 +34,7 @@ const sortedTechnology = useMemo(() => {
         <div>
             <div className="flex items-center gap-2">
                 <button onClick={() => setIsOpen(prev => !prev)}
-                    className="text-gray-500 hover:text-gray-700 mt-2 font-semibold">
+                    className="text-gray-700 mt-2 font-semibold">
                     {isOpen ? "▲" : "▼"} Filters {selected.length > 0 && `(${selected.length})`}
                 </button>
                 {selected.length > 0 && (
@@ -44,7 +44,7 @@ const sortedTechnology = useMemo(() => {
                     )}  
             </div>
 
-            <div className={`overflow-hidden transition-all duration-400 ease-in-out
+            <div className={`overflow-hidden transition-all duration-400 ease-in-out mr-25
                 ${isOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"}`}>
                 <div className="pt-4 font-semibold"> Categories
                     <FilterGroup items={TAGS} selected={selected} onToggle={onToggle} type={"tag"}/>
