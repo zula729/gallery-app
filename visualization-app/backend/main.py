@@ -212,6 +212,17 @@ class FirebaseClient:
             if not entry.get("keywords"):
                 self.ref.child(folder_id).delete()
                 print(f"Deleted: {folder_id}")
+            if "R" in entry.get("technology", []):
+                technologies = entry["technology"]
+                technologies.remove("R")
+                self.ref.child(folder_id).update({"technology": technologies})
+                print(f"Removed 'R' from {folder_id}")
+            if "Render" in entry.get("technology", []):
+                technologies = entry["technology"]
+                technologies.remove("Render")
+                self.ref.child(folder_id).update({"technology": technologies})
+                print(f"Removed 'Render' from {folder_id}")
+        
 
     def clean_keywords_by_yaml(self, yaml_path: str, dry_run: bool = True) -> None:
 
@@ -448,6 +459,7 @@ def main() -> None:
         root_dir=Path(r'C:\Users\azhar\Desktop\visualization'),
         cred_path="credentials.json",
     )
+    pipeline.run_delete_empty()
     # pipeline.run_upload()
 
 if __name__ == "__main__":
