@@ -59,7 +59,7 @@ const TechnologyStackedBarChart = () => {
             <BarChart
                 data={data}
                 margin={{
-                    top: 20,
+                    top: 10,
                     right: 10,
                     left: 0,
                     bottom: 5
@@ -73,7 +73,7 @@ const TechnologyStackedBarChart = () => {
                     height={80}
                     niceTicks="snap125"
                 />
-                <YAxis width={50} niceTicks="snap125" />
+                <YAxis width={50} domain={[0, 65]} niceTicks="snap125" />
                 <Tooltip />
                 <Legend />
                 {SEMESTR.map((semester, i) => (
