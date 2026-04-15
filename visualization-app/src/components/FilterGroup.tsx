@@ -7,13 +7,13 @@ type FilterGroupProps = {
 };
 
 const colorMap = {
-    semestr: 'bg-gray-100 text-gray-600 hover:text-black hover:bg-gray-300',
+    semestr: 'bg-blue-50 text-blue-600 hover:text-blue-800 hover:bg-blue-100',
     tag: 'bg-amber-50 text-amber-600 hover:text-amber-800 hover:bg-amber-100',
     technology: 'bg-green-50 text-green-600 hover:text-green-800 hover:bg-green-100'
 };
 
 const selectedColorMap = {
-    semestr: 'text-black bg-gray-300',
+    semestr: 'text-blue-900 bg-blue-200',
     tag: 'text-amber-900 bg-amber-200',
     technology: 'text-green-900 bg-green-200'
 };
