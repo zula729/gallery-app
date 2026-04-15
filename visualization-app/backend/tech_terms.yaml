@@ -1,186 +1,159 @@
 Python:
-  - python
+    - python
 
 JavaScript:
-  - javascript
+    - javascript
 
 TypeScript:
-  - typescript
+    - typescript
 
 Java:
-  - java
+    - java
 
 R:
-  - r
+    - r
 
 SQL:
-  - sql
+    - sql
 
 D3.js:
-  - d3
-  - d3.js
+    - d3
+    - d3.js
 
 React:
-  - react
-
-Vue:
-  - vue
+    - react
 
 GeoPandas:
-  - geopandas
+    - geopandas
 
 Visx:
-  - visx
+    - visx
 
 Dash:
-  - dash
+    - dash
 
 Pandas:
-  - pandas
+    - pandas
 
 NumPy:
-  - numpy
-
-Matplotlib:
-  - matplotlib
+    - numpy
 
 Plotly:
-  - plotly
+    - plotly
 
 Tableau:
-  - tableau
-
-Docker:
-  - docker
+    - tableau
 
 GeoJSON:
-  - geojson
+    - geojson
 
 DuckDB:
-  - duckdb
+    - duckdb
 
 HTML:
-  - html
+    - html
 
 CSS:
-  - css
+    - css
 
 Jupyter Notebook:
-  - jupyter
-
-Scikit-learn:
-  - sklearn
-
-TensorFlow:
-  - tensorflow
+    - jupyter
 
 PyTorch:
-  - pytorch
-
-Keras:
-  - keras
+    - pytorch
 
 Requests:
-  - requests
+    - requests
 
 Pathlib:
-  - pathlib
+    - pathlib
 
 Figma:
-  - figma
-
-PowerBI:
-  - powerbi
+    - figma
 
 Streamlit:
-  - streamlit
+    - streamlit
 
 Vite:
-  - vite
+    - vite
 
 Tailwind:
-  - tailwind
+    - tailwind
 
 NetworkX:
-  - networkx
+    - networkx
 
 Leaflet:
-  - leaflet
-
-Flask:
-  - flask
-
-Django:
-  - django
+    - leaflet
 
 FastAPI:
-  - fastapi
+    - fastapi
 
 Node.js:
-  - node
+    - node
 
 Express.js:
-  - express
-  - express.js
+    - express
+    - express.js
 
 Circlify:
-  - circlify
+    - circlify
 
 Apache:
-  - apache
+    - apache
 
 ECharts:
-  - echarts
+    - echarts
 
 Next.js:
-  - next.js
+    - next.js
 
 SQLite:
-  - sqlite
+    - sqlite
 
 SvelteKit:
-  - sveltekit
+    - sveltekit
 
 SMUI:
-  - smui
+    - smui
 
 Ray:
-  - ray
+    - ray
 
 Vega:
-  - vega
+    - vega
 
-"C#":
-  - "c#"
+'C#':
+    - 'c#'
 
 .NET:
-  - .net
+    - .net
 
 DemoFile.Net:
-  - demofile.net
+    - demofile.net
 
 SciPy:
-  - scipy
+    - scipy
 
 Recharts:
-  - recharts
+    - recharts
 
 Chart.js:
-  - chart.js
-  - chart
+    - chart.js
+    - chart
 
 Render:
-  - render
+    - render
 
 Lucide:
-  - lucide
+    - lucide
 
 npm:
-  - npm
+    - npm
 
 CSV:
-  - csv
-  - cvs
+    - csv
+    - cvs
 
 Excel:
-  - excel
+    - excel
