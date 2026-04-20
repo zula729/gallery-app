@@ -35,7 +35,7 @@ function FilterGroup({
                 <button
                     key={item}
                     onClick={() => onToggle(item)}
-                    className={`rounded-xl p-0.5 pl-2 pr-2 font-medium transition-colors cursor-pointer
+                    className={`rounded-full text-sm font-medium p-0.5 pl-2 pr-2 transition-colors cursor-pointer
                         ${
                             selected.includes(item)
                                 ? `${selectedColorMap[type]}`
