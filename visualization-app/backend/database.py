@@ -1,3 +1,7 @@
+import xml.etree.ElementTree as ET
+import base64
+import os
+import zipfile
 import docx
 import json
 import firebase_admin
@@ -8,7 +12,7 @@ import pdfplumber
 import yaml
 import ocrmypdf
 from wordfreq import zipf_frequency
-from firebase_admin import credentials, db
+from firebase_admin import credentials, db, storage
 from sklearn.feature_extraction.text import CountVectorizer
 from transformers import pipeline
 from keybert import KeyBERT
@@ -16,7 +20,6 @@ from pathlib import Path
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
-
 
 class DocumentProcessor:
     def read_text(self, file_path: Path) -> str:
@@ -43,7 +46,6 @@ class KeywordExtractor:
         )
         self.ner = pipeline("ner", model="dslim/bert-base-NER", aggregation_strategy="simple")
 
-
     def extract(self, text: str, top_n: int = 5) -> list[str]:
         results = self.model.extract_keywords(
             text,
@@ -66,24 +68,6 @@ class KeywordExtractor:
             if part[0].isdecimal():
                 return part[:6]
         return None
-    
-    @staticmethod
-    def _clean_name(name: str) -> str:
-        name = re.sub(r'##', '', name)
-        name = re.sub(r'\s+', ' ', name)
-        name = name.strip()
-        return name
-    
-    ## does not working, woking bad with difficult names
-    def extract_authors_from_file(self, text: str) -> str:
-        entities = self.ner(text)
-        names = [
-            self._clean_name(e["word"])
-            for e in entities
-            if e["entity_group"] == "PER"
-        ]
-        names = [n for n in names if len(n) > 1]  # drop single chars
-        return ', '.join(dict.fromkeys(names)) if names else "Unknown Author"
 
     @staticmethod
     def extract_authors_from_name(path: Path) -> str:
@@ -140,17 +124,88 @@ class KeywordFilter:
             return True
         return self._is_real_word(kw)
 
-    def _is_real_word(self, word:    str) -> bool:
-        return zipf_frequency(word, "en") > 2.5 or zipf_frequency(word, "cs") > 2.5 
+    def _is_real_word(self, word: str) -> bool:
+        return (zipf_frequency(word, "en") > 2.5 or
+                zipf_frequency(word, "cs") > 2.5)
+
+
+class ImageExtractor:
+    def __init__(self):
+        self.ns = {'svg': 'http://www.w3.org/2000/svg', 'xlink': 'http://www.w3.org/1999/xlink'}
+
+    @staticmethod
+    def is_big_enough(base64_str, min_size_kb=20):
+        if "base64," in base64_str:
+            base64_str = base64_str.split("base64,")[1]
+        file_size_bytes = (len(base64_str) * 3) / 4
+        file_size_kb = file_size_bytes / 1024
+        return file_size_kb >= min_size_kb
+
+    def extract_images_from_docx(self, docx_path):
+        output_folder = docx_path.parent / "images"
+        output_folder.mkdir(parents=True, exist_ok=True)
+        index = 0
+        with zipfile.ZipFile(docx_path, 'r') as docx_zip:
+            for file in docx_zip.namelist():
+                if file.startswith('word/media/'):
+                    ext = os.path.splitext(file)[1]
+                    new_filename = f"firebase_image{index}{ext}"
+                    target_path = os.path.join(output_folder, new_filename)
+                    with docx_zip.open(file) as source, open(target_path, "wb") as target:
+                        target.write(source.read())
+                    print(f"Извлечено: {file}")
+                    index += 1
+
+    def extract_images_from_svg(self, svg_path):
+        output_folder = svg_path.parent / "images"
+        output_folder.mkdir(parents=True, exist_ok=True)
+        tree = ET.parse(svg_path)
+        root = tree.getroot()
+
+        images = root.findall('.//svg:image', self.ns) + root.findall('.//image', self.ns)
+
+        for i, img in enumerate(images):
+
+            if not self.is_big_enough(img.get('href') or img.get('{http://www.w3.org/1999/xlink}href')):
+                print(f"Skipped image, too small (id: {img.get('id')}), {svg_path}")
+                continue
+
+            img_data = img.get('href') or img.get('{http://www.w3.org/1999/xlink}href')
+
+            if not img_data or not img_data.startswith('data:image'):
+                continue
+
+            header, encoded = img_data.split("base64,", 1)
+
+            try:
+                header, encoded = img_data.split(",", 1)
+                ext = header.split(';')[0].split('/')[-1]
+                content = base64.b64decode(encoded)
+                
+                file_path = os.path.join(output_folder, f"firebase_image{i}.{ext}")
+                with open(file_path, 'wb') as f:
+                    f.write(content)
+                print(f"Сохранено: {file_path}")
+            except Exception as e:
+                print(f"Ошибка при обработке изображения {i}: {e}")
+
+    def save_images(self, files: list[Path]):
+        for file_path in files:
+            if file_path.suffix.lower() == '.docx':
+                self.extract_images_from_docx(file_path)
+            elif file_path.suffix.lower() == '.svg':
+                self.extract_images_from_svg(file_path)
+
 
 class FirebaseClient:
     DB_URL = "https://visualization-88a6b-default-rtdb.europe-west1.firebasedatabase.app/"
     REF_PATH = "Keywords from projects"
+    BUCKET_NAME = "visualization-88a6b.firebasestorage.app"
 
     def __init__(self, cred_path: str = "credentials.json"):
         if not firebase_admin._apps:
             cred = credentials.Certificate(cred_path)
-            firebase_admin.initialize_app(cred, {"databaseURL": self.DB_URL})
+            firebase_admin.initialize_app(cred, {"databaseURL": self.DB_URL, "storageBucket": self.BUCKET_NAME})
         self.ref = db.reference(self.REF_PATH)
 
     def upload_metadata(self, files: list[Path], extractor: KeywordExtractor, doc_processor: DocumentProcessor):
@@ -195,6 +250,26 @@ class FirebaseClient:
                 if kw in examples:
                     found_tags.add(tag)
         return found_tags
+    
+    def upload_images(self, files: list[Path], extractor: KeywordExtractor):
+        bucket = storage.bucket()
+        urls_by_folder = {}
+
+        for file_path in files:
+            folder_id = extractor.folder_id_from_path(file_path)
+            if file_path.name.startswith("firebase_image"):
+                blob = bucket.blob(f"{folder_id}/images/{file_path.name}")
+                blob.upload_from_filename(str(file_path))
+                blob.make_public()
+                print(f"Uploaded {file_path.name} to Firebase Storage")
+                if folder_id not in urls_by_folder:
+                    urls_by_folder[folder_id] = []
+                urls_by_folder[folder_id].append(blob.public_url)
+            for folder_id, urls in urls_by_folder.items():
+                self.ref.child(f"{folder_id}").update({
+                    "images": urls, # Теперь это список ссылок!
+                })
+                print(f"Database updated for {folder_id} with {len(urls)} images.")
 
     @staticmethod
     def _get_semester(path: Path) -> str | None:
@@ -212,17 +287,6 @@ class FirebaseClient:
             if not entry.get("keywords"):
                 self.ref.child(folder_id).delete()
                 print(f"Deleted: {folder_id}")
-            if "R" in entry.get("technology", []):
-                technologies = entry["technology"]
-                technologies.remove("R")
-                self.ref.child(folder_id).update({"technology": technologies})
-                print(f"Removed 'R' from {folder_id}")
-            if "Render" in entry.get("technology", []):
-                technologies = entry["technology"]
-                technologies.remove("Render")
-                self.ref.child(folder_id).update({"technology": technologies})
-                print(f"Removed 'Render' from {folder_id}")
-        
 
     def clean_keywords_by_yaml(self, yaml_path: str, dry_run: bool = True) -> None:
 
@@ -231,11 +295,6 @@ class FirebaseClient:
         for examples in categories.values():
             if isinstance(examples, list):
                 allowed.update(examples)
-
-        print(f"\n{'='*60}")
-        print(f"[{'DRY RUN' if dry_run else 'LIVE RUN'}] Чистим keywords по: {yaml_path}")
-        print(f"Допустимых слов в YAML: {len(allowed)}")
-        print(f"{'='*60}\n")
 
         db_data = self.fetch_all()
         total_removed = 0
@@ -262,15 +321,9 @@ class FirebaseClient:
             if not dry_run:
                 cleaned = [kw for kw in kw_list if kw in allowed]
                 self.ref.child(folder_id).update({"keywords": cleaned})
-
-        if dry_run:
-            print("Run with dry_run=False to apply these changes to Firebase.")
-        else:
-            print("Done")
         
 
     def find_missing_from_db(self, root_dir: Path) -> None:
-
         local_ids: dict[str, str] = {}
         for folder in root_dir.iterdir():
             if folder.is_dir() and folder.name[0].isdecimal():
@@ -307,9 +360,7 @@ class KeywordClassifier:
         for _, data in tags.items():
             if isinstance(data, list):
                 kw2.update(data)
-
         keywords_not_in_tags: set[str] = kw1 - kw2
-
         final_result = {cat: list(ex) if ex else [] for cat, ex in tags.items()}
         final_result["UNDEFINED"] = []
         result_clean = {cat: [] for cat in tags}
@@ -322,7 +373,7 @@ class KeywordClassifier:
         cat_names = list(tags.keys())
 
         for kw in keywords_not_in_tags:
-            result = self.classifier(                             # ✅ убрали лишний .classifier
+            result = self.classifier(
                 kw,
                 candidate_labels=hypotheses,
                 multi_label=False,
@@ -338,7 +389,6 @@ class KeywordClassifier:
             final_result[chosen].append(kw)
             result_clean[chosen].append(kw)
             print(f"{kw} → {chosen} (score: {best_score:.2f})")
-
         ProjectUtils.save_categories_yaml(result_clean)
 
 
@@ -395,7 +445,6 @@ class ProjectUtils:
             try:
                 self.repair_pdf(pdf, tmp)
                 tmp.replace(pdf)
-                print(f"Repaired: {pdf.name}")
             except Exception as e:
                 tmp.unlink(missing_ok=True)
                 print(f"Failed: {pdf.name} — {e}")
@@ -413,6 +462,7 @@ class Pipeline:
         self.keyword_filter = KeywordFilter()
         self.firebase = FirebaseClient(cred_path)
         self.utils = ProjectUtils()
+        self.image_extractor = ImageExtractor()
         self._extractor = None    # lazy
         self._classifier = None   # lazy
     
@@ -436,20 +486,26 @@ class Pipeline:
             if "report" in f.name.lower():
                 result.append(f)
         return result
+    
+    @property
+    def images(self) -> list[Path]:
+        return list(self.root_dir.rglob('firebase_image*.*'))
 
     def run_upload(self) -> None:
         # self.firebase.upload_keywords(self.files, self.extractor, self.doc_processor, self.keyword_filter)
-        self.firebase.upload_metadata(self.files, self.extractor, self.doc_processor)
+        # self.firebase.upload_metadata(self.files, self.extractor, self.doc_processor)
+        self.firebase.upload_images(self.images, self.extractor)
+
 
     def run_export_json(self, output_path: str = "keywords.json") -> None:
         self.utils.save_keywords_json(self.files, self.extractor, self.doc_processor, self.keyword_filter, output_path)
 
     def run_delete_empty(self) -> None:
         self.firebase.delete_empty_keywords()
-    
+
     def run_clean_keywords(self, yaml_path: str = "tags.yaml", dry_run: bool = True) -> None:
         self.firebase.clean_keywords_by_yaml(yaml_path, dry_run=dry_run)
-    
+
     def run_find_missing(self) -> dict:
         return self.firebase.find_missing_from_db(self.root_dir)
 
@@ -459,8 +515,10 @@ def main() -> None:
         root_dir=Path(r'C:\Users\azhar\Desktop\visualization'),
         cred_path="credentials.json",
     )
-    pipeline.run_delete_empty()
-    # pipeline.run_upload()
+    pipeline.run_upload()
+
+
+
 
 if __name__ == "__main__":
     main()
