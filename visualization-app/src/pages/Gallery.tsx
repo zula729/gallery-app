@@ -53,7 +53,7 @@ export function Gallery() {
     });
 
     return (
-        <main className="flex-1 p-2 ml-4">
+        <main className="flex-1 p-8 ml-4">
             <h2 className="text-4xl font-semibold">Gallery</h2>
             <h3 className="text-lg font-semibold pt-4 mr-25">
                 Search <Searchbar value={search} onChange={setSearch} />
@@ -71,7 +71,7 @@ export function Gallery() {
             <div className="flex flex-row pt-2 gap-8 flex-wrap mt-4">
                 {filtered.map((c) => (
                     <Link
-                        to={c.name}
+                        to={c.id}
                         className="block transition-transform hover:scale-[1.02]"
                         onClick={(e) => {
                             if ((e.target as HTMLElement).closest('button')) {
