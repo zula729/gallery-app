@@ -18,7 +18,9 @@ export function Gallery() {
     };
     const filtered = cards.filter((c) => {
         const matchesSearch =
-            c.author?.toLowerCase().includes(search.toLowerCase()) ||
+            c.author?.some((author: string) =>
+                author.toLowerCase().includes(search.toLowerCase())
+            ) ||
             c.keywords?.some((kw: string) => kw.toLowerCase().includes(search.toLowerCase())) ||
             c.technology?.some((tech: string) =>
                 tech.toLowerCase().includes(search.toLowerCase())

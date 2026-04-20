@@ -1,6 +1,6 @@
 export type CardType = {
     id: string;
-    author: string;
+    author: string[];
     keywords: string[];
     name: string;
     semestr: string;

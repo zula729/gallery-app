@@ -12,7 +12,7 @@ export function useCards() {
             if (data) {
                 const parsed: CardType[] = Object.entries(data).map(([id, entry]: any) => ({
                     id,
-                    author: entry.author,
+                    author: Array.isArray(entry.author) ? entry.author : [entry.author],
                     keywords: entry.keywords,
                     name: entry.name,
                     semestr: entry.semester,
