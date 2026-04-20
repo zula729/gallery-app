@@ -15,13 +15,17 @@ function Sidebar() {
             <hr className="border-gray-300 pb-2"></hr>
             <ul className="">
                 {SidebarData.map((val, key) => {
+                    const isActive =
+                        val.link === '/'
+                            ? location.pathname === '/'
+                            : location.pathname.startsWith(val.link);
                     return (
                         <li
                             key={key}
                             className={`group flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer mb-2
                 transition-all duration-150 ease-in-out
               ${
-                  location.pathname === val.link
+                  isActive
                       ? 'bg-amber-50 text-amber-700'
                       : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
               }`}
