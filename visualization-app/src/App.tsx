@@ -4,7 +4,7 @@ import { Home } from './pages/Home';
 import { Gallery } from './pages/Gallery';
 import { Visualization } from './pages/Visualization';
 import { HashRouter, Routes, Route, Navigate } from 'react-router';
-import { ProjectDetails } from './components/ProjectDetails';
+import ProjectDetails from './components/ProjectDetails';
 
 function App() {
     return (
@@ -20,7 +20,7 @@ function App() {
                             <Route path="home" element={<Home />} />
                             <Route path="gallery" element={<Gallery />} />
                             <Route path="visualization" element={<Visualization />} />
-                            <Route path="/gallery/:name" element={<ProjectDetails />} />
+                            <Route path="/gallery/:id" element={<ProjectDetails />} />
                         </Routes>
                     </main>
                 </div>
