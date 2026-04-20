@@ -56,7 +56,7 @@ function Card({ card }: CardProps) {
                             <div
                                 ref={labelsRef}
                                 className={`flex flex-row pt-2 gap-1 flex-wrap overflow-hidden transition duration-300 
-                            ${expanded ? 'max-h-screen' : 'max-h-18'}`}
+                            ${expanded ? 'max-h-screen' : 'max-h-15'}`}
                             >
                                 {allLabels.map((label) => (
                                     <Label key={label.text} text={label.text} type={label.type} />
