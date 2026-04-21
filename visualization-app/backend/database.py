@@ -99,6 +99,22 @@ class KeywordExtractor:
         except Exception as e:
             print(f"Error processing {file_path.name}: {e}")
             return [], ''
+    
+    def extract_existing_keywords(self, file_path: Path, doc_processor: DocumentProcessor) -> list[str] | None:
+        if self.is_macos_artifact(file_path):
+            return None
+        try:
+            text = doc_processor.read_text(file_path).lower()
+            tags = ProjectUtils.load_categories("tags.yaml")
+            found_keywords = []
+            for _, examples in tags.items():
+                for example in examples:
+                    if example.lower() in text:
+                        found_keywords.append(example)
+            return found_keywords if found_keywords else []
+        except Exception as e:
+            print(f"Error processing {file_path.name}: {e}")
+            return []
 
     def extract_metadata(self, file_path: Path, doc_processor: DocumentProcessor
                          ) -> tuple[str | None, str, list[str]] | tuple[None, None, None]:
@@ -182,7 +198,7 @@ class ImageExtractor:
                 ext = header.split(';')[0].split('/')[-1]
                 content = base64.b64decode(encoded)
                 
-                file_path = os.path.join(output_folder, f"firebase_image{i}.{ext}")
+                file_path = os.path.join(output_folder, f"firebase_image{img.get('id')}.{ext}")
                 with open(file_path, 'wb') as f:
                     f.write(content)
                 print(f"Сохранено: {file_path}")
@@ -210,15 +226,40 @@ class FirebaseClient:
 
     def upload_metadata(self, files: list[Path], extractor: KeywordExtractor, doc_processor: DocumentProcessor):
         for file_path in files:
-            folder_id, author, technology = extractor.extract_metadata(file_path, doc_processor)
+            # folder_id, author, technology = extractor.extract_metadata(file_path, doc_processor)
+            folder_id = extractor.folder_id_from_path(file_path)
             tags = self.upload_tags(folder_id, extractor, "tags.yaml")
-            if tags is None:
+            if not folder_id:
+                print(f"Error: {file_path}")
                 continue
             self.ref.child(f"{folder_id}").update({
                 # "semester": self._get_semester(file_path),
                 # "author": author,
                 # "technology": technology,
                 "tags": list(tags)
+            })
+
+    def update_keywords(self, files: list[Path], extractor: KeywordExtractor, doc_processor: DocumentProcessor):
+        for file_path in files:
+            keywords = extractor.extract_keywords_from_file(file_path, doc_processor)
+            folder_id = extractor.folder_id_from_path(file_path)
+            if keywords is None:
+                print("NONE VALUE TO DATA BASE")
+                print(file_path)
+                continue
+            if keywords == "":
+                print("WRONG PDF OR DOCX FILE")
+                print(file_path)
+                continue
+            self.ref.child(f"{folder_id}").update({
+                "keywords": keywords,
+            })
+
+    def upload_keywords_from_json(self, json_path: str):
+        data = ProjectUtils.load_json(json_path)
+        for folder_id, keywords in data.items():
+            self.ref.child(f"{folder_id}").update({
+                "keywords": keywords,
             })
 
     def upload_keywords(self, files: list[Path], extractor: KeywordExtractor, doc_processor: DocumentProcessor, keyword_filer: KeywordFilter):
@@ -267,7 +308,7 @@ class FirebaseClient:
                 urls_by_folder[folder_id].append(blob.public_url)
             for folder_id, urls in urls_by_folder.items():
                 self.ref.child(f"{folder_id}").update({
-                    "images": urls, # Теперь это список ссылок!
+                    "images": urls,
                 })
                 print(f"Database updated for {folder_id} with {len(urls)} images.")
 
@@ -287,6 +328,12 @@ class FirebaseClient:
             if not entry.get("keywords"):
                 self.ref.child(folder_id).delete()
                 print(f"Deleted: {folder_id}")
+
+    def no_tags(self):
+        data = self.fetch_all()
+        for folder_id, entry in data.items():
+            if not entry.get("tags"):
+                print(f"No tags: {folder_id}")
 
     def clean_keywords_by_yaml(self, yaml_path: str, dry_run: bool = True) -> None:
 
@@ -323,10 +370,10 @@ class FirebaseClient:
                 self.ref.child(folder_id).update({"keywords": cleaned})
         
 
-    def find_missing_from_db(self, root_dir: Path) -> None:
+    def find_missing_from_db(self, root_dir: Path):
         local_ids: dict[str, str] = {}
-        for folder in root_dir.iterdir():
-            if folder.is_dir() and folder.name[0].isdecimal():
+        for semester in root_dir.iterdir():
+            for folder in semester.iterdir():
                 folder_id = folder.name[:6]
                 local_ids[folder_id] = folder.name
 
@@ -403,19 +450,30 @@ class ProjectUtils:
     ) -> None:
         keywords_dict: dict[str, list[str]] = {}
         for file_path in files:
-            keywords = extractor.extract_keywords_from_file(file_path, doc_processor)
-            folder_id, author, technology = extractor.extract_metadata(file_path)
-            if keywords is None:
-                print("NONE VALUE TO DATA BASE")
-                print(file_path)
+            folder_id = extractor.folder_id_from_path(file_path)
+            if not folder_id:
+                print(f"no folder_id: {file_path}")
                 continue
-            if keywords == "":
-                print("WRONG PDF OR DOCX FILE")
-                print(file_path)
-                continue 
+            keywords = extractor.extract_keywords_from_file(file_path, doc_processor)
+            if keywords is None:
+                print(f"NONE VALUE: {file_path}")
+                continue
+            
+            if not keywords:
+                print(f"EMPTY KEYWORDS: {file_path}")
+                continue
             keywords = keyword_filter.filter(keywords)
-            if folder_id is not None:
-                keywords_dict[folder_id] = keywords, author or []
+            extracted_keywords = extractor.extract_existing_keywords(file_path, doc_processor)
+            if extracted_keywords:
+                if isinstance(extracted_keywords, list):
+                    keywords.extend(extracted_keywords)
+                elif isinstance(extracted_keywords, dict):
+                    for category_keywords in extracted_keywords.values():
+                        keywords.extend(category_keywords)
+            keywords = list(set(keywords))
+            keywords_dict[folder_id] = keywords
+            print(f"✓ {folder_id}: {len(keywords)} ключевых слов")
+
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(keywords_dict, f, ensure_ascii=False, indent=2)
 
@@ -480,22 +538,23 @@ class Pipeline:
     
     @property
     def files(self) -> list[Path]:
-        all_files = list(self.root_dir.rglob('*.pdf')) + list(self.root_dir.rglob('*.docx'))
+        all_files = list(self.root_dir.rglob('*'))
         result = []
+    
         for f in all_files:
-            if "report" in f.name.lower():
+            if f.is_file() and "report_page" in f.name.lower():
                 result.append(f)
+        
         return result
     
     @property
     def images(self) -> list[Path]:
-        return list(self.root_dir.rglob('firebase_image*.*'))
+        pathes = list(self.root_dir.rglob('*.png'))
+        return pathes
 
     def run_upload(self) -> None:
-        # self.firebase.upload_keywords(self.files, self.extractor, self.doc_processor, self.keyword_filter)
         # self.firebase.upload_metadata(self.files, self.extractor, self.doc_processor)
         self.firebase.upload_images(self.images, self.extractor)
-
 
     def run_export_json(self, output_path: str = "keywords.json") -> None:
         self.utils.save_keywords_json(self.files, self.extractor, self.doc_processor, self.keyword_filter, output_path)
@@ -509,16 +568,20 @@ class Pipeline:
     def run_find_missing(self) -> dict:
         return self.firebase.find_missing_from_db(self.root_dir)
 
+    def run_no_tags(self) -> None:
+        self.firebase.no_tags()
 
 def main() -> None:
     pipeline = Pipeline(
-        root_dir=Path(r'C:\Users\azhar\Desktop\visualization'),
+        root_dir=Path(r'C:\Users\azhar\Desktop\project_not_in_dataset'),
         cred_path="credentials.json",
     )
-    pipeline.run_upload()
-
-
-
+    path = [Path(r"C:/Users/azhar/Desktop/project_not_in_dataset/podzim2024/569385-Melovska_Karolina-vis_project_melovska/svg_pages/569385-Melovska_Karolina-report_vis_page_1.svg"),
+            Path(r"C:/Users/azhar/Desktop/project_not_in_dataset/podzim2024/569385-Melovska_Karolina-vis_project_melovska/svg_pages/569385-Melovska_Karolina-report_vis_page_2.svg"),
+            Path(r"C:/Users/azhar/Desktop/project_not_in_dataset/podzim2024/569385-Melovska_Karolina-vis_project_melovska/svg_pages/569385-Melovska_Karolina-report_vis_page_3.svg")]
+    image_ex = ImageExtractor()
+    image_ex.save_images(path)
+    # pipeline.run_upload()
 
 if __name__ == "__main__":
     main()

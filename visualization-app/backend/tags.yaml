@@ -1,205 +1,228 @@
 ANIMALS:
-  - dog
-  - hound
-  - breeds
-  - cowstructors
-  - kennel
-  - dogs
-  - nymphs
+    - dog
+    - hound
+    - breeds
+    - cowstructors
+    - kennel
+    - dogs
+    - nymphs
 
 FOOD:
-  - recepie
-  - food
-  - spaghetti
-  - popcorn
-  - bakery
-  - buttermilk
-  - nutritional
-  - dinner
-  - nutrition
-  - recipes
-  - cooked
-  - proteins
-  - protein
-  - garlic
-  - espresso
-  - coffee
-  - cocoa
-  - tea
-  - italian
-  - waitress
+    - recepie
+    - food
+    - spaghetti
+    - popcorn
+    - bakery
+    - buttermilk
+    - nutritional
+    - dinner
+    - nutrition
+    - recipes
+    - cooked
+    - proteins
+    - protein
+    - garlic
+    - espresso
+    - coffee
+    - cocoa
+    - tea
+    - italian
+    - waitress
 
 TRANSPORT:
-  - race
-  - traffic
-  - volkswagen
-  - driving
-  - speeding
-  - flight
-  - airline
-  - driver
-  - uber
-  - trip
+    - ferrari
+    - race
+    - traffic
+    - volkswagen
+    - driving
+    - speeding
+    - flight
+    - airline
+    - driver
+    - uber
+    - trip
+    - pilot
 
 MEDICINE:
-  - genes
-  - chromosomal
-  - lab
-  - cancer
-  - pandemic
-  - diabetes
-  - heartdisease
-  - doctor
-  - cardiovascular
-  - health
-  - bacteria
-  - diet
-  - vaccinations
-  - antibiotics
-  - molecular
-  - cdc
-  - coronavirus
-  - migraine
-  - genomic
-  - bioinformatics
-  - cloning
+    - genes
+    - chromosomal
+    - lab
+    - cancer
+    - pandemic
+    - diabetes
+    - heartdisease
+    - doctor
+    - cardiovascular
+    - health
+    - bacteria
+    - diet
+    - vaccinations
+    - antibiotics
+    - molecular
+    - cdc
+    - coronavirus
+    - migraine
+    - genomic
+    - bioinformatics
+    - cloning
 
 POLITICS:
-  - republican
-  - economics
-  - politician
-  - democratic
-  - police
-  - elections
-  - presidential
-  - parties
-  - candidates
-  - economy
-  - trading
-  - trade
+    - republican
+    - economics
+    - politician
+    - democratic
+    - police
+    - elections
+    - presidential
+    - parties
+    - candidates
+    - economy
+    - trading
+    - trade
+    - voters
+    - politics
 
 SOCIAL_MEDIA:
-  - trends
-  - popular
-  - tweet
-  - youtube
-  - screentime
-  - subscription
-  - popularity
-  - tweets
+    - trends
+    - popular
+    - tweet
+    - youtube
+    - screentime
+    - subscription
+    - popularity
+    - tweets
+    - reddit
 
 BOOK:
-  - fantasy
-  - book
-  - kingkiller
-  - supernatural
-  - romance
+    - fantasy
+    - book
+    - kingkiller
+    - supernatural
+    - romance
 
 DEMOGRAPHY:
-  - demography
-  - gender
-  - female
-  - male
-  - girlfriend
-  - wife
-  - overcrowding
-  - crime
-  - police
+    - gender
+    - demography
+    - gender
+    - female
+    - male
+    - girlfriend
+    - wife
+    - overcrowding
+    - crime
+    - crimes
+    - police
 
 SPORT:
-  - bike
-  - logosfootball
-  - football
-  - bikes
-  - championship
-  - manager
-  - locals
-  - greatest
+    - bike
+    - logosfootball
+    - football
+    - bikes
+    - championship
+    - manager
+    - locals
+    - greatest
+    - ball
+    - wrestling
+    - runner
 
 DISASTER:
-  - accidents
-  - earthquakes
-  - pollution
-  - tectonic
-  - seismic
+    - accidents
+    - earthquakes
+    - pollution
+    - tectonic
+    - seismic
 
 MUSIC:
-  - spotify
-  - songs
-  - reggae
-  - blues
-  - musical
-  - violin
+    - spotify
+    - songs
+    - reggae
+    - blues
+    - musical
+    - violin
 
 MOVIES:
-  - movie
-  - cinema
-  - imdb
-  - films
-  - tarantino
-  - popcorn
-  - anime
-  - titanic
-  - startrek
-  - dialogue
+    - movie
+    - cinema
+    - imdb
+    - films
+    - tarantino
+    - popcorn
+    - anime
+    - titanic
+    - startrek
+    - dialogue
+    - pokemon
 
 GAMES:
-  - games
-  - rpg
-  - playtime
-  - duels
-  - competitive
-  - grenades
-  - match
+    - games
+    - rpg
+    - playtime
+    - duels
+    - competitive
+    - grenades
+    - match
 
 CZECHIA:
-  - czech
-  - bohemia
-  - brno
+    - czech
+    - bohemia
+    - brno
+    - moravian
 
 SLOVAKIA:
-  - slovak
+    - slovak
 
 GEOGRAPHY:
-  - geospatial
-  - antarctica
-  - global
-  - colombia
-  - delhi
-  - migration
-  - immigration
-  - geografické
-  - tourists
-  - apartment
+    - geospatial
+    - antarctica
+    - global
+    - colombia
+    - delhi
+    - migration
+    - immigration
+    - geografické
+    - tourists
+    - apartment
+    - antarctica
 
 SPACE:
-  - nasa
-  - meteorites
-  - meteors
+    - nasa
+    - meteorites
+    - meteors
 
 ENERGY:
-  - solar
-  - photovoltaic
-  - renewable
-  - green
+    - solar
+    - photovoltaic
+    - renewable
+    - green
 
 LIFESTYLE:
-  - sleep
-  - bed
-  - bedtime
-  - asleep
-  - indoors
-  - emotional
+    - sleep
+    - bed
+    - bedtime
+    - asleep
+    - indoors
+    - emotional
 
 BUSINESS:
-  - rebranding
-  - rich
-  - valuable
-  - cheapest
-  - software
-  - developer
+    - rebranding
+    - rich
+    - valuable
+    - cheapest
+    - software
+    - developer
 
 ELECTION:
-  - parties
-  - elections
-  - candidates
+    - parties
+    - elections
+    - candidates
+    - voters
+
+FLIGHTS:
+    - aviation
+    - airline
+    - airport
+    - airline
+    - pilot
+    - flight
+    - plane
