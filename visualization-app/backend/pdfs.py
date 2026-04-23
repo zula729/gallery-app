@@ -4,6 +4,8 @@ import subprocess
 import fitz
 import os
 
+import ocrmypdf
+
 main_project_path= Path('C:\\Users\\azhar\\Desktop\\visualization')
 target_dir = Path('C:\\Users\\azhar\\Desktop\\project_not_in_dataset')
 
@@ -100,6 +102,28 @@ def convert_pdf_to_svg(source_dir: Path) -> None:
             os.remove(temp_pdf)
             
         doc.close()
+
+def repair_pdf(input_path: Path, output_path: Path) -> None:
+    ocrmypdf.ocr(
+        input_path,
+        output_path,
+        force_ocr=True,
+        language="eng+ces",
+        deskew=True,
+    )
+
+def repair_all_pdfs(self, root_dir: Path) -> None:
+    for pdf in root_dir.rglob("*.pdf"):
+        tmp = pdf.with_suffix(".tmp.pdf")
+        try:
+            self.repair_pdf(pdf, tmp)
+            tmp.replace(pdf)
+        except Exception as e:
+            tmp.unlink(missing_ok=True)
+            print(f"Failed: {pdf.name} — {e}")
+
+    
+
 
 def main():
     convert_pdf_to_svg(Path(r"C:\Users\azhar\Desktop\project_not_in_dataset"))

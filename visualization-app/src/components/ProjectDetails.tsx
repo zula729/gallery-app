@@ -17,11 +17,11 @@ function ProjectDetails() {
         <main className="flex-1 p-8 ml-4">
             <h2 className="text-4xl font-semibold mb-8">Gallery/{card.name}</h2>
             <div className="w-full max-w-5xl">
-                <div className="relative w-full bg-gray-300 rounded-lg overflow-hidden mb-6">
+                <div className="relative w-full max-h-[600px] bg-gray-300 rounded-lg overflow-hidden mb-6 flex items-center justify-center">
                     <img
                         src={card.images[currentImageIndex]}
                         alt={`carousel-image-${currentImageIndex}`}
-                        className="w-full h-120 object-cover"
+                        className="w-full h-full object-contain"
                     />
                 </div>
 

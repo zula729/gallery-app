@@ -19,7 +19,7 @@ const TechnologyStackedBarChart = () => {
     const [selectedTags, setSelectedTags] = useState<string[]>(TECHNOLOGY);
     const [selectedSemesters, setSelectedSemesters] = useState<string[]>(SEMESTR);
 
-    const data = useMemo(() => {
+    const { data, maxValue } = useMemo(() => {
         const freq: Record<string, Record<string, number>> = {};
         cards.forEach((card) => {
             card.technology?.forEach((tech) => {
@@ -38,9 +38,21 @@ const TechnologyStackedBarChart = () => {
             });
         });
 
-        return Object.entries(freq)
+        const formattedData = Object.entries(freq)
             .map(([tech, semesters]) => ({ tech, ...semesters }))
             .sort((a, b) => a.tech.localeCompare(b.tech));
+
+        let max = 0;
+        formattedData.forEach((item) => {
+            SEMESTR.forEach((semester) => {
+                const value = item[semester] ?? 0;
+                if (value > max) max = value;
+            });
+        });
+
+        const yMax = Math.ceil(max / 20) * 20 + 20;
+
+        return { data: formattedData, maxValue: yMax };
     }, [cards, selectedTags, selectedSemesters]);
 
     const toggleTag = (tag: string) => {
@@ -73,7 +85,7 @@ const TechnologyStackedBarChart = () => {
                     height={100}
                     niceTicks="snap125"
                 />
-                <YAxis width={50} domain={[0, 65]} niceTicks="snap125" />
+                <YAxis width={50} domain={[0, maxValue]} niceTicks="snap125" />
                 <Tooltip />
                 <Legend />
                 {SEMESTR.map((semester, i) => (
