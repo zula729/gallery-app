@@ -2,6 +2,7 @@ import { useParams } from 'react-router';
 import { useCards } from '../hooks/useCards';
 import { useMemo, useState } from 'react';
 import Label from './Label';
+import ReactMarkdown from 'react-markdown';
 
 function ProjectDetails() {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -17,11 +18,17 @@ function ProjectDetails() {
         <main className="flex-1 p-8 ml-4">
             <h2 className="text-4xl font-semibold mb-8">Gallery/{card.name}</h2>
             <div className="w-full max-w-5xl">
-                <div className="relative w-full max-h-[600px] bg-gray-300 rounded-lg overflow-hidden mb-6 flex items-center justify-center">
+                <div className="relative w-full h-[600px] rounded-lg overflow-hidden mb-6 flex items-center justify-center">
+                    <img
+                        src={card.images[currentImageIndex]}
+                        aria-hidden
+                        className="absolute inset-0 w-full h-full object-cover blur-2xl scale-110 brightness-50"
+                    />
+
                     <img
                         src={card.images[currentImageIndex]}
                         alt={`carousel-image-${currentImageIndex}`}
-                        className="w-full h-full object-contain"
+                        className="relative max-w-full max-h-full object-contain"
                     />
                 </div>
 
@@ -82,12 +89,28 @@ function ProjectDetails() {
                 </p>
                 <p className="text-lg text-gray-700">
                     <strong>About:</strong>{' '}
-                    {
-                        'Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.'
-                    }
-                </p>
-                <p className="text-lg text-gray-700">
-                    <strong>Link:</strong> {}
+                    <div className="prose max-w-none mt-2">
+                        <ReactMarkdown
+                            components={{
+                                a: ({ href, children }) => (
+                                    <a
+                                        href={href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-blue-500 underline"
+                                    >
+                                        {children}
+                                    </a>
+                                )
+                            }}
+                        >
+                            {card.text || 'No description provided'}
+                        </ReactMarkdown>
+                    </div>
+                    {/* {
+                        <ReactMarkdown>{card.text}</ReactMarkdown>
+                        // 'Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.'
+                    } */}
                 </p>
             </div>
         </main>
