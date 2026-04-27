@@ -40,6 +40,10 @@ const TechnologyStackedBarChart = () => {
 
         const formattedData = Object.entries(freq)
             .map(([tech, semesters]) => ({ tech, ...semesters }))
+            .filter((item) => {
+                const total = SEMESTR.reduce((sum, sem) => sum + ((item[sem] as number) ?? 0), 0);
+                return total >= 5;
+            })
             .sort((a, b) => a.tech.localeCompare(b.tech));
 
         let max = 0;
