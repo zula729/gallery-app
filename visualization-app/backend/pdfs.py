@@ -6,6 +6,8 @@ import os
 
 import ocrmypdf
 
+from path_work import PathParser
+
 main_project_path= Path('C:\\Users\\azhar\\Desktop\\visualization')
 target_dir = Path('C:\\Users\\azhar\\Desktop\\project_not_in_dataset')
 
@@ -23,8 +25,7 @@ def rename(root_dir: Path, prefix: str) -> None:
         if "report" in pdf.name.lower():
             new_path = pdf.with_name(f"{prefix}_{pdf.name}")
             pdf.rename(new_path)
-            print(f"Renamed: {pdf.name} → {new_path.name}")
-
+            print(f"Renamed: {pdf.name} → {new_path.name}")\
 
 def no_report_name(source_dir: Path) -> None:
     for pdf in source_dir.rglob("*.pdf"):
@@ -37,17 +38,9 @@ def folder_name(pdf: Path) -> str:
     return relative_path.parent
 
 
-def is_macos_artifact(path: Path) -> bool:
-    for part in path.parts:
-        p = part.lower()
-        if p.startswith("__macosx") or p.startswith("._") or p == ".ds_store" or p == "__MACOSX":
-            return True
-    return False
-
-
 def move_files(source_dir: Path, target_dir: Path) -> None:
     for pdf in source_dir.rglob("*.pdf"):
-        if is_macos_artifact(pdf):
+        if PathParser.is_macos_artifact(pdf):
             continue
         if "report" in pdf.name.lower():
             folder = folder_name(pdf)
@@ -63,7 +56,7 @@ def move_files(source_dir: Path, target_dir: Path) -> None:
 
 def convert_pdf_to_svg(source_dir: Path) -> None:
     for pdf in source_dir.rglob("*.pdf"):
-        if is_macos_artifact(pdf):
+        if PathParser.is_macos_artifact(pdf):
             continue
         if "repaired" in pdf.name.lower():
             print(f"Пропущено: {pdf.name}")
@@ -122,11 +115,10 @@ def repair_all_pdfs(self, root_dir: Path) -> None:
             tmp.unlink(missing_ok=True)
             print(f"Failed: {pdf.name} — {e}")
 
-    
-
 
 def main():
-    convert_pdf_to_svg(Path(r"C:\Users\azhar\Desktop\project_not_in_dataset"))
+    path = Path(r"C:/Users/azhar/Desktop/no_keywords/cz/244141-Matulova_Katerina-Matulova-Hyanek-")
+    convert_pdf_to_svg(path)
 
 if __name__ == "__main__":
     main()

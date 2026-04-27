@@ -35,6 +35,18 @@ class FirebaseClient:
             print(f"NONE VALUE TO DATA BASE: {file_path}")
             return False
         return True
+    
+    def upload_text(self, files: list[Path], doc_processor):
+        for file_path in files:
+            if PathParser.is_macos_artifact(file_path):
+                continue
+            text = doc_processor.read_text(file_path)
+            folder_id = PathParser.folder_id_from_path(file_path)
+            if text is None or text == "":
+                print(f"NONE VALUE TO DATA BASE: {file_path}")
+                continue
+            print(f"(folder_id: {folder_id})")
+            self._update_data(folder_id, {"text": text})
 
     def upload_metadata(self, files: list[Path], extractor, doc_processor):
         for file_path in files:
@@ -170,4 +182,12 @@ class FirebaseClient:
                 folder_id = folder.name[:6]
                 local_ids[folder_id] = folder.name
         return local_ids
+
+    def find_missing_text_in_db(self):
+        data = self.fetch_all()
+        missing_text = {fid: entry for fid, entry in data.items() if not entry.get("text")}
+        print(f"Total entries: {len(data)}")
+        print(f"Entries missing text: {len(missing_text)}")
+        for fid, entry in missing_text.items():
+            print(f"{fid}: {entry.get('name', 'Unknown')}")
 
