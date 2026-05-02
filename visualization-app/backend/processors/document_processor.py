@@ -1,10 +1,9 @@
 import re
 import fitz
-import pdfplumber
 import docx
 from pathlib import Path
 from docx.oxml.ns import qn
-from lxml import etree
+import pdfplumber
 
 
 class DocumentProcessor:
@@ -15,9 +14,10 @@ class DocumentProcessor:
             return self._read_docx(file_path)
         return ""
 
-    # def _read_pdf(self, path: Path) -> str:
-    #     with pdfplumber.open(path) as pdf:
-    #         return "".join(page.extract_text() or "" for page in pdf.pages)
+    def _read_pdf_simpl(self, path: Path) -> str:
+        with pdfplumber.open(path) as pdf:
+            return "".join(page.extract_text() or "" for page in pdf.pages)
+        
     def _read_pdf(self, pdf_path: Path) -> str:
         doc = fitz.open(pdf_path)
         md_lines = []
@@ -30,7 +30,6 @@ class DocumentProcessor:
 
             blocks = page.get_text("dict")["blocks"]
 
-            # Вычисляем базовый отступ страницы (левый край основного текста)
             x_positions = [
                 block["bbox"][0] for block in blocks
                 if block["type"] == 0 and block["lines"]
@@ -47,7 +46,6 @@ class DocumentProcessor:
 
                 all_spans = [span for line in block["lines"] for span in line["spans"]]
 
-                # Пропускаем мелкий текст (артефакты из картинок)
                 if all_spans and all(span["size"] < 7 for span in all_spans):
                     i += 1
                     continue
@@ -55,11 +53,9 @@ class DocumentProcessor:
                 block_x = block["bbox"][0]
                 block_text = " ".join(span["text"] for span in all_spans).strip()
 
-                # Определяем буллет-блок (содержит только •, -, –)
                 is_bullet_symbol = block_text in ("•", "-", "–", "*", "·")
 
                 if is_bullet_symbol:
-                    # Следующий блок — текст элемента списка
                     if i + 1 < len(blocks) and blocks[i + 1]["type"] == 0:
                         i += 1
                         next_block = blocks[i]
@@ -72,7 +68,6 @@ class DocumentProcessor:
                         i += 1
                         continue
 
-                # Определяем список по отступу (блок заметно правее базового текста)
                 is_indented = block_x > base_x + 10
 
                 block_lines = []
@@ -127,11 +122,8 @@ class DocumentProcessor:
 
 
     def clean_markdown(self, text):
-        # Убираем дублирование ссылок вида [текст](url)url
         text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)\s*\2', r'[\1](\2)', text)
-        # Убираем пустые ссылки
         text = re.sub(r'\[\s*\]\([^)]+\)\s*', '', text)
-        # Убираем лишние пустые строки
         text = re.sub(r'\n{3,}', '\n\n', text)
         return text
 
@@ -142,14 +134,13 @@ class DocumentProcessor:
 
         for para in doc.paragraphs:
             if not para.text.strip():
-                md_lines.append("")  # zachová prázdné řádky
+                md_lines.append("")
                 continue
 
             para_text = ""
             for run in para.runs:
                 run_text = run.text
 
-                # Zkontroluj jestli run obsahuje hyperlink
                 url = self.get_hyperlink_url(run, doc)
                 if url:
                     para_text += f"[{run_text}]({url})"
@@ -164,7 +155,6 @@ class DocumentProcessor:
 
     def get_hyperlink_url(self, run, doc):
         """Extrahuje URL z runu pokud je součástí hyperlinku."""
-        # Projdi rodiče runu a hledej hyperlink element
         parent = run._r.getparent()
         if parent.tag == qn("w:hyperlink"):
             rId = parent.get(qn("r:id"))

@@ -3,14 +3,14 @@ import re
 
 class PathParser:
     @staticmethod
-    def _get_semester(path: Path) -> str | None:
+    def extract_semester(path: Path) -> str | None:
         for part in path.parts:
             if part.lower().startswith("podzim"):
                 return part
         return None
 
     @staticmethod
-    def extract_authors_from_name(path: Path) -> str:
+    def extract_authors(path: Path) -> str:
         for part in path.parts:
             if part[0].isdecimal():
                 match = re.search(r'^\d+-(.*?)(?:-|$)', part)
@@ -27,7 +27,7 @@ class PathParser:
         return False
 
     @staticmethod
-    def folder_id_from_path(path: Path) -> str:
+    def extract_folder_id(path: Path) -> str:
         for part in path.parts:
             if part[0].isdecimal():
                 return part[:6]

@@ -6,7 +6,7 @@ import os
 
 import ocrmypdf
 
-from path_work import PathParser
+from utils import PathParser
 
 main_project_path= Path('C:\\Users\\azhar\\Desktop\\visualization')
 target_dir = Path('C:\\Users\\azhar\\Desktop\\project_not_in_dataset')

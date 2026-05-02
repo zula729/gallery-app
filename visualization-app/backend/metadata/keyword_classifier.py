@@ -1,5 +1,5 @@
-from firebase_client import FirebaseClient
-from json_yaml_manager import JsonYamlManager
+from firebase import FirebaseClient
+from utils import JsonYamlManager
 
 from transformers import pipeline
 
@@ -60,7 +60,6 @@ class KeywordClassifier:
         hypotheses: list[str],
         categories: list[str]
     ) -> str:
-        """Классифицирует одно ключевое слово"""
         result = self.classifier(
             keyword,
             candidate_labels=hypotheses,

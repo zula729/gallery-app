@@ -10,14 +10,14 @@ class ImageExtractor:
         self.ns = {'svg': 'http://www.w3.org/2000/svg', 'xlink': 'http://www.w3.org/1999/xlink'}
 
     @staticmethod
-    def is_big_enough(base64_str, min_size_kb=20):
+    def _is_above_size_threshold(base64_str, min_size_kb=20):
         if "base64," in base64_str:
             base64_str = base64_str.split("base64,")[1]
         file_size_bytes = (len(base64_str) * 3) / 4
         file_size_kb = file_size_bytes / 1024
         return file_size_kb >= min_size_kb
 
-    def extract_images_from_docx(self, docx_path):
+    def _extract_from_docx(self, docx_path):
         try:
             output_folder = docx_path.parent / "images"
             output_folder.mkdir(parents=True, exist_ok=True)
@@ -35,7 +35,7 @@ class ImageExtractor:
         except Exception as e:
             print(f"Error extracting images from {docx_path}: {e}")
 
-    def extract_images_from_svg(self, svg_path):
+    def _extract_from_svg(self, svg_path):
         try:
             output_folder = svg_path.parent / "images"
             output_folder.mkdir(parents=True, exist_ok=True)
@@ -49,7 +49,7 @@ class ImageExtractor:
         images = root.findall('.//svg:image', self.ns) + root.findall('.//image', self.ns)
 
         for i, img in enumerate(images):
-            if not self.is_big_enough(img.get('href') or img.get('{http://www.w3.org/1999/xlink}href')):
+            if not self._is_above_size_threshold(img.get('href') or img.get('{http://www.w3.org/1999/xlink}href')):
                 print(f"Skipped image, too small (id: {img.get('id')}), {svg_path}")
                 continue
             img_data = img.get('href') or img.get('{http://www.w3.org/1999/xlink}href')
@@ -67,12 +67,12 @@ class ImageExtractor:
             except Exception as e:
                 print(f"Error {i}: {e}")
 
-    def save_images(self, files: list[Path]):
+    def process_files(self, files: list[Path]):
         for file_path in files:
             try: 
                 if file_path.suffix.lower() == '.docx':
-                    self.extract_images_from_docx(file_path)
+                    self._extract_from_docx(file_path)
                 elif file_path.suffix.lower() == '.svg':
-                    self.extract_images_from_svg(file_path)
+                    self._extract_from_svg(file_path)
             except Exception as e:
                 print(f"Error processing {file_path}: {e}")
