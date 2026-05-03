@@ -3,7 +3,7 @@ from pipeline import Pipeline
 
 
 def main() -> None:
-    path = Path(r"C:\Users\azhar\Desktop\example")
+    path = Path(r"C:\Users\azhar\Desktop\no_keywords")
     pipeline = Pipeline(
         root_dir=Path(path),
     )

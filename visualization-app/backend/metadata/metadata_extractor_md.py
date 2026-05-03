@@ -62,12 +62,7 @@ class MarkdownExtractor:
             logger.error(f"Error extracting keywords: {e}")
             return None
     
-    def extract_tags(self, content: dict):
-        text = (
-                self._get_field(content, "Motivation") +
-                self._get_field(content, "Project Description (short project description 150-200 words)") +
-                self._get_field(content, "Explanation of the design choices")
-            )
+    def extract_tags(self, text: str):
         tags = JsonYamlManager.load_yaml(TAGS_YAML)
         found_tags = set()
         for tag, examples in tags.items():
@@ -79,14 +74,18 @@ class MarkdownExtractor:
     def extract_metadata(self, content: dict[str, str | None]):
         authors_raw = self._get_field(content, "Authors")
         tech_raw = self._get_field(content, "Used technologies")
-        
+        text = (
+                self._get_field(content, "Motivation") +
+                self._get_field(content, "Project Description (short project description 150-200 words)") +
+                self._get_field(content, "Explanation of the design choices")
+            )
         return {
             "name": self._get_field(content, "name"),
             "author": [line.lstrip("- ").strip() for line in authors_raw.split("\n") if line.strip()],
             "technology": [re.sub(r"^\d+\.\s+", "", line) for line in tech_raw.split("\n") if line.strip()],
-            "text": self._get_field(content, "Project Description (short project description 150-200 words)"),
+            "text": text,
             "link": self._get_field(content, "Link on project"),
-            "tags": self.extract_tags(content),
+            "tags": self.extract_tags(text),
 
         }
 
