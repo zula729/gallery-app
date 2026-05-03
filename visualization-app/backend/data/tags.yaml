@@ -2,7 +2,6 @@ ANIMALS:
     - dog
     - hound
     - breeds
-    - cowstructors
     - kennel
     - dogs
     - nymphs
@@ -65,6 +64,15 @@ MEDICINE:
     - genomic
     - bioinformatics
     - cloning
+    - mental health
+    - disorders
+    - anxiety
+    - substance abuse
+    - alcohol abuse
+    - tobacco abuse
+    - public health
+    - bioinformatics
+    - nuclei
 
 POLITICS:
     - republican
@@ -112,6 +120,8 @@ DEMOGRAPHY:
     - crime
     - crimes
     - police
+    - religion
+    - sexuality
 
 SPORT:
     - bike
@@ -139,7 +149,6 @@ MUSIC:
     - reggae
     - blues
     - musical
-    - violin
 
 MOVIES:
     - movie
@@ -153,6 +162,12 @@ MOVIES:
     - startrek
     - dialogue
     - pokemon
+    - ratings
+    - popularity
+    - genres
+    - fandom
+    - users
+    - community
 
 GAMES:
     - games
@@ -171,6 +186,7 @@ CZECHIA:
 
 SLOVAKIA:
     - slovak
+    - bratislava
 
 GEOGRAPHY:
     - geospatial
@@ -184,6 +200,10 @@ GEOGRAPHY:
     - tourists
     - apartment
     - antarctica
+    - czech
+    - slovak
+    - brno
+    - bratislava
 
 SPACE:
     - nasa
@@ -203,6 +223,8 @@ LIFESTYLE:
     - asleep
     - indoors
     - emotional
+    - productivity
+    - time management
 
 BUSINESS:
     - rebranding
@@ -226,3 +248,20 @@ FLIGHTS:
     - pilot
     - flight
     - plane
+
+AI_NLP:
+    - llm
+    - empathy
+    - bias
+    - intersectionality
+    - fairness
+    - ai
+    - social groups
+    - machine learning
+
+ENVIRONMENT:
+    - waste
+    - recycling
+    - pollution
+    - environment
+    - sustainability

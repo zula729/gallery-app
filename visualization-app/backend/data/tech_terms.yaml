@@ -134,6 +134,7 @@ SciPy:
 
 Recharts:
     - recharts
+    - Recharts
 
 Chart.js:
     - chart.js
@@ -151,3 +152,9 @@ CSV:
 
 Excel:
     - excel
+
+Proj4:
+    - Proj4
+
+Material-U:
+    - Material-u
