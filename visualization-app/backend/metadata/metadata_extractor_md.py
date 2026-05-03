@@ -51,8 +51,7 @@ class MarkdownExtractor:
         try:
             text = (
                 self._get_field(content, "Motivation") +
-                self._get_field(content, "Project Description (short project description 150-200 words)") +
-                self._get_field(content, "Explanation of the design choices")
+                self._get_field(content, "Project Description (short project description 150-200 words)")
             )
             keywords: list[str] = (self._predict_keywords(text))
             extracted_keywords: list[str] = self._match_known_keywords(text)
