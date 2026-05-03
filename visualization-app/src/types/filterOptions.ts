@@ -1,5 +1,5 @@
-import tagsYaml from '../../backend/tags.yaml';
-import techYaml from '../../backend/tech_terms.yaml';
+import tagsYaml from '../../backend/data/tags.yaml';
+import techYaml from '../../backend/data/tech_terms.yaml';
 
 export const TAGS = Object.keys(tagsYaml) as string[];
 
