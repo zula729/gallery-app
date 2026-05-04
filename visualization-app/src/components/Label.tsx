@@ -15,7 +15,10 @@ function Label({ text, type = 'keyword' }: LabelProps) {
         <span
             className={`rounded-full text-sm font-medium flex items-center p-0.5 pl-2 pr-2 ${colorMap[type]}`}
         >
-            {text.charAt(0).toUpperCase() + text.slice(1).toLowerCase().replace(/_/g, ' ')}
+            {(() => {
+                const replaced = text.replace(/_/g, ' ').replace(/podzim/gi, 'autumn');
+                return replaced.charAt(0).toUpperCase() + replaced.slice(1).toLowerCase();
+            })()}
         </span>
     );
 }

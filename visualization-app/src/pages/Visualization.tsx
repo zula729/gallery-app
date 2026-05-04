@@ -35,7 +35,7 @@ export function Visualization() {
                         cardField="tags"
                         dataKey="tag"
                         height={500}
-                        yAxisStep={5}
+                        yAxisStep={10}
                     />
                 </div>
             </div>

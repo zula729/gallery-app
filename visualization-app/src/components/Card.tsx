@@ -4,6 +4,8 @@ import type { CardType } from '../types/CardType';
 
 import { useState, useRef, useEffect } from 'react';
 
+import Default from '../assets/default.png';
+
 type CardProps = {
     card: CardType;
 };
@@ -43,7 +45,10 @@ function Card({ card }: CardProps) {
         <div className="rounded-2xl bg-white">
             <div className="flex flex-col">
                 <div className={`border border-gray-400 shadow-lg/20 rounded-xl w-90 pb-3`}>
-                    <img className="object-cover rounded-t-xl w-full h-40" src={card.images[0]} />
+                    <img
+                        className="object-contain rounded-t-xl w-full h-40"
+                        src={card.images?.[0] ?? Default}
+                    />
                     <div className="flex flex-col pl-2 pr-2 pt-2">
                         <div className="h-25">
                             <h2 className="text-xl font-semibold">{card.name}</h2>
@@ -55,7 +60,17 @@ function Card({ card }: CardProps) {
                                     </span>
                                 ))}
                             </p>
-                            <p className="text-m">{card.semestr}</p>
+                            <p className="text-m">
+                                {(() => {
+                                    const replaced = card.semestr
+                                        .replace(/_/g, ' ')
+                                        .replace(/podzim/gi, 'autumn');
+                                    return (
+                                        replaced.charAt(0).toUpperCase() +
+                                        replaced.slice(1).toLowerCase()
+                                    );
+                                })()}
+                            </p>
                         </div>
                         <hr className="mt-3 mb-2 border-gray-300"></hr>
                         <div>

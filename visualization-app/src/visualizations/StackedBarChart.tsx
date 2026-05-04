@@ -113,7 +113,15 @@ const StackedBarChart = ({
                                 color: isActive ? '#fff' : COLORS[i % COLORS.length]
                             }}
                         >
-                            {semester}
+                            {(() => {
+                                const replaced = semester
+                                    .replace(/_/g, ' ')
+                                    .replace(/podzim/gi, 'autumn');
+                                return (
+                                    replaced.charAt(0).toUpperCase() +
+                                    replaced.slice(1).toLowerCase()
+                                );
+                            })()}
                         </button>
                     );
                 })}
@@ -135,6 +143,15 @@ const StackedBarChart = ({
                         <Bar
                             key={semester}
                             dataKey={semester}
+                            name={(() => {
+                                const replaced = semester
+                                    .replace(/_/g, ' ')
+                                    .replace(/podzim/gi, 'autumn');
+                                return (
+                                    replaced.charAt(0).toUpperCase() +
+                                    replaced.slice(1).toLowerCase()
+                                );
+                            })()}
                             stackId="a"
                             fill={COLORS[i % COLORS.length]}
                         />
