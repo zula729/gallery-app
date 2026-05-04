@@ -56,7 +56,14 @@ export function Gallery() {
 
     return (
         <main className="flex-1 p-8 ml-4">
-            <h2 className="text-4xl font-semibold">Gallery</h2>
+            <div className="flex items-center justify-between">
+                <div>
+                    <h2 className="text-4xl font-semibold">Gallery</h2>
+                    <p className="text-gray-500 mt-1 text-sm">
+                        A collection of visualizations developed during the course
+                    </p>
+                </div>
+            </div>
             <h3 className="text-lg font-semibold pt-4 mr-25">
                 Search <Searchbar value={search} onChange={setSearch} />
             </h3>
