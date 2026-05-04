@@ -1,29 +1,52 @@
-export function Home() {
-    return (
-        <main className="flex-1 p-8 ml-4 max-w-4xl">
-            <div className="mb-8">
-                <h2 className="text-4xl font-semibold">Welcome</h2>
-                {/* <p className="text-gray-400 text-sm mb-8">FI MU · Brno</p>
+import Counter from '../components/Counter';
+import { useCards } from '../hooks/useCards';
+// import Background from '../assets/background.png';
 
-                <p className="text-gray-600 text-sm leading-relaxed mb-8 max-w-xl">
+export function Home() {
+    const count = useCards().length;
+    return (
+        <main className="flex-1 p-8 ml-4">
+            <div className="mb-8">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h2 className="text-4xl font-semibold">Welcome</h2>
+                        <p className="text-gray-500 mt-1 text-sm">FI MU · Brno</p>
+                    </div>
+                </div>
+                <p className="text-gray-600 text-sm leading-relaxed mb-8 max-w-xl space-y-6 pt-4">
                     A showcase of student visualizations from Masaryk University. Browse projects,
                     explore technologies used, and discover what students accomplished each
                     semester.
                 </p>
-                <div className="grid grid-cols-3 gap-3 mb-8">
-                    <div className="bg-gray-50 rounded-xl p-4">
+
+                <div className="flex flex-row gap-4 mb-8">
+                    <div className="bg-gray-50 rounded-xl p-4 basis-md">
                         <p className="text-xl font-semibold text-amber-600">2</p>
                         <p className="text-gray-400 text-xs mt-1">Semesters</p>
                     </div>
-                    <div className="bg-gray-50 rounded-xl p-4">
+                    <div className="bg-gray-50 rounded-xl p-4 basis-md">
                         <p className="text-xl font-semibold text-amber-600">FI MU</p>
                         <p className="text-gray-400 text-xs mt-1">Faculty</p>
                     </div>
-                    <div className="bg-gray-50 rounded-xl p-4">
+                    <div className="bg-gray-50 rounded-xl p-4 basis-md">
                         <p className="text-xl font-semibold text-amber-600">2025</p>
                         <p className="text-gray-400 text-xs mt-1">Latest cohort</p>
                     </div>
-                </div> */}
+                    <div className="bg-gray-50 rounded-xl p-4 basis-md">
+                        <p className="text-xl font-semibold text-amber-600">
+                            <Counter
+                                from={0}
+                                to={count}
+                                separator=","
+                                direction="up"
+                                duration={1}
+                                className="count-up-text"
+                                delay={0}
+                            />
+                        </p>
+                        <p className="text-gray-400 text-xs mt-1">Projects number</p>
+                    </div>
+                </div>
             </div>
             <a
                 href="https://is.muni.cz/predmet/fi/PV251"
