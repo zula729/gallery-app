@@ -45,10 +45,17 @@ function Card({ card }: CardProps) {
         <div className="rounded-2xl bg-white">
             <div className="flex flex-col">
                 <div className={`border border-gray-400 shadow-lg/20 rounded-xl w-90 pb-3`}>
-                    <img
-                        className="object-contain rounded-t-xl w-full h-40"
-                        src={card.images?.[0] ?? Default}
-                    />
+                    <div className="relative w-full h-40 rounded-t-xl overflow-hidden">
+                        <img
+                            src={card.images?.[0] ?? Default}
+                            aria-hidden
+                            className="absolute inset-0 w-full h-full object-cover blur-2xl scale-110 brightness-100"
+                        />
+                        <img
+                            src={card.images?.[0] ?? Default}
+                            className="relative z-10 w-full h-full object-contain"
+                        />
+                    </div>
                     <div className="flex flex-col pl-2 pr-2 pt-2">
                         <div className="h-25">
                             <h2 className="text-xl font-semibold">{card.name}</h2>

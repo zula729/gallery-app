@@ -8,4 +8,5 @@ export type CardType = {
     technology: string[];
     images: string[];
     text: string;
+    link: string;
 };

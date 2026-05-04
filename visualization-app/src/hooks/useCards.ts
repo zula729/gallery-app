@@ -19,7 +19,8 @@ export function useCards() {
                     tags: entry.tags,
                     technology: entry.technology?.map((t: string) => t.trim()),
                     images: entry.images ?? [],
-                    text: entry.text
+                    text: entry.text,
+                    link: entry.link ?? ''
                 }));
                 setCard(parsed);
             } else {
