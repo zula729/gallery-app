@@ -42,7 +42,7 @@ function FilterPanel({
             <div className="flex items-center gap-2">
                 <button
                     onClick={() => setIsOpen((prev) => !prev)}
-                    className="text-gray-700 mt-2 font-semibold"
+                    className="text-gray-700 mt-2 font-semibold cursor-pointer"
                 >
                     {isOpen ? '▲' : '▼'} Filters {selected.length > 0 && `(${selected.length})`}
                 </button>

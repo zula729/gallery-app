@@ -25,8 +25,10 @@ function FilterGroup({
     sorted = true,
     type = 'semestr'
 }: FilterGroupProps) {
-    const formatLabel = (item: string) =>
-        item.charAt(0).toUpperCase() + item.slice(1).toLowerCase().replace(/_/g, ' ');
+    const formatLabel = (item: string) => {
+        const replaced = item.replace(/_/g, ' ').replace(/podzim/gi, 'autumn');
+        return replaced.charAt(0).toUpperCase() + replaced.slice(1).toLowerCase();
+    };
 
     const sortedItems = sorted ? [...items].sort((a, b) => a.localeCompare(b)) : items;
     return (
