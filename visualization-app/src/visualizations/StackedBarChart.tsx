@@ -32,7 +32,7 @@ const StackedBarChart = ({
     yAxisStep = 20
 }: StackedBarChartProps) => {
     const cards = useCards();
-    const [selectedOptions, setSelectedOptions] = useState<string[]>(options);
+    const [selectedOptions] = useState<string[]>(options);
     const [selectedSemesters, setSelectedSemesters] = useState<string[]>(SEMESTR);
 
     const { data, maxValue } = useMemo(() => {
