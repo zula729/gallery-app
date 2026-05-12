@@ -2,9 +2,7 @@
 
 ## Deploy app
 
-```
-npm run dev
-```
+link: https://bachelor-cc64fb.pages.fi.muni.cz/#/home
 
 ## Add new projects
 
