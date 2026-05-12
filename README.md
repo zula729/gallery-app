@@ -19,7 +19,7 @@ link: https://bachelor-cc64fb.pages.fi.muni.cz/#/home
 - Add new technologies to _tech_terms.yaml_ in _../backend/data/_
   - Include all variations of how the technology may appear in text
 
-\*Automatic adding(need to be checked)
+\* Automatic adding(need to be checked)
 
 - This feature may need refactoring and might not fully support the new format.
 
