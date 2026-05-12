@@ -11,7 +11,21 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 class Pipeline:
+    """
+    Main class for processing project files and uploading results.
+
+    Responsibilities:
+    - Collect files from directory structure
+    - Extract metadata and keywords
+    - Upload data (metadata, keywords, images) to Firebase
+    """
     def __init__(self, root_dir: Path):
+        """
+        Initialize pipeline with required services and processors.
+
+        Args:
+            root_dir (Path): Root directory containing all project folders
+        """
         self.root_dir = root_dir
         self.doc_processor = DocumentProcessor()
         self.keyword_filter = KeywordFilter()
@@ -25,18 +39,36 @@ class Pipeline:
     
     @property
     def pdf_extractor(self) -> MetadataExtractor:
+        """
+        Lazy initialization of PDF metadata extractor.
+
+        Returns:
+            MetadataExtractor: PDF metadata extractor instance
+        """
         if self._pdf_extractor is None:
             self._pdf_extractor = MetadataExtractor()
         return self._pdf_extractor
     
     @property
     def md_extractor(self) -> MarkdownExtractor:
+        """
+        Lazy initialization of Markdown extractor.
+
+        Returns:
+            MarkdownExtractor: Markdown processing instance
+        """
         if self._md_extractor is None:
             self._md_extractor = MarkdownExtractor()
         return self._md_extractor
 
     @property
     def classifier(self) -> KeywordClassifier:
+        """
+        Lazy initialization of keyword classifier.
+
+        Returns:
+            KeywordClassifier: Classification model instance
+        """
         if self._classifier is None:
             self._classifier = KeywordClassifier()
         return self._classifier
@@ -58,6 +90,15 @@ class Pipeline:
         return paths
 
     def run_upload(self) -> None:
+        """
+        Executes full upload pipeline:
+
+        1. Upload metadata
+        2. Upload keywords
+        3. Upload images
+
+        Uses Markdown-based processing.
+        """
         self.firebase_pusher_md.push_metadata(self.files)
         self.firebase_pusher_md.push_keywords(self.files)
         self.firebase_pusher_md.push_images(self.images)

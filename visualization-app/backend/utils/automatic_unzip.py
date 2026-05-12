@@ -9,6 +9,16 @@ if sys.platform == "win32":
 root_dir = Path(r'C:\Users\azhar\Desktop\visualization_with_images')  # Change this to your target directory
 
 def unzip_all_automatically(directory: Path):
+    """
+    Recursively finds all .zip files in the given directory
+    and extracts each archive into a separate folder.
+
+    Each ZIP file is extracted into:
+        <zip_file_name_without_extension>/
+
+    Example:
+        example.zip -> example/
+    """
     for zip_path in directory.rglob('*.zip'):
         extract_to = zip_path.parent / zip_path.stem
         

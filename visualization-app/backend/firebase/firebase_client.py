@@ -8,6 +8,14 @@ logger = logging.getLogger(__name__)
 
 
 class FirebaseClient:
+    """
+    Client for interacting with Firebase Realtime Database and Storage.
+
+    Provides utilities for:
+    - Fetching and cleaning database records
+    - Validating keywords against YAML configuration
+    - Detecting missing data (local vs database)
+    """
     DB_URL = "https://visualization-88a6b-default-rtdb.europe-west1.firebasedatabase.app/"
     REF_PATH = "Keywords from projects"
     BUCKET_NAME = "visualization-88a6b.firebasestorage.app"
@@ -23,6 +31,11 @@ class FirebaseClient:
         return self.ref.get() or {}
 
     def delete_empty_records(self) -> None:
+        """
+        Removes database entries that do not contain keywords.
+
+        Useful for cleaning incomplete or failed uploads.
+        """
         data = self.fetch_all()
         for folder_id, entry in data.items():
             if not entry.get("keywords"):
@@ -30,6 +43,16 @@ class FirebaseClient:
                 logger.info(f"Deleted: {folder_id}")
 
     def filter_keywords_by_yaml(self, yaml_path: str, dry_run: bool = True) -> None:
+        """
+        Filters keywords in database using allowed values from YAML.
+
+        Args:
+            yaml_path (str): Path to YAML file with allowed categories/keywords
+            dry_run (bool): If True, only counts removals without updating DB
+
+        Returns:
+            int: Total number of removed keywords
+        """
         categories = JsonYamlManager.load_categories(yaml_path)
         allowed: set[str] = self._get_allowed_keywords(categories)
 
@@ -43,12 +66,33 @@ class FirebaseClient:
         return total_removed
 
     def _get_allowed_keywords(self, categories: dict) -> set[str]:
+        """
+        Extracts all allowed keywords from YAML categories.
+
+        Args:
+            categories (dict): YAML structure {category: [keywords]}
+
+        Returns:
+            set[str]: Set of allowed keywords
+        """
         allowed = set()
         for examples in categories.values():
             allowed.update(self._ensure_list(examples))
         return allowed
 
     def _filter_entry_keywords(self, folder_id: str, entry: dict, allowed: set[str], dry_run: bool) -> int:
+        """
+        Filters invalid keywords from a single database entry.
+
+        Args:
+            folder_id (str): Project ID
+            entry (dict): Database record
+            allowed (set[str]): Allowed keywords
+            dry_run (bool): If True, do not update database
+
+        Returns:
+            int: Number of removed keywords
+        """
         kw_list = entry.get("keywords", [])
         to_remove = [kw for kw in kw_list if kw not in allowed]
         if not kw_list or not to_remove:
@@ -61,6 +105,17 @@ class FirebaseClient:
         return len(to_remove)
 
     def find_missing_folders(self, root_dir: Path):
+        """
+        Compares local project folders with database entries.
+
+        Finds projects that exist locally but are missing in Firebase.
+
+        Args:
+            root_dir (Path): Root directory containing semester folders
+
+        Returns:
+            dict: {folder_id: folder_name} for missing entries
+        """
         local_ids = self._scan_local_folders(root_dir)
         db_ids = set(self.fetch_all().keys())
 
@@ -73,6 +128,20 @@ class FirebaseClient:
         return missing
 
     def _scan_local_folders(self, root_dir: Path) -> dict[str, str]:
+        """
+        Scans local directory structure to extract project IDs.
+
+        Assumes structure:
+            root/
+                semester/
+                    <folder_id>-project_name/
+
+        Args:
+            root_dir (Path): Root directory
+
+        Returns:
+            dict: {folder_id: folder_name}
+        """
         local_ids = {}
         for semester in root_dir.iterdir():
             for folder in semester.iterdir():
@@ -81,6 +150,19 @@ class FirebaseClient:
         return local_ids
 
     def find_missing_values(self):
+        """
+        Finds database entries with missing required fields.
+
+        Checks for:
+        - text
+        - author
+        - keywords
+        - name
+        - semestr
+        - tags
+
+        Logs all incomplete entries.
+        """
         data = self.fetch_all()
         missing = {}
         

@@ -12,18 +12,41 @@ logger = logging.getLogger(__name__)
 
 
 class FirebasePushMD:
+    """
+    Handles uploading project data (metadata, keywords, images)
+    to Firebase Realtime Database and Firebase Storage.
+    """
+
     DB_URL = "https://visualization-88a6b-default-rtdb.europe-west1.firebasedatabase.app/"
     REF_PATH = "Keywords from projects"
     BUCKET_NAME = "visualization-88a6b.firebasestorage.app"
     DEFAULT_CRED = Path(__file__).parent.parent / "credentials.json"
 
     def __init__(self, cred_path: Path = DEFAULT_CRED):
+        """
+        Initializes Firebase app (if not already initialized)
+        and creates a reference to the database path.
+        """
         if not firebase_admin._apps:
             cred = credentials.Certificate(cred_path)
             firebase_admin.initialize_app(cred, {"databaseURL": self.DB_URL, "storageBucket": self.BUCKET_NAME})
         self.ref = db.reference(self.REF_PATH)
     
     def parse_sections(self, file_path: Path) -> dict[str, str | None]:
+        """
+        Parses a Markdown file into structured sections.
+
+        Extracts:
+        - Project name (from first '# ' heading)
+        - All '## ' sections as key-value pairs
+
+        Args:
+            file_path (Path): Path to markdown file
+
+        Returns:
+            dict: Parsed sections {section_name: content}
+            None: If file cannot be read
+        """
         try:
             with open(file_path, encoding="utf-8") as f:
                 content = f.read()
@@ -41,6 +64,16 @@ class FirebasePushMD:
             return None
     
     def _merge_and_push(self, folder_id: str, data: dict[str, list[str]]) -> None:
+        """
+        Merges new data with existing Firebase data and updates it.
+
+        - Lists are merged and deduplicated
+        - Other values are overwritten
+
+        Args:
+            folder_id (str): Unique project identifier
+            data (dict): Data to upload
+        """
         current = self.ref.child(folder_id).get() or {}
         merged_data = {}
         for key, values in data.items():
@@ -52,6 +85,19 @@ class FirebasePushMD:
         self.ref.child(folder_id).update(merged_data)
     
     def push_metadata(self, files: list[Path]):
+        """
+        Extracts metadata from markdown files and uploads it to Firebase.
+
+        Includes:
+        - Project name
+        - Authors
+        - Technologies
+        - Tags
+        - Semester
+
+        Args:
+            files (list[Path]): List of markdown file paths
+        """
         from metadata import MarkdownExtractor
         from utils import PathParser
         extractor = MarkdownExtractor()
@@ -68,6 +114,12 @@ class FirebasePushMD:
             self._merge_and_push(folder_id, data_to_send)
 
     def push_keywords(self, files: list[Path]):
+        """
+        Extracts keywords from markdown files and uploads them to Firebase.
+
+        Args:
+            files (list[Path]): List of markdown file paths
+        """
         from metadata import MarkdownExtractor
         extractor = MarkdownExtractor()
         for file_path in files:
@@ -83,6 +135,15 @@ class FirebasePushMD:
             self._merge_and_push(folder_id, keywords)
     
     def push_images(self, files: list[Path]):
+        """
+        Uploads image files to Firebase Storage and stores their public URLs
+        in the Realtime Database.
+
+        Images are grouped by project folder_id.
+
+        Args:
+            files (list[Path]): List of image file paths
+        """
         bucket = storage.bucket()
         urls_by_folder: dict[str, list[str]] = {}
 

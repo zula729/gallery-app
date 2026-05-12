@@ -12,6 +12,15 @@ logger = logging.getLogger(__name__)
 
 
 class MarkdownExtractor:
+    """
+    Extracts structured information (keywords, tags, metadata)
+    from parsed Markdown content.
+
+    Combines:
+    - Keyword extraction (KeyBERT)
+    - Named Entity Recognition (NER)
+    - Rule-based matching using predefined YAML tags
+    """
     def __init__(self, model_name: str = 'distilbert-base-nli-mean-tokens'):
         self.model = KeyBERT(model_name)
         self.vectorizer = CountVectorizer(
@@ -20,6 +29,19 @@ class MarkdownExtractor:
         self.ner = pipeline("ner", model="dslim/bert-base-NER", aggregation_strategy="simple")
 
     def _get_field(self, content: dict, key: str, default: str = "") -> str:
+        """
+        Safely retrieves a field from parsed content.
+
+        Logs a warning if the key is missing.
+
+        Args:
+            content (dict): Parsed markdown sections
+            key (str): Field name
+            default (str): Default value if key is missing
+
+        Returns:
+            str: Field value or default
+        """
         value = content.get(key)
         if value is None:
             logger.warning(f"No '{key}' in content")
@@ -27,6 +49,16 @@ class MarkdownExtractor:
         return value
 
     def _predict_keywords(self, text: str, top_n: int = 5) -> list[str]:
+        """
+        Extracts keywords using KeyBERT.
+
+        Args:
+            text (str): Input text
+            top_n (int): Number of keywords to extract
+
+        Returns:
+            list[str]: List of extracted keywords
+        """
         results = self.model.extract_keywords(
             text,
             top_n=top_n,
@@ -35,6 +67,17 @@ class MarkdownExtractor:
         return [kw for kw, _ in results]
     
     def _match_known_keywords(self, content: str) -> list[str]:
+        """
+        Matches predefined keywords from YAML against the text.
+
+        This ensures domain-specific keywords are always included.
+
+        Args:
+            content (str): Input text
+
+        Returns:
+            list[str]: Matched keywords
+        """
         try:
             tags = JsonYamlManager.load_yaml(TAGS_YAML)
             found_keywords = set()
@@ -48,6 +91,20 @@ class MarkdownExtractor:
             return []
     
     def extract_keywords(self, content: dict) -> dict[str, list[str]] | None:
+        """
+        Extracts keywords from markdown content.
+
+        Combines:
+        - ML-based keyword extraction (KeyBERT)
+        - Rule-based keyword matching (YAML)
+
+        Args:
+            content (dict): Parsed markdown sections
+
+        Returns:
+            dict: {"keywords": [...]}
+            None: If extraction fails
+        """
         try:
             text = (
                 self._get_field(content, "Motivation") +
@@ -62,6 +119,18 @@ class MarkdownExtractor:
             return None
     
     def extract_tags(self, text: str):
+        """
+        Extracts tags based on predefined YAML mapping.
+
+        Each tag contains example keywords.
+        If any example appears in text, the tag is assigned.
+
+        Args:
+            text (str): Input text
+
+        Returns:
+            list[str]: List of detected tags
+        """
         tags = JsonYamlManager.load_yaml(TAGS_YAML)
         found_tags = set()
         for tag, examples in tags.items():
@@ -71,6 +140,23 @@ class MarkdownExtractor:
         return list(found_tags)
 
     def extract_metadata(self, content: dict[str, str | None]):
+        """
+        Extracts structured metadata from parsed markdown content.
+
+        Includes:
+        - Project name
+        - Authors (cleaned list)
+        - Technologies (cleaned list)
+        - Combined text for NLP
+        - Project link
+        - Tags
+
+        Args:
+            content (dict): Parsed markdown sections
+
+        Returns:
+            dict: Metadata dictionary
+        """
         authors_raw = self._get_field(content, "Authors")
         tech_raw = self._get_field(content, "Used technologies")
         text = (
@@ -87,15 +173,3 @@ class MarkdownExtractor:
             "tags": self.extract_tags(text),
 
         }
-
-
-def main():
-    # md_pr = MarkdownExtractor()
-    # path = Path(r"C:\Users\azhar\Desktop\example\511868-Danisova_Terezie-AMR_project_Danisova_Chupac_Postulka\AMR_project_Danisova_Chupac_Postulka\report.md")
-    # content = md_pr.parse_sections(path)
-    # print(md_pr.extract_metadata(content))
-    # print(20 * "-")
-    # print(md_pr.extract_keywords(content))
-    pass
-
-main()

@@ -1,4 +1,33 @@
-# Bachelor
+# Bachelor tesis
+
+## Description
+
+This project consists of two main parts:
+
+### Backend
+
+The backend is responsible for:
+
+Collecting projects from a structured folder system
+Extracting metadata, keywords, and images from reports (Markdown/PDF)
+Processing and classifying data using NLP tools
+Uploading structured data to Firebase Realtime Database and Storage
+
+### Frontend
+
+The frontend is a visualization web application that:
+
+Displays projects, keywords, and technologies
+Allows users to explore and filter projects
+Uses data stored in Firebase
+
+#### Live app: https://bachelor-cc64fb.pages.fi.muni.cz/#/home
+
+The frontend depends entirely on correctly processed and uploaded backend data.
+
+### Important
+
+The frontend does NOT process data itself. All data must be prepared and uploaded via the backend pipeline.
 
 ## Deploy app
 
@@ -28,7 +57,7 @@ link: https://bachelor-cc64fb.pages.fi.muni.cz/#/home
 1. In your main file, initialize the path and pipeline:
 
 ```
-    path = Path(r"C:\Users\azhar\Desktop\no_keywords")
+    path = Path(r"C:\example\path")
     pipeline = Pipeline(
         root_dir=Path(path),
     )
@@ -42,8 +71,6 @@ link: https://bachelor-cc64fb.pages.fi.muni.cz/#/home
 
 This will automatically extract information from reports and upload it to the database in the correct format.
 If something is missing, check the logs for details.
-
----
 
 ## Installation
 
