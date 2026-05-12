@@ -2,6 +2,8 @@
 
 ## Description
 
+_need to be added_
+
 This project consists of two main parts:
 
 ### Backend
