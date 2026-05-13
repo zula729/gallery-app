@@ -69,6 +69,30 @@ If something is missing, check the logs for details.
 pip install -r requirements.txt
 ```
 
+## Tech Stack
+
+### Core
+
+- [React 19](https://react.dev/blog/2024/12/05/react-19)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vite.dev/)
+
+### UI & Styling
+
+- [Tailwind CSS v4](https://tailwindcss.com/)
+- [Motion (Framer Motion)](https://motion.dev/)
+- [Lucide React](https://lucide.dev/guide/react/)
+
+### Visualizations
+
+- [Recharts](https://recharts.github.io/)
+- [React Markdown](https://github.com/remarkjs/react-markdown)
+
+### Backend
+
+- [Firebase](https://firebase.google.com/)
+- [React Router 7](https://reactrouter.com/)
+
 ## Authors and acknowledgment
 
 ### need to be added
