@@ -16,17 +16,13 @@ Collecting projects from a structured folder system. Extracting metadata, keywor
 
 #### need to be added
 
-#### Live app: https://bachelor-cc64fb.pages.fi.muni.cz/#/home
-
-The frontend depends entirely on correctly processed and uploaded backend data.
-
 #### Important
 
 _The frontend does NOT process data itself. All data must be prepared and uploaded via the backend pipeline._
 
 ## Deploy app
 
-link: https://bachelor-cc64fb.pages.fi.muni.cz/#/home
+link: https://zula729.github.io/PV251_Projects/#/home
 
 ## Add new projects
 
