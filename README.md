@@ -92,11 +92,3 @@ pip install -r requirements.txt
 
 - [Firebase](https://firebase.google.com/)
 - [React Router 7](https://reactrouter.com/)
-
-## Authors and acknowledgment
-
-### need to be added
-
-## License
-
-### need to be added
