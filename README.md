@@ -1,94 +1,142 @@
-# Bachelor tesis
+# Bachelor Thesis
 
 ## Description
 
-_need to be added_
+A showcase of student visualization projects created during the [PV251 Visualization](https://is.muni.cz/predmet/fi/podzim2026/PV251) course at Masaryk University.
 
-This project consists of two main parts:
+Browse projects, explore the technologies used, and discover what students have accomplished each semester. The platform provides project descriptions and data-driven visualizations of topics, semesters, and technology usage across projects.
+
+---
+
+## Architecture
 
 ### Backend
 
 The backend is responsible for:
 
-Collecting projects from a structured folder system. Extracting metadata, keywords, and images from reports (Markdown/PDF). Processing and classifying data using NLP tools. Uploading structured data to Firebase Realtime Database and Storage
+- Collecting projects from a structured folder hierarchy
+- Extracting metadata, keywords, and images from project reports (Markdown)
+- Processing and classifying data using NLP tools
+- Uploading structured data to Firebase Realtime Database and Firebase Storage
 
 ### Frontend
 
-#### need to be added
+> Documentation coming soon.
 
-#### Important
+### Important
 
-_The frontend does NOT process data itself. All data must be prepared and uploaded via the backend pipeline._
+> **The frontend does not process data itself.**
+>
+> All project data must be prepared and uploaded through the backend pipeline.
 
-## Deploy app
+---
 
-link: https://zula729.github.io/PV251_Projects/#/home
+## Adding New Projects
 
-## Add new projects
+1. Create a folder for the semester using the format:
 
-- Create a folder for each semester using the format: podzim2026, podzim2027, etc.
-- Add all project files to the corresponding semester folder.
-
-## Add new categories or technologies
-
-\* Manual adding
-
-- Add new categories to _tags.yaml_ in _../backend/data/_
-  - Include all relevant keywords for each category
-
-- Add new technologies to _tech_terms.yaml_ in _../backend/data/_
-  - Include all variations of how the technology may appear in text
-
-\* Automatic adding(need to be checked)
-
-- This feature may need refactoring and might not fully support the new format.
-
-## Add projects to database
-
-1. In your main file, initialize the path and pipeline:
-
-```
-    path = Path(r"C:\example\path")
-    pipeline = Pipeline(
-        root_dir=Path(path),
-    )
+```text
+podzim2026
+podzim2027
+jaro2027
 ```
 
-2. Run the upload process:
+2. Add all project files to the corresponding semester folder.
 
+---
+
+## Adding Categories and Technologies
+
+### Manual Configuration
+
+#### Categories
+
+Edit:
+
+```text
+backend/data/tags.yaml
 ```
-    pipeline.run_upload()
+
+- Add new categories
+- Include all relevant keywords for each category
+
+#### Technologies
+
+Edit:
+
+```text
+backend/data/tech_terms.yaml
 ```
 
-This will automatically extract information from reports and upload it to the database in the correct format.
-If something is missing, check the logs for details.
+- Add new technologies
+- Include common variations and aliases that may appear in reports
 
-## Installation
+### Automatic Detection
 
+> This feature may require refactoring and might not fully support the current project format.
+
+---
+
+## Uploading Projects to the Database
+
+### 1. Initialize the Pipeline
+
+```python
+from pathlib import Path
+
+path = Path(r"C:\example\path")
+
+pipeline = Pipeline(
+    root_dir=path,
+)
 ```
+
+### 2. Run the Upload Process
+
+```python
+pipeline.run_upload()
+```
+
+The pipeline will:
+
+- Extract information from project reports
+- Process metadata and classifications
+- Upload data to Firebase in the required format
+
+If any data is missing or incorrect, check the application logs for details.
+
+---
+
+## 🚀 Installation
+
+```bash
 pip install -r requirements.txt
 ```
 
-## Tech Stack
+---
+
+## 🛠️ Tech Stack
 
 ### Core
 
-- [React 19](https://react.dev/blog/2024/12/05/react-19)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Vite](https://vite.dev/)
+- React 19
+- TypeScript
+- Vite
 
 ### UI & Styling
 
-- [Tailwind CSS v4](https://tailwindcss.com/)
-- [Motion (Framer Motion)](https://motion.dev/)
-- [Lucide React](https://lucide.dev/guide/react/)
+- Tailwind CSS v4
+- Motion (Framer Motion)
+- Lucide React
 
-### Visualizations
+### Data Visualization
 
-- [Recharts](https://recharts.github.io/)
-- [React Markdown](https://github.com/remarkjs/react-markdown)
+- Recharts
+- React Markdown
 
-### Backend
+### Backend & Infrastructure
 
-- [Firebase](https://firebase.google.com/)
-- [React Router 7](https://reactrouter.com/)
+- Firebase
+- React Router 7
+
+---
