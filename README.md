@@ -107,7 +107,7 @@ If any data is missing or incorrect, check the application logs for details.
 
 ---
 
-## 🚀 Installation
+## Installation
 
 ```bash
 pip install -r requirements.txt
@@ -115,7 +115,7 @@ pip install -r requirements.txt
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Core
 
