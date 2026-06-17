@@ -21,7 +21,7 @@ class MarkdownExtractor:
     - Named Entity Recognition (NER)
     - Rule-based matching using predefined YAML tags
     """
-    def __init__(self, model_name: str = 'distilbert-base-nli-mean-tokens'):
+    def __init__(self, model_name: str = 'all-mpnet-base-v2'):
         self.model = KeyBERT(model_name)
         self.vectorizer = CountVectorizer(
             token_pattern=r"(?u)\b[^\W\d_]{2,}\b"

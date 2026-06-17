@@ -9,7 +9,7 @@ from utils.paths import TECH_TERMS_YAML, TAGS_YAML
 
 
 class MetadataExtractor:
-    def __init__(self, model_name: str = 'distilbert-base-nli-mean-tokens'):
+    def __init__(self, model_name: str = 'all-mpnet-base-v2'):
         self.model = KeyBERT(model_name)
         self.vectorizer = CountVectorizer(
             token_pattern=r"(?u)\b[^\W\d_]{2,}\b"

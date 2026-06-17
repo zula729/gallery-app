@@ -5,6 +5,6 @@ import ViteYaml from '@modyfi/vite-plugin-yaml';
 
 // https://vite.dev/config/
 export default defineConfig({
-    base: '/PV251_Projects/',
+    base: '/gallery-app/',
     plugins: [react(), tailwindcss(), ViteYaml()]
 });

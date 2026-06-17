@@ -154,7 +154,7 @@ class DocumentProcessor:
 
 
     def get_hyperlink_url(self, run, doc):
-        """Extrahuje URL z runu pokud je součástí hyperlinku."""
+        """Extracts the URL from a run if it is part of a hyperlink."""
         parent = run._r.getparent()
         if parent.tag == qn("w:hyperlink"):
             rId = parent.get(qn("r:id"))
