@@ -38,7 +38,6 @@ The backend is responsible for:
 ```text
 podzim2026
 podzim2027
-jaro2027
 ```
 
 2. Add all project files to the corresponding semester folder.
