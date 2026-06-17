@@ -1,12 +1,12 @@
+from sentence_transformers import SentenceTransformer, util
+
 from firebase import FirebasePushPDF
 from utils import JsonYamlManager
 
-from transformers import pipeline
-
 
 class KeywordClassifier:
-    def __init__(self, score_threshold: float = 0.6):
-        self.classifier = pipeline("zero-shot-classification")
+    def __init__(self, score_threshold: float = 0.4):
+        self.model = SentenceTransformer('all-mpnet-base-v2')
         self.score_threshold = score_threshold
 
     def run_categorize(self, yaml_path: str, firebase: FirebasePushPDF) -> None:
@@ -33,46 +33,35 @@ class KeywordClassifier:
         return keywords
 
     def _classify_keywords(self, keywords: set[str], tags: dict) -> dict:
-        result = {cat: [] for cat in tags}
-        result["UNDEFINED"] = []
+        import copy
+        result = copy.deepcopy(tags)
+        if "UNDEFINED" not in result:
+            result["UNDEFINED"] = []
 
-        hypotheses = self._build_hypotheses(tags)
-        cat_names = list(tags.keys())
+        kw_embeddings = self.model.encode(keywords, convert_to_tensor=True)
 
-        for keyword in keywords:
-            category = self._classify_single_keyword(
-                keyword, hypotheses, cat_names
-            )
-            result[category].append(keyword)
-            print(f"{keyword} → {category}")
+        for idx, keyword in enumerate(keywords):
+            best_score = -1.0
+            best_category = "UNDEFINED"
+
+            for category, known_words in tags.items():
+                if not known_words:
+                    continue
+                
+                known_embeddings = self.model.encode(known_words, convert_to_tensor=True)
+                
+                cos_scores = util.cos_sim(kw_embeddings[idx], known_embeddings)[0]
+                max_score = float(cos_scores.max())
+
+                if max_score > best_score:
+                    best_score = max_score
+                    best_category = category
+
+            if best_score >= self.score_threshold:
+                result[best_category].append(keyword)
+                print(f"{keyword} -> {best_category} (score: {best_score:.2f})")
+            else:
+                result["UNDEFINED"].append(keyword)
+                print(f"{keyword} -> UNDEFINED (best score: {best_score:.2f})")
 
         return result
-
-    def _build_hypotheses(self, tags: dict) -> list[str]:
-        return [
-            f"This text is about {cat}, such as {', '.join(ex if isinstance(ex, list) else [])}."
-            for cat, ex in tags.items()
-        ]
-
-    def _classify_single_keyword(
-        self,
-        keyword: str,
-        hypotheses: list[str],
-        categories: list[str]
-    ) -> str:
-        result = self.classifier(
-            keyword,
-            candidate_labels=hypotheses,
-            multi_label=False,
-            hypothesis_template="{}"
-        )
-
-        scores = {
-            categories[hypotheses.index(label)]: score
-            for label, score in zip(result['labels'], result['scores'])
-        }
-
-        best_category = max(scores, key=scores.get)
-        best_score = scores[best_category]
-
-        return best_category if best_score >= self.score_threshold else "UNDEFINED"

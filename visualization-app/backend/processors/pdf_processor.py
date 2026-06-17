@@ -25,7 +25,7 @@ def rename(root_dir: Path, prefix: str) -> None:
         if "report" in pdf.name.lower():
             new_path = pdf.with_name(f"{prefix}_{pdf.name}")
             pdf.rename(new_path)
-            print(f"Renamed: {pdf.name} → {new_path.name}")\
+            print(f"Renamed: {pdf.name} -> {new_path.name}")\
 
 def no_report_name(source_dir: Path) -> None:
     for pdf in source_dir.rglob("*.pdf"):
@@ -59,7 +59,7 @@ def convert_pdf_to_svg(source_dir: Path) -> None:
         if PathParser.is_macos_artifact(pdf):
             continue
         if "repaired" in pdf.name.lower():
-            print(f"Пропущено: {pdf.name}")
+            print(f"Skipped: {pdf.name}")
             continue
         output_folder = pdf.parent / "svg_pages" 
         output_folder.mkdir(parents=True, exist_ok=True)
@@ -116,9 +116,9 @@ def repair_all_pdfs(self, root_dir: Path) -> None:
             print(f"Failed: {pdf.name} — {e}")
 
 
-def main():
-    path = Path(r"C:/Users/azhar/Desktop/no_keywords/cz/244141-Matulova_Katerina-Matulova-Hyanek-")
-    convert_pdf_to_svg(path)
+# def main():
+#     path = Path()
+#     convert_pdf_to_svg(path)
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
