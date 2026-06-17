@@ -30,6 +30,8 @@ class Pipeline:
         self.doc_processor = DocumentProcessor()
         self.keyword_filter = KeywordFilter()
         self.firebase_client = FirebaseClient()
+        #FirebasePushPDF is currently not used, as we are focusing on Markdown-based processing.
+        # self.firebase_pusher_pdf = FirebasePushPDF()
         self.firebase_pusher_md = FirebasePushMD()
         self.utils = JsonYamlManager()
         self.image_extractor = ImageExtractor()
