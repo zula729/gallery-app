@@ -15,11 +15,6 @@ class MarkdownExtractor:
     """
     Extracts structured information (keywords, tags, metadata)
     from parsed Markdown content.
-
-    Combines:
-    - Keyword extraction (KeyBERT)
-    - Named Entity Recognition (NER)
-    - Rule-based matching using predefined YAML tags
     """
     def __init__(self, model_name: str = 'all-mpnet-base-v2'):
         self.model = KeyBERT(model_name)
@@ -147,7 +142,7 @@ class MarkdownExtractor:
         - Project name
         - Authors (cleaned list)
         - Technologies (cleaned list)
-        - Combined text for NLP
+        - Text (combined relevant sections)
         - Project link
         - Tags
 

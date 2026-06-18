@@ -3,16 +3,27 @@ from pathlib import Path
 import subprocess
 import fitz
 import os
-
-import ocrmypdf
+import logging
 
 from utils import PathParser
+logger = logging.getLogger(__name__)
 
-main_project_path= Path('C:\\Users\\azhar\\Desktop\\visualization')
-target_dir = Path('C:\\Users\\azhar\\Desktop\\project_not_in_dataset')
+main_project_path= Path('')
+target_dir = Path('')
 
 
 def files(path) -> list[Path]:
+    """
+    Finds all PDF and DOCX files in a directory that contain 'report' in their name.
+
+    Performs a case-insensitive recursive lookup matching specific internal file criteria.
+
+    Args:
+        path (Path): The root directory to start searching from.
+
+    Returns:
+        list[Path]: A list of path objects matching the search filters.
+    """
     all_files = list(path.rglob('*.pdf')) + list(path.rglob('*.docx'))
     result = []
     for f in all_files:
@@ -21,6 +32,16 @@ def files(path) -> list[Path]:
     return result
 
 def rename(root_dir: Path, prefix: str) -> None:
+    """
+    Prepends a custom string prefix to all PDF report files within a directory tree.
+
+    Args:
+        root_dir (Path): Root directory containing target PDFs.
+        prefix (str): String value to prepend to the matching filenames.
+
+    Returns:
+        None
+    """
     for pdf in root_dir.rglob("*.pdf"):
         if "report" in pdf.name.lower():
             new_path = pdf.with_name(f"{prefix}_{pdf.name}")
@@ -28,33 +49,35 @@ def rename(root_dir: Path, prefix: str) -> None:
             print(f"Renamed: {pdf.name} -> {new_path.name}")\
 
 def no_report_name(source_dir: Path) -> None:
+    """
+    Scans a folder and prints the locations of PDFs that do not contain the term 'report'.
+
+    Helpful for identifying non-conforming filenames within raw document folders.
+
+    Args:
+        source_dir (Path): The folder hierarchy to analyze.
+
+    Returns:
+        None
+    """
     for pdf in source_dir.rglob("*.pdf"):
         if not "report" in pdf.name.lower():
             print(f"Found: {pdf.name}, {pdf.parent}\n")
 
 
-def folder_name(pdf: Path) -> str:
-    relative_path = pdf.relative_to(reports_path)
-    return relative_path.parent
-
-
-def move_files(source_dir: Path, target_dir: Path) -> None:
-    for pdf in source_dir.rglob("*.pdf"):
-        if PathParser.is_macos_artifact(pdf):
-            continue
-        if "report" in pdf.name.lower():
-            folder = folder_name(pdf)
-            target_folder = target_dir / folder
-            if target_folder.exists() and target_folder.is_dir():
-                try:
-                    shutil.move(str(pdf), str(target_folder / pdf.name))
-                    print(f"Moved: {pdf.name} to {target_folder}")
-                except Exception as e:
-                    print(f"Error moving {pdf.name}: {e}")
-            else:
-                print(f"Skip: Target folder {target_folder} does not exist. Not moving.")
-
 def convert_pdf_to_svg(source_dir: Path) -> None:
+    """
+    Splits multi-page PDFs into standalone SVG pages using Inkscape vector rendering.
+
+    Extracts individual PDF pages locally, saves them out to transient documents, 
+    and pipes them into Inkscape. Deletes pages if no raster image layouts are rendered.
+
+    Args:
+        source_dir (Path): Folder containing target PDFs for decomposition.
+
+    Returns:
+        None
+    """
     for pdf in source_dir.rglob("*.pdf"):
         if PathParser.is_macos_artifact(pdf):
             continue
@@ -63,7 +86,7 @@ def convert_pdf_to_svg(source_dir: Path) -> None:
             continue
         output_folder = pdf.parent / "svg_pages" 
         output_folder.mkdir(parents=True, exist_ok=True)
-        
+        # If executing on cross-platform setups, dynamically fetch or configure this variable
         inkscape_path = r"C:\Program Files\Inkscape\bin\inkscape.exe"
         
         doc = fitz.open(pdf)
@@ -89,36 +112,20 @@ def convert_pdf_to_svg(source_dir: Path) -> None:
 
             with open(svg_path, 'r', encoding='utf-8') as f:
                 content = f.read()
-                if '<image' not in content:
-                    f.close()
-                    os.remove(svg_path)
-            os.remove(temp_pdf)
+                
+            if '<image' not in content:
+                os.remove(svg_path)
+                logger.info(f"Dropped empty page canvas vector markup template: {svg_name}")
+
+            if temp_pdf.exists():
+                os.remove(temp_pdf)
             
         doc.close()
 
-def repair_pdf(input_path: Path, output_path: Path) -> None:
-    ocrmypdf.ocr(
-        input_path,
-        output_path,
-        force_ocr=True,
-        language="eng+ces",
-        deskew=True,
-    )
 
-def repair_all_pdfs(self, root_dir: Path) -> None:
-    for pdf in root_dir.rglob("*.pdf"):
-        tmp = pdf.with_suffix(".tmp.pdf")
-        try:
-            self.repair_pdf(pdf, tmp)
-            tmp.replace(pdf)
-        except Exception as e:
-            tmp.unlink(missing_ok=True)
-            print(f"Failed: {pdf.name} — {e}")
+def main():
+    path = Path()
+    convert_pdf_to_svg(path)
 
-
-# def main():
-#     path = Path()
-#     convert_pdf_to_svg(path)
-
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()

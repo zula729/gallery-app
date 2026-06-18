@@ -99,13 +99,11 @@ class FirebasePushMD:
             files (list[Path]): List of markdown file paths
         """
         from metadata import MarkdownExtractor
-        from utils import PathParser
         extractor = MarkdownExtractor()
-        util = PathParser()
         for file_path in files:
             content = self.parse_sections(file_path)
             data_to_send = extractor.extract_metadata(content)
-            data_to_send.update({"semester": util.extract_semester(file_path)})
+            data_to_send.update({"semester": PathParser.extract_semester(file_path)})
 
             folder_id = PathParser.extract_folder_id(file_path)
             if not folder_id:

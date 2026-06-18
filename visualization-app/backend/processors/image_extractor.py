@@ -6,11 +6,30 @@ from pathlib import Path
 
 
 class ImageExtractor:
+    """
+    Extracts embedded raster images from compressed file formats or markup.
+    
+    Supports pulling visual media arrays out of OpenXML Microsoft Word documents (.docx) 
+    and decoding embedded Base64 vector image resources out of XML-based SVG drawings (.svg).
+    """
     def __init__(self):
         self.ns = {'svg': 'http://www.w3.org/2000/svg', 'xlink': 'http://www.w3.org/1999/xlink'}
 
     @staticmethod
     def _is_above_size_threshold(base64_str, min_size_kb=20):
+        """
+        Calculates approximate unencoded binary size of a base64 string to check a threshold.
+
+        Uses the structural 3:4 byte ratio formula of base64 encoding to derive 
+        on-disk file size without requiring actual data decoding operations.
+
+        Args:
+            base64_str (str): Raw string containing base64 data, possibly with URI headers.
+            min_size_kb (float): Minimum file size cutoff in kilobytes. Defaults to 20.0.
+
+        Returns:
+            bool: True if estimated unencoded file size equals or exceeds the threshold, else False.
+        """
         if "base64," in base64_str:
             base64_str = base64_str.split("base64,")[1]
         file_size_bytes = (len(base64_str) * 3) / 4
@@ -18,6 +37,18 @@ class ImageExtractor:
         return file_size_kb >= min_size_kb
 
     def _extract_from_docx(self, docx_path):
+        """
+        Extracts embedded raw media items out of a target Microsoft OpenXML Word document.
+
+        Treats the .docx container as a standardized zip file archive and inspects 
+        the target nested folder 'word/media/' where visual assets reside.
+
+        Args:
+            docx_path (Path): Pathlib object pointing to the source document asset.
+
+        Returns:
+            None
+        """
         try:
             output_folder = docx_path.parent / "images"
             output_folder.mkdir(parents=True, exist_ok=True)
@@ -36,6 +67,18 @@ class ImageExtractor:
             print(f"Error extracting images from {docx_path}: {e}")
 
     def _extract_from_svg(self, svg_path):
+        """
+        Parses an SVG file tree and decodes embedded inline base64 image streams.
+
+        Scans XML elements matching namespace schemas for `<image>` definitions. Checks
+        extracted text chunks against dimension parameters before exporting payload to disk.
+
+        Args:
+            svg_path (Path): Pathlib object pointing to the target vector graphics source.
+
+        Returns:
+            None
+        """
         try:
             output_folder = svg_path.parent / "images"
             output_folder.mkdir(parents=True, exist_ok=True)
@@ -68,6 +111,18 @@ class ImageExtractor:
                 print(f"Error {i}: {e}")
 
     def process_files(self, files: list[Path]):
+        """
+        Iterates over an incoming sequence of files and routes them to correct extractors.
+
+        Identifies input targets according to extension maps and passes individual file 
+        paths down to dedicated extraction processing routines.
+
+        Args:
+            files (list[Path]): List of fully-qualified pathlib Path items to evaluate.
+
+        Returns:
+            None
+        """
         for file_path in files:
             try: 
                 if file_path.suffix.lower() == '.docx':
