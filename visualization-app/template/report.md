@@ -2,19 +2,9 @@
 
 ## Authors
 
-- Author 1 Name
-- Author 2 Name
-
 ## Used technologies
 
-1. JavaScript
-2. Python
-3. Charts.js
-
 ## Data sources + data preprocessing
-
-- [example](https://www.example.com)
-  Description of preprocessing steps...
 
 ## Motivation (why did you choose the topic, what did you want to see/show)
 
