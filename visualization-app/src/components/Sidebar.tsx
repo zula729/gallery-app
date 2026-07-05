@@ -46,7 +46,7 @@ function Sidebar() {
             </ul>
             <button
                 onClick={toggleTheme}
-                className="mt-auto mb-4 p-2 rounded-lg cursor-pointer text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 self-start"
+                className="mt-auto mb-4 p-2 rounded-lg cursor-pointer text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 self-start"
             >
                 {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
             </button>
