@@ -100,7 +100,7 @@ function Card({ card }: CardProps) {
                                     ))}
                                 </div>
                                 {!expanded && isOverflowing && (
-                                    <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-white dark:from-gray-800 to-transparent" />
+                                    <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-6 bg-linear-to-t from-white dark:from-gray-800 to-transparent" />
                                 )}
                             </div>
                             <div className="h-5 mt-1">
