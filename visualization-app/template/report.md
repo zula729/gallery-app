@@ -27,3 +27,7 @@ _All screenshots must be saved inside the `images/` folder in the report reposit
 _Any additional images used in the report must also be stored in the same folder._
 Exmample:
 ![image1](images/image.png)
+
+---
+
+# Do NOT change file name
