@@ -2,16 +2,18 @@ import { type FilterType } from '../types/filterOptions';
 
 const colorMap: Record<FilterType, string> = {
     semestr:
-        'bg-blue-50 text-blue-600 hover:text-blue-800 hover:bg-blue-100 dark:bg-blue-950 dark:text-blue-400 dark:hover:text-blue-300 dark:hover:bg-blue-900',
-    tag: 'bg-amber-50 text-amber-600 hover:text-amber-800 hover:bg-amber-100 dark:bg-amber-950 dark:text-amber-400 dark:hover:text-amber-300 dark:hover:bg-amber-900',
+        'bg-blue-50 text-blue-600 border border-transparent hover:text-blue-800 hover:bg-blue-100 dark:bg-transparent dark:text-gray-100 dark:border-blue-500 dark:hover:bg-blue-900 dark:hover:text-blue-400',
+    tag: 'bg-amber-50 text-amber-600 border border-transparent hover:text-amber-800 hover:bg-amber-100 dark:bg-transparent dark:text-gray-100 dark:border-amber-500 dark:hover:bg-amber-900 dark:hover:text-amber-400',
     technology:
-        'bg-green-50 text-green-600 hover:text-green-800 hover:bg-green-100 dark:bg-green-950 dark:text-green-400 dark:hover:text-green-300 dark:hover:bg-green-900'
+        'bg-green-50 text-green-600 border border-transparent hover:text-green-800 hover:bg-green-100 dark:bg-transparent dark:text-gray-100 dark:border-teal-500 dark:hover:bg-teal-900 dark:hover:text-teal-400'
 };
 
 const selectedColorMap: Record<FilterType, string> = {
-    semestr: 'text-blue-900 bg-blue-200 dark:text-blue-100 dark:bg-blue-800',
-    tag: 'text-amber-900 bg-amber-200 dark:text-amber-100 dark:bg-amber-800',
-    technology: 'text-green-900 bg-green-200 dark:text-green-100 dark:bg-green-800'
+    semestr:
+        'text-blue-900 bg-blue-200 border border-transparent dark:bg-blue-900 dark:text-gray-100 dark:border-blue-400',
+    tag: 'text-amber-900 bg-amber-200 border border-transparent dark:bg-amber-900 dark:text-gray-100 dark:border-amber-400',
+    technology:
+        'text-green-900 bg-green-200 border border-transparent dark:bg-teal-900 dark:text-gray-100 dark:border-teal-400'
 };
 
 type FilterGroupProps = {
