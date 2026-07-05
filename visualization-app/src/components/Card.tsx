@@ -42,9 +42,11 @@ function Card({ card }: CardProps) {
     }, [allLabels]);
 
     return (
-        <div className="rounded-2xl bg-white">
+        <div className="rounded-2xl bg-white dark:bg-gray-800">
             <div className="flex flex-col">
-                <div className={`border border-gray-400 shadow-lg/20 rounded-xl w-90 pb-3`}>
+                <div
+                    className={`border border-gray-400 dark:border-gray-600 shadow-lg/20 rounded-2xl w-90 pb-3`}
+                >
                     <div className="relative w-full h-40 rounded-t-xl overflow-hidden">
                         <img
                             src={card.images?.[0] ?? Default}
@@ -58,8 +60,10 @@ function Card({ card }: CardProps) {
                     </div>
                     <div className="flex flex-col pl-2 pr-2 pt-2">
                         <div className="h-25">
-                            <h2 className="text-xl font-semibold">{card.name}</h2>
-                            <p className="text-sm text-gray-500">
+                            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                                {card.name}
+                            </h2>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
                                 {card.author.map((author, index) => (
                                     <span key={index}>
                                         {author}
@@ -67,7 +71,7 @@ function Card({ card }: CardProps) {
                                     </span>
                                 ))}
                             </p>
-                            <p className="text-m">
+                            <p className="text-m text-gray-700 dark:text-gray-300">
                                 {(() => {
                                     const replaced = card.semestr
                                         .replace(/_/g, ' ')
@@ -79,7 +83,7 @@ function Card({ card }: CardProps) {
                                 })()}
                             </p>
                         </div>
-                        <hr className="mt-3 mb-2 border-gray-300"></hr>
+                        <hr className="mt-3 mb-2 border-gray-300 dark:border-gray-600"></hr>
                         <div>
                             <div
                                 ref={labelsRef}
@@ -94,7 +98,7 @@ function Card({ card }: CardProps) {
                                 {(isOverflowing || expanded) && (
                                     <button
                                         onClick={() => setExpanded((prev) => !prev)}
-                                        className="text-xs text-gray-500 hover:text-gray-800 cursor-pointer text-left"
+                                        className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 cursor-pointer text-left"
                                     >
                                         {expanded ? '↑ less' : 'more ↓'}
                                     </button>

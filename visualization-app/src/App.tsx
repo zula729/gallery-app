@@ -9,7 +9,7 @@ import ProjectDetails from './components/ProjectDetails';
 function App() {
     return (
         <HashRouter>
-            <div className="flex flex-col min-h-screen">
+            <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900">
                 <div className="flex flex-1">
                     <div className="sticky top-0 self-start h-screen">
                         <Sidebar />

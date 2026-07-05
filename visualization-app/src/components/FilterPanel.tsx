@@ -42,14 +42,14 @@ function FilterPanel({
             <div className="flex items-center gap-2">
                 <button
                     onClick={() => setIsOpen((prev) => !prev)}
-                    className="text-gray-700 mt-2 font-semibold cursor-pointer"
+                    className="text-gray-700 dark:text-gray-300 mt-2 font-semibold cursor-pointer"
                 >
                     {isOpen ? '▲' : '▼'} Filters {totalSelected > 0 && `(${totalSelected})`}
                 </button>
                 {totalSelected > 0 && (
                     <button
                         onClick={onClear}
-                        className="text-xs text-red-400 hover:text-red-600 mt-2.5"
+                        className="text-xs text-red-400 dark:text-red-500 hover:text-red-600 dark:hover:text-red-400 mt-2.5"
                     >
                         <Trash size={16} />
                     </button>
@@ -60,7 +60,7 @@ function FilterPanel({
                 className={`overflow-hidden transition-all duration-400 ease-in-out mr-25
                 ${isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'}`}
             >
-                <div className="pt-4 font-semibold">
+                <div className="pt-4 font-semibold text-gray-900 dark:text-gray-100">
                     Categories
                     <FilterGroup
                         items={TAGS}
@@ -69,15 +69,15 @@ function FilterPanel({
                         type={'tag'}
                     />
                 </div>
-                <div className="pt-4 font-semibold flex items-center gap-3 ">
+                <div className="pt-4 font-semibold flex items-center gap-3 text-gray-900 dark:text-gray-100">
                     Technology
-                    <div className="flex text-xs font-medium bg-gray-100 rounded-full p-0.5 gap-0.5 ">
+                    <div className="flex text-xs font-medium bg-gray-100 dark:bg-gray-800 rounded-full p-0.5 gap-0.5">
                         <button
                             onClick={() => onTechModeChange('OR')}
                             className={`px-3 py-0.5 rounded-full transition-all duration-200 ${
                                 techMode === 'OR'
-                                    ? 'bg-white text-gray-800 shadow-sm'
-                                    : 'text-gray-400 hover:text-gray-600 cursor-pointer'
+                                    ? 'bg-white dark:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-sm'
+                                    : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer'
                             }`}
                         >
                             OR
@@ -86,8 +86,8 @@ function FilterPanel({
                             onClick={() => onTechModeChange('AND')}
                             className={`px-3 py-0.5 rounded-full transition-all duration-200 ${
                                 techMode === 'AND'
-                                    ? 'bg-white text-gray-800 shadow-sm'
-                                    : 'text-gray-400 hover:text-gray-600 cursor-pointer'
+                                    ? 'bg-white dark:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-sm'
+                                    : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer'
                             }`}
                         >
                             AND
@@ -101,7 +101,7 @@ function FilterPanel({
                     sorted={false}
                     type={'technology'}
                 />
-                <div className="pt-4 font-semibold">
+                <div className="pt-4 font-semibold text-gray-900 dark:text-gray-100">
                     Semester
                     <FilterGroup
                         items={SEMESTR}
