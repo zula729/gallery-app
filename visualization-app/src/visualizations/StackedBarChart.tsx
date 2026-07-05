@@ -103,10 +103,10 @@ const StackedBarChart = ({
                                 toggle(semester, selectedSemesters, setSelectedSemesters)
                             }
                             className={`
-                                    p-0.5 pl-3 pr-3 pb-1 rounded-full border-2 font-semibold cursor-pointer
-                                    transition-all duration-150
-                                    ${isActive ? 'text-white' : 'bg-transparent'}
-                                `}
+                                p-0.5 pl-3 pr-3 pb-1 rounded-full border-2 font-semibold cursor-pointer
+                                transition-all duration-150 hover:brightness-110 hover:scale-102
+                                ${isActive ? 'text-white' : 'bg-transparent'}
+                            `}
                             style={{
                                 borderColor: COLORS[i % COLORS.length],
                                 background: isActive ? COLORS[i % COLORS.length] : 'transparent',
