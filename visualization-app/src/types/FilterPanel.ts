@@ -1,8 +1,10 @@
 import type { CardType } from './CardType';
 
+import type { FilterType } from './filterOptions';
+
 export type FilterPanelProps = {
-    selected: string[];
-    onToggle: (category: string) => void;
+    selected: Record<FilterType, string[]>;
+    onToggle: (type: FilterType, cat: string) => void;
     onClear: () => void;
     cards: CardType[];
     techMode: 'OR' | 'AND';

@@ -27,15 +27,15 @@ function FilterPanel({
     }, [cards]);
 
     const sortedTechnology = useMemo(() => {
-        const sorted = [...TECHNOLOGY].sort((a, b) => {
+        return [...TECHNOLOGY].sort((a, b) => {
             const freqA = technologyFrequency[a] ?? 0;
             const freqB = technologyFrequency[b] ?? 0;
-            if (freqA === 0 && freqB !== 0) return 1;
-            if (freqB === 0 && freqA !== 0) return -1;
             return freqB - freqA;
         });
-        return sorted;
     }, [technologyFrequency]);
+
+    const totalSelected =
+        selected.tag.length + selected.technology.length + selected.semestr.length;
 
     return (
         <div>
@@ -44,9 +44,9 @@ function FilterPanel({
                     onClick={() => setIsOpen((prev) => !prev)}
                     className="text-gray-700 mt-2 font-semibold cursor-pointer"
                 >
-                    {isOpen ? '▲' : '▼'} Filters {selected.length > 0 && `(${selected.length})`}
+                    {isOpen ? '▲' : '▼'} Filters {totalSelected > 0 && `(${totalSelected})`}
                 </button>
-                {selected.length > 0 && (
+                {totalSelected > 0 && (
                     <button
                         onClick={onClear}
                         className="text-xs text-red-400 hover:text-red-600 mt-2.5"
@@ -61,12 +61,11 @@ function FilterPanel({
                 ${isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'}`}
             >
                 <div className="pt-4 font-semibold">
-                    {' '}
                     Categories
                     <FilterGroup
                         items={TAGS}
-                        selected={selected}
-                        onToggle={onToggle}
+                        selected={selected.tag}
+                        onToggle={(cat) => onToggle('tag', cat)}
                         type={'tag'}
                     />
                 </div>
@@ -97,18 +96,17 @@ function FilterPanel({
                 </div>
                 <FilterGroup
                     items={sortedTechnology}
-                    selected={selected}
-                    onToggle={onToggle}
+                    selected={selected.technology}
+                    onToggle={(cat) => onToggle('technology', cat)}
                     sorted={false}
                     type={'technology'}
                 />
                 <div className="pt-4 font-semibold">
-                    {' '}
                     Semester
                     <FilterGroup
                         items={SEMESTR}
-                        selected={selected}
-                        onToggle={onToggle}
+                        selected={selected.semestr}
+                        onToggle={(cat) => onToggle('semestr', cat)}
                         type={'semestr'}
                     />
                 </div>

@@ -1,6 +1,8 @@
 import tagsYaml from '../../backend/data/tags.yaml';
 import techYaml from '../../backend/data/tech_terms.yaml';
 
+export type FilterType = 'semestr' | 'tag' | 'technology';
+
 export const TAGS = Object.keys(tagsYaml) as string[];
 
 export const TECHNOLOGY = Object.keys(techYaml) as string[];

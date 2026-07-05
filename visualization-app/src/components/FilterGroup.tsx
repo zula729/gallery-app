@@ -1,21 +1,23 @@
-type FilterGroupProps = {
-    items: string[];
-    selected: string[];
-    onToggle: (item: string) => void;
-    sorted?: boolean;
-    type?: 'semestr' | 'tag' | 'technology';
-};
+import { type FilterType } from '../types/filterOptions';
 
-const colorMap = {
+const colorMap: Record<FilterType, string> = {
     semestr: 'bg-blue-50 text-blue-600 hover:text-blue-800 hover:bg-blue-100',
     tag: 'bg-amber-50 text-amber-600 hover:text-amber-800 hover:bg-amber-100',
     technology: 'bg-green-50 text-green-600 hover:text-green-800 hover:bg-green-100'
 };
 
-const selectedColorMap = {
+const selectedColorMap: Record<FilterType, string> = {
     semestr: 'text-blue-900 bg-blue-200',
     tag: 'text-amber-900 bg-amber-200',
     technology: 'text-green-900 bg-green-200'
+};
+
+type FilterGroupProps = {
+    items: string[];
+    selected: string[];
+    onToggle: (item: string) => void;
+    sorted?: boolean;
+    type?: FilterType;
 };
 
 function FilterGroup({
@@ -26,8 +28,9 @@ function FilterGroup({
     type = 'semestr'
 }: FilterGroupProps) {
     const formatLabel = (item: string) => {
-        const replaced = item.replace(/_/g, ' ').replace(/podzim/gi, 'autumn');
-        return replaced.charAt(0).toUpperCase() + replaced.slice(1).toLowerCase();
+        const withSpaces = item.replace(/_/g, ' ');
+        const withAutumn = withSpaces.replace(/podzim/gi, 'autumn');
+        return withAutumn.charAt(0).toUpperCase() + withAutumn.slice(1).toLowerCase();
     };
 
     const sortedItems = sorted ? [...items].sort((a, b) => a.localeCompare(b)) : items;
