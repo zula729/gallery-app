@@ -5,12 +5,12 @@ type LabelProps = {
 
 const colorMap = {
     keyword:
-        'bg-gray-100 text-gray-600 border border-transparent dark:bg-transparent dark:text-gray-100 dark:border-gray-500',
-    tag: 'bg-amber-50 text-amber-600 border border-transparent dark:bg-transparent dark:text-gray-100 dark:border-amber-500',
+        'bg-gray-100 text-gray-600 border dark:bg-transparent dark:text-gray-100 dark:border-gray-500',
+    tag: 'bg-amber-50 text-amber-600 border dark:bg-transparent dark:text-gray-100 dark:border-amber-500',
     technology:
-        'bg-green-50 text-green-600 border border-transparent dark:bg-transparent dark:text-gray-100 dark:border-teal-500',
+        'bg-green-50 text-green-600 border dark:bg-transparent dark:text-gray-100 dark:border-teal-500',
     semestr:
-        'bg-blue-50 text-blue-600 border border-transparent dark:bg-transparent dark:text-gray-100 dark:border-blue-500'
+        'bg-blue-50 text-blue-600 border dark:bg-transparent dark:text-gray-100 dark:border-blue-500'
 };
 
 function Label({ text, type = 'keyword' }: LabelProps) {
