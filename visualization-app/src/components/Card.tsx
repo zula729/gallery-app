@@ -85,14 +85,23 @@ function Card({ card }: CardProps) {
                         </div>
                         <hr className="mt-3 mb-2 border-gray-300 dark:border-gray-600"></hr>
                         <div>
-                            <div
-                                ref={labelsRef}
-                                className={`flex flex-row pt-2 gap-1 flex-wrap overflow-hidden transition duration-300 
-                            ${expanded ? 'max-h-screen' : 'max-h-15'}`}
-                            >
-                                {allLabels.map((label) => (
-                                    <Label key={label.text} text={label.text} type={label.type} />
-                                ))}
+                            <div className="relative">
+                                <div
+                                    ref={labelsRef}
+                                    className={`flex flex-row pt-2 gap-1 flex-wrap overflow-hidden transition duration-300 
+        ${expanded ? 'max-h-screen' : 'max-h-18'}`}
+                                >
+                                    {allLabels.map((label) => (
+                                        <Label
+                                            key={label.text}
+                                            text={label.text}
+                                            type={label.type}
+                                        />
+                                    ))}
+                                </div>
+                                {!expanded && isOverflowing && (
+                                    <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-white dark:from-gray-800 to-transparent" />
+                                )}
                             </div>
                             <div className="h-5 mt-1">
                                 {(isOverflowing || expanded) && (
