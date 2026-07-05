@@ -11,6 +11,10 @@ import {
     matchesTags,
     matchesSemester
 } from '../utils/filterCards';
+import { ChevronsLeft } from 'lucide-react';
+import { ChevronsRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 const PAGE_SIZE = 12;
 
@@ -110,19 +114,34 @@ export function Gallery() {
             {totalPages > 1 && (
                 <div className="flex justify-center items-center gap-2 mt-8">
                     <button
+                        onClick={() => setPage(1)}
+                        disabled={page === 1}
+                        className="p-2 rounded-lg bg-slate-100 cursor-pointer 
+                        disabled:cursor-not-allowed disabled:opacity-40
+                        hover:bg-slate-200 hover:text-gray-900
+                        disabled:hover:bg-slate-100 disabled:hover:text-inherit"
+                    >
+                        <ChevronsLeft size={20} />
+                    </button>
+                    <button
                         onClick={() => setPage((p) => Math.max(1, p - 1))}
                         disabled={page === 1}
-                        className="px-3 py-1 rounded border disabled:opacity-40"
+                        className="p-2 rounded-lg bg-slate-100 cursor-pointer 
+                        disabled:cursor-not-allowed disabled:opacity-40
+                        hover:bg-slate-200 hover:text-gray-900
+                        disabled:hover:bg-slate-100 disabled:hover:text-inherit"
                     >
-                        Předchozí
+                        <ArrowLeft size={20} />
                     </button>
 
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
                         <button
                             key={num}
                             onClick={() => setPage(num)}
-                            className={`px-3 py-1 rounded border ${
-                                num === page ? 'bg-gray-800 text-white' : ''
+                            className={`px-3 py-1 rounded-lg bg-slate-100 cursor-pointer text-medium font-semibold ${
+                                num === page
+                                    ? 'bg-slate-300 text-black'
+                                    : 'text-gray-500 hover:bg-slate-200 hover:text-gray-900'
                             }`}
                         >
                             {num}
@@ -132,9 +151,23 @@ export function Gallery() {
                     <button
                         onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                         disabled={page === totalPages}
-                        className="px-3 py-1 rounded border disabled:opacity-40"
+                        className="
+                        p-2 rounded-lg bg-slate-100 cursor-pointer 
+                        disabled:cursor-not-allowed disabled:opacity-40
+                        hover:bg-slate-200 hover:text-gray-900
+                        disabled:hover:bg-slate-100 disabled:hover:text-inherit"
                     >
-                        Další
+                        <ArrowRight size={20} />
+                    </button>
+                    <button
+                        onClick={() => setPage(totalPages)}
+                        disabled={page === totalPages}
+                        className="p-2 rounded-lg bg-slate-100 cursor-pointer 
+                        disabled:cursor-not-allowed disabled:opacity-40
+                        hover:bg-slate-200 hover:text-gray-900
+                        disabled:hover:bg-slate-100 disabled:hover:text-inherit"
+                    >
+                        <ChevronsRight size={20} />
                     </button>
                 </div>
             )}
