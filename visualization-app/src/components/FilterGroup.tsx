@@ -2,10 +2,10 @@ import { type FilterType } from '../types/filterOptions';
 
 const colorMap: Record<FilterType, string> = {
     semestr:
-        'bg-blue-50 text-blue-600 border hover:text-blue-800 hover:bg-blue-100 dark:bg-transparent dark:text-gray-100 dark:border-blue-500 dark:hover:bg-blue-900 dark:hover:text-blue-400',
-    tag: 'bg-amber-50 text-amber-600 border hover:text-amber-800 hover:bg-amber-100 dark:bg-transparent dark:text-gray-100 dark:border-amber-500 dark:hover:bg-amber-900 dark:hover:text-amber-400',
+        'bg-blue-50 text-blue-600 border hover:text-blue-800 hover:bg-blue-100 dark:bg-transparent dark:text-gray-100 dark:border-blue-500 dark:hover:bg-gray-900 dark:hover:text-blue-400',
+    tag: 'bg-amber-50 text-amber-600 border hover:text-amber-800 hover:bg-amber-100 dark:bg-transparent dark:text-gray-100 dark:border-amber-500 dark:hover:bg-gray-900 dark:hover:text-amber-400',
     technology:
-        'bg-green-50 text-green-600 border hover:text-green-800 hover:bg-green-100 dark:bg-transparent dark:text-gray-100 dark:border-teal-500 dark:hover:bg-teal-900 dark:hover:text-teal-400'
+        'bg-green-50 text-green-600 border hover:text-green-800 hover:bg-green-100 dark:bg-transparent dark:text-gray-100 dark:border-teal-500 dark:hover:bg-gray-900 dark:hover:text-teal-400'
 };
 
 const selectedColorMap: Record<FilterType, string> = {
