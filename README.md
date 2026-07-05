@@ -21,7 +21,11 @@ The backend is responsible for:
 
 ### Frontend
 
-> Documentation coming soon.
+The frontend is built with TypeScript, React, and Vite. It consists of the following pages:
+
+- Home – introductory landing page of the application
+- Gallery – overview of all projects with search and filtering by keywords, tags, categories, authors, and project names
+- Visualization – statistical charts representing the distribution of projects by technology and category
 
 ### Important
 
@@ -41,6 +45,12 @@ podzim2027
 ```
 
 2. Add all project files to the corresponding semester folder.
+
+---
+
+## Work with PDF and .docx files
+
+###
 
 ---
 
@@ -73,6 +83,12 @@ backend/data/tech_terms.yaml
 ### Automatic Detection
 
 > This feature may require refactoring and might not fully support the current project format.
+
+---
+
+## Work with new template .md files
+
+###
 
 ---
 
