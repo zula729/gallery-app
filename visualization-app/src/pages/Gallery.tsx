@@ -22,6 +22,7 @@ export function Gallery() {
     const cards = useCards();
     const [search, setSearch] = useState('');
     const [techMode, setTechMode] = useState<'OR' | 'AND'>('OR');
+    const [catMode, setCatMode] = useState<'OR' | 'AND'>('OR');
     const [page, setPage] = useState(1);
 
     const [selectedFilters, setSelectedFilters] = useState<Record<FilterType, string[]>>({
@@ -53,16 +54,20 @@ export function Gallery() {
         setTechMode(mode);
         setPage(1);
     };
+    const handleCatModeChange = (mode: 'OR' | 'AND') => {
+        setCatMode(mode);
+        setPage(1);
+    };
     const filtered = useMemo(() => {
         const { tag, technology, semestr } = selectedFilters;
         return cards.filter(
             (c) =>
                 matchesSearch(c, search) &&
                 matchesTechnology(c, technology, techMode) &&
-                matchesTags(c, tag) &&
+                matchesTags(c, tag, catMode) &&
                 matchesSemester(c, semestr)
         );
-    }, [cards, search, selectedFilters, techMode]);
+    }, [cards, search, selectedFilters, techMode, catMode]);
 
     const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
 
@@ -93,7 +98,9 @@ export function Gallery() {
                     onClear={clearFilters}
                     cards={cards}
                     techMode={techMode}
+                    catMode={catMode}
                     onTechModeChange={handleTechModeChange}
+                    onCatModeChange={handleCatModeChange}
                 />
             </div>
             <div className="flex flex-row pt-2 gap-8 flex-wrap mt-4">

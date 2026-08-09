@@ -25,8 +25,12 @@ export function matchesTechnology(
         : selectedTech.every((cat) => cardTech.includes(cat.toLowerCase()));
 }
 
-export function matchesTags(card: CardType, selectedTags: string[]): boolean {
-    return selectedTags.length === 0 || selectedTags.some((cat) => card.tags?.includes(cat));
+export function matchesTags(card: CardType, selectedTags: string[], mode: 'OR' | 'AND'): boolean {
+    if (selectedTags.length === 0) return true;
+    const cardCat = card.tags?.map((t) => t.trim().toLowerCase()) ?? [];
+    return mode === 'OR'
+        ? selectedTags.some((cat) => cardCat.includes(cat.toLowerCase()))
+        : selectedTags.every((cat) => cardCat.includes(cat.toLowerCase()));
 }
 
 export function matchesSemester(card: CardType, selectedSemesters: string[]): boolean {

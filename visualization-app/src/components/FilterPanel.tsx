@@ -10,7 +10,9 @@ function FilterPanel({
     onClear,
     cards = [],
     techMode,
-    onTechModeChange
+    catMode,
+    onTechModeChange,
+    onCatModeChange
 }: FilterPanelProps) {
     const [isOpen, setIsOpen] = useState(false);
     const technologyFrequency = useMemo(() => {
@@ -60,15 +62,37 @@ function FilterPanel({
                 className={`overflow-hidden transition-all duration-400 ease-in-out mr-25
                 ${isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'}`}
             >
-                <div className="pt-4 font-semibold text-gray-900 dark:text-gray-100">
+                <div className="pt-4 font-semibold flex items-center gap-3 text-gray-900 dark:text-gray-100">
                     Categories
-                    <FilterGroup
-                        items={TAGS}
-                        selected={selected.tag}
-                        onToggle={(cat) => onToggle('tag', cat)}
-                        type={'tag'}
-                    />
+                    <div className="flex text-xs font-medium bg-gray-100 dark:bg-gray-800 rounded-full p-0.5 gap-0.5">
+                        <button
+                            onClick={() => onCatModeChange('OR')}
+                            className={`px-3 py-0.5 rounded-full transition-all duration-200 ${
+                                catMode === 'OR'
+                                    ? 'bg-white dark:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-sm'
+                                    : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer'
+                            }`}
+                        >
+                            OR
+                        </button>
+                        <button
+                            onClick={() => onCatModeChange('AND')}
+                            className={`px-3 py-0.5 rounded-full transition-all duration-200 ${
+                                catMode === 'AND'
+                                    ? 'bg-white dark:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-sm'
+                                    : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer'
+                            }`}
+                        >
+                            AND
+                        </button>
+                    </div>
                 </div>
+                <FilterGroup
+                    items={TAGS}
+                    selected={selected.tag}
+                    onToggle={(cat) => onToggle('tag', cat)}
+                    type={'tag'}
+                />
                 <div className="pt-4 font-semibold flex items-center gap-3 text-gray-900 dark:text-gray-100">
                     Technology
                     <div className="flex text-xs font-medium bg-gray-100 dark:bg-gray-800 rounded-full p-0.5 gap-0.5">

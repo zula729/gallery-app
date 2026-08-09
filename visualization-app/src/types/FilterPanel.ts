@@ -8,5 +8,7 @@ export type FilterPanelProps = {
     onClear: () => void;
     cards: CardType[];
     techMode: 'OR' | 'AND';
+    catMode: 'OR' | 'AND';
     onTechModeChange: (mode: 'OR' | 'AND') => void;
+    onCatModeChange: (mode: 'OR' | 'AND') => void;
 };
