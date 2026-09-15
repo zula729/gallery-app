@@ -1,4 +1,4 @@
-# Insert Project's Name Here
+# Project's name
 
 ## Authors
 
