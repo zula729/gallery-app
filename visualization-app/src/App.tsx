@@ -1,5 +1,4 @@
 import Sidebar from './components/Sidebar';
-import Footer from './components/Footer';
 import { Home } from './pages/Home';
 import { Gallery } from './pages/Gallery';
 import { Visualization } from './pages/Visualization';
@@ -24,7 +23,6 @@ function App() {
                         </Routes>
                     </main>
                 </div>
-                <Footer />
             </div>
         </HashRouter>
     );
