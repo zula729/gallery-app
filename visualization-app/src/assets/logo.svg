@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="40" height="40">
+  <!-- Толстые линии связей -->
+  <path d="M 25 25 L 50 75 L 75 25" fill="none" stroke="#9CA3AF" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Верхние узлы (исходные данные) -->
+  <circle cx="25" cy="25" r="12" fill="#4B5563"/>
+  <circle cx="75" cy="25" r="12" fill="#4B5563"/>
+  
+  <!-- Главный нижний узел (результат) -->
+  <circle cx="50" cy="75" r="14" fill="#F59E0B"/>
+</svg>
