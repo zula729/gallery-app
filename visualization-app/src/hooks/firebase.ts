@@ -4,13 +4,13 @@ import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 // firebase config
 const firebaseConfig = {
-    apiKey: 'AIzaSy...',
+    apiKey: 'AIzaSyB5tf1Bf8cXHOc9fa0gDLNlxfl2NfUZajY',
     authDomain: 'visualization-88a6b.firebaseapp.com',
     databaseURL: 'https://visualization-88a6b-default-rtdb.europe-west1.firebasedatabase.app',
     projectId: 'visualization-88a6b',
-    storageBucket: '...',
-    messagingSenderId: '...',
-    appId: '...'
+    storageBucket: 'visualization-88a6b.firebasestorage.app',
+    messagingSenderId: '115907667124',
+    appId: '1:115907667124:web:ec75cfbed70a5b406c23e1'
 };
 
 // app initialization
@@ -25,9 +25,9 @@ const provider = new GoogleAuthProvider();
 export const loginAsAdmin = () => {
     signInWithPopup(auth, provider)
         .then((result) => {
-            console.log('Вы вошли как:', result.user.email);
+            console.log('Login as:', result.user.email);
         })
         .catch((error) => {
-            console.error('Ошибка входа:', error);
+            console.error('Login error:', error);
         });
 };
