@@ -1,4 +1,6 @@
-import { type FilterType } from '../types/filterOptions';
+import { type FilterType } from '../types/filterType';
+
+import { formatLabel } from '../utils/formatLabel';
 
 const colorMap: Record<FilterType, string> = {
     semestr:
@@ -31,11 +33,6 @@ function FilterGroup({
     sorted = true,
     type = 'semestr'
 }: FilterGroupProps) {
-    const formatLabel = (item: string) => {
-        const withSpaces = item.replace(/_/g, ' ');
-        const withAutumn = withSpaces.replace(/podzim/gi, 'autumn');
-        return withAutumn.charAt(0).toUpperCase() + withAutumn.slice(1).toLowerCase();
-    };
     const sortedItems = sorted ? [...items].sort((a, b) => a.localeCompare(b)) : items;
     return (
         <div className="flex flex-wrap gap-2 mt-3 items-center">

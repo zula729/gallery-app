@@ -59,7 +59,7 @@ function ProjectDetails() {
                 </div>
 
                 <div className="flex gap-3 overflow-x-auto pb-2">
-                    {card.images.map((image, index) => (
+                    {(card.images ?? []).map((image, index) => (
                         <button
                             key={index}
                             onClick={() => setCurrentImageIndex(index)}
@@ -82,13 +82,13 @@ function ProjectDetails() {
             <div className="max-w-5xl">
                 <p className="font-semibold text-gray-700 dark:text-gray-300 mb-2">Category</p>
                 <div className="flex flex-wrap gap-2 ml-2 mb-6">
-                    {card.tags.map((tags) => (
+                    {(card.tags ?? []).map((tags) => (
                         <Label key={tags} text={tags} type={'tag'}></Label>
                     ))}
                 </div>
                 <p className="font-semibold text-gray-700 dark:text-gray-300 mb-2">Technologies</p>
                 <div className="flex flex-wrap gap-2 ml-2 mb-6">
-                    {card.technology.map((technology) => (
+                    {(card.technology ?? []).map((technology) => (
                         <Label key={technology} text={technology} type={'technology'}></Label>
                     ))}
                 </div>
@@ -98,7 +98,7 @@ function ProjectDetails() {
                 </div>
                 <p className="font-semibold text-gray-700 dark:text-gray-300 mb-2">Keywords</p>
                 <div className="flex flex-wrap gap-2 ml-2 mb-6">
-                    {card.keywords.map((keyword) => (
+                    {(card.keywords ?? []).map((keyword) => (
                         <Label key={keyword} text={keyword} type={'keyword'}></Label>
                     ))}
                 </div>
@@ -117,7 +117,7 @@ function ProjectDetails() {
                 )}
                 <p className="font-semibold text-gray-700 dark:text-gray-300 mb-2">Authors</p>
                 <div className="flex flex-row gap-4 mb-6 ml-2">
-                    {card.author.map((author, index) => (
+                    {(card.author ?? []).map((author, index) => (
                         <div key={index} className="flex items-center gap-2">
                             <div className="w-9 h-9 rounded-full border border-amber-500 dark:border-amber-600 bg-amber-50 dark:bg-amber-950 flex items-center justify-center text-xs font-bold text-amber-800 dark:text-amber-300">
                                 {getInitials(author)}

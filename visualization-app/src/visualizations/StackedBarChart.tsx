@@ -8,12 +8,15 @@ import {
     Legend,
     ResponsiveContainer
 } from 'recharts';
-import { useMemo, useState } from 'react';
-import { SEMESTR } from '../types/filterOptions';
-import { useCards } from '../hooks/useCards';
+import { useEffect, useMemo, useState } from 'react';
+import type { CardType } from '../types/CardType';
+import { formatLabel } from '../utils/formatLabel';
+import { buildOptionLookup, resolveOption } from '../utils/matchOption';
 
 interface StackedBarChartProps {
+    cards: CardType[];
     options: string[];
+    semesters: string[];
     cardField: 'tags' | 'technology';
     dataKey: string;
     minTotal?: number;
@@ -24,30 +27,31 @@ interface StackedBarChartProps {
 const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7f7f', '#a4de6c'];
 
 const StackedBarChart = ({
+    cards,
     options,
+    semesters,
     cardField,
     dataKey,
     minTotal = 0,
     height = 450,
     yAxisStep = 20
 }: StackedBarChartProps) => {
-    const cards = useCards();
-    const [selectedOptions] = useState<string[]>(options);
-    const [selectedSemesters, setSelectedSemesters] = useState<string[]>(SEMESTR);
+    const [selectedSemesters, setSelectedSemesters] = useState<string[]>(semesters);
+    useEffect(() => {
+        setSelectedSemesters(semesters);
+    }, [semesters]);
+
+    const optionsLookup = useMemo(() => buildOptionLookup(options), [options]);
 
     const { data, maxValue } = useMemo(() => {
         const freq: Record<string, Record<string, number>> = {};
 
         cards.forEach((card) => {
             (card[cardField] as string[] | undefined)?.forEach((value) => {
-                const match = options.find((o) => o.toLowerCase() === value.trim().toLowerCase());
+                const match = resolveOption(optionsLookup, value);
                 const semester = card.semestr ?? 'unknown';
 
-                if (
-                    match &&
-                    selectedOptions.includes(match) &&
-                    selectedSemesters.includes(semester)
-                ) {
+                if (match && selectedSemesters.includes(semester)) {
                     if (!freq[match]) freq[match] = {};
                     freq[match][semester] = (freq[match][semester] ?? 0) + 1;
                 }
@@ -55,36 +59,27 @@ const StackedBarChart = ({
         });
 
         const formatted = Object.entries(freq)
-            .map(([key, semesters]) => ({ [dataKey]: key, ...semesters }))
-            .filter((item) => {
-                const total = SEMESTR.reduce((sum, sem) => sum + ((item[sem] as number) ?? 0), 0);
-                return total >= minTotal;
+            .map(([key, semesterCounts]) => {
+                const total = semesters.reduce(
+                    (sum, sem) => sum + (semesterCounts[sem] ?? 0),
+                    0
+                );
+                return { [dataKey]: key, ...semesterCounts, __total: total };
             })
-            .sort((a, b) => {
-                const totalA = SEMESTR.reduce((sum, sem) => sum + ((a[sem] as number) ?? 0), 0);
-                const totalB = SEMESTR.reduce((sum, sem) => sum + ((b[sem] as number) ?? 0), 0);
-                return totalB - totalA;
-            });
+            .filter((item) => item.__total >= minTotal)
+            .sort((a, b) => b.__total - a.__total)
+            .map(({ __total, ...item }) => item);
 
         let max = 0;
         formatted.forEach((item) => {
-            SEMESTR.forEach((sem) => {
+            semesters.forEach((sem) => {
                 const v = (item[sem] as number) ?? 0;
                 if (v > max) max = v;
             });
         });
 
         return { data: formatted, maxValue: Math.ceil(max / yAxisStep) * yAxisStep + yAxisStep };
-    }, [
-        cards,
-        selectedOptions,
-        selectedSemesters,
-        cardField,
-        dataKey,
-        options,
-        minTotal,
-        yAxisStep
-    ]);
+    }, [cards, selectedSemesters, cardField, dataKey, optionsLookup, minTotal, yAxisStep, semesters]);
 
     const toggle = (value: string, selected: string[], setter: (v: string[]) => void) => {
         setter(
@@ -95,10 +90,11 @@ const StackedBarChart = ({
     return (
         <div>
             <div className="flex flex-wrap gap-2 mb-3">
-                {SEMESTR.map((semester, i) => {
+                {semesters.map((semester, i) => {
                     const isActive = selectedSemesters.includes(semester);
                     return (
                         <button
+                            key={semester}
                             onClick={() =>
                                 toggle(semester, selectedSemesters, setSelectedSemesters)
                             }
@@ -113,15 +109,7 @@ const StackedBarChart = ({
                                 color: isActive ? '#fff' : COLORS[i % COLORS.length]
                             }}
                         >
-                            {(() => {
-                                const replaced = semester
-                                    .replace(/_/g, ' ')
-                                    .replace(/podzim/gi, 'autumn');
-                                return (
-                                    replaced.charAt(0).toUpperCase() +
-                                    replaced.slice(1).toLowerCase()
-                                );
-                            })()}
+                            {formatLabel(semester)}
                         </button>
                     );
                 })}
@@ -135,23 +123,16 @@ const StackedBarChart = ({
                         textAnchor="end"
                         height={100}
                         niceTicks="snap125"
+                        tickFormatter={formatLabel}
                     />
                     <YAxis width={50} domain={[0, maxValue]} niceTicks="snap125" />
                     <Tooltip />
                     <Legend verticalAlign="top" height={36} />
-                    {SEMESTR.map((semester, i) => (
+                    {semesters.map((semester, i) => (
                         <Bar
                             key={semester}
                             dataKey={semester}
-                            name={(() => {
-                                const replaced = semester
-                                    .replace(/_/g, ' ')
-                                    .replace(/podzim/gi, 'autumn');
-                                return (
-                                    replaced.charAt(0).toUpperCase() +
-                                    replaced.slice(1).toLowerCase()
-                                );
-                            })()}
+                            name={formatLabel(semester)}
                             stackId="a"
                             fill={COLORS[i % COLORS.length]}
                         />

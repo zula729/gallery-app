@@ -1,7 +1,11 @@
 import StackedBarChart from '../visualizations/StackedBarChart';
-import { TAGS, TECHNOLOGY } from '../types/filterOptions';
+import { useCards } from '../hooks/useCards';
+import { useFilterOptions } from '../hooks/useFilterOptions';
 
 export function Visualization() {
+    const cards = useCards();
+    const { tags, technology, semestr } = useFilterOptions(cards);
+
     return (
         <main className="flex-1 p-8 ml-4">
             <div className="flex items-center justify-between">
@@ -23,7 +27,9 @@ export function Visualization() {
                         Frequency of tehcnologies used across projects
                     </p>
                     <StackedBarChart
-                        options={TECHNOLOGY}
+                        cards={cards}
+                        options={technology}
+                        semesters={semestr}
                         cardField="technology"
                         dataKey="tech"
                         minTotal={5}
@@ -38,7 +44,9 @@ export function Visualization() {
                         Frequency of tags across projects
                     </p>
                     <StackedBarChart
-                        options={TAGS}
+                        cards={cards}
+                        options={tags}
+                        semesters={semestr}
                         cardField="tags"
                         dataKey="tag"
                         height={500}

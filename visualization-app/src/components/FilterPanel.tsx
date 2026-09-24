@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react';
 import FilterGroup from './FilterGroup';
-import { TAGS, TECHNOLOGY, SEMESTR } from '../types/filterOptions';
 import type { FilterPanelProps } from '../types/FilterPanel';
 import { Trash } from 'lucide-react';
+import { useFilterOptions } from '../hooks/useFilterOptions';
+import { buildOptionLookup, resolveOption } from '../utils/matchOption';
 
 function FilterPanel({
     selected,
@@ -15,26 +16,28 @@ function FilterPanel({
     onCatModeChange
 }: FilterPanelProps) {
     const [isOpen, setIsOpen] = useState(false);
+    const { tags, technology, semestr } = useFilterOptions(cards);
+    const technologyLookup = useMemo(() => buildOptionLookup(technology), [technology]);
     const technologyFrequency = useMemo(() => {
         const freq: Record<string, number> = {};
         cards.forEach((card) => {
             card.technology?.forEach((tech) => {
-                const match = TECHNOLOGY.find((t) => t.toLowerCase() === tech.trim().toLowerCase());
+                const match = resolveOption(technologyLookup, tech);
                 if (match) {
                     freq[match] = (freq[match] ?? 0) + 1;
                 }
             });
         });
         return freq;
-    }, [cards]);
+    }, [cards, technologyLookup]);
 
     const sortedTechnology = useMemo(() => {
-        return [...TECHNOLOGY].sort((a, b) => {
+        return [...technology].sort((a, b) => {
             const freqA = technologyFrequency[a] ?? 0;
             const freqB = technologyFrequency[b] ?? 0;
             return freqB - freqA;
         });
-    }, [technologyFrequency]);
+    }, [technology, technologyFrequency]);
 
     const totalSelected =
         selected.tag.length + selected.technology.length + selected.semestr.length;
@@ -88,7 +91,7 @@ function FilterPanel({
                     </div>
                 </div>
                 <FilterGroup
-                    items={TAGS}
+                    items={tags}
                     selected={selected.tag}
                     onToggle={(cat) => onToggle('tag', cat)}
                     type={'tag'}
@@ -128,7 +131,7 @@ function FilterPanel({
                 <div className="pt-4 font-semibold text-gray-900 dark:text-gray-100">
                     Semester
                     <FilterGroup
-                        items={SEMESTR}
+                        items={semestr}
                         selected={selected.semestr}
                         onToggle={(cat) => onToggle('semestr', cat)}
                         type={'semestr'}
