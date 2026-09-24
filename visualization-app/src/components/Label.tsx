@@ -1,6 +1,10 @@
+import { formatLabel } from '../utils/formatLabel';
+
+export type LabelType = 'keyword' | 'tag' | 'technology' | 'semestr';
+
 type LabelProps = {
     text: string;
-    type?: 'keyword' | 'tag' | 'technology' | 'semestr';
+    type?: LabelType;
 };
 
 const colorMap = {
@@ -18,10 +22,7 @@ function Label({ text, type = 'keyword' }: LabelProps) {
         <span
             className={`rounded-full text-sm font-medium flex items-center p-1 pl-2 pr-2 ${colorMap[type]}`}
         >
-            {(() => {
-                const replaced = text.replace(/_/g, ' ').replace(/podzim/gi, 'autumn');
-                return replaced.charAt(0).toUpperCase() + replaced.slice(1).toLowerCase();
-            })()}
+            {formatLabel(text)}
         </span>
     );
 }

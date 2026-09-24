@@ -1,8 +1,11 @@
 import Label from './Label';
 
 import type { CardType } from '../types/CardType';
+import type { LabelType } from './Label';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
+
+import { formatLabel } from '../utils/formatLabel';
 
 import Default from '../assets/default.png';
 
@@ -12,22 +15,26 @@ type CardProps = {
 
 type LabelWithType = {
     text: string;
-    type: 'keyword' | 'tag' | 'technology';
+    type: LabelType;
 };
 
 function Card({ card }: CardProps) {
     const [expanded, setExpanded] = useState(false);
-    const allLabels: LabelWithType[] = [
-        ...(card.tags ?? [])
-            .sort((a, b) => a.localeCompare(b))
-            .map((tag) => ({ text: tag, type: 'tag' as const })),
-        ...(card.technology ?? [])
-            .sort((a, b) => a.localeCompare(b))
-            .map((tech) => ({ text: tech, type: 'technology' as const })),
-        ...(card.keywords ?? [])
-            .sort((a, b) => a.localeCompare(b))
-            .map((kw) => ({ text: kw, type: 'keyword' as const }))
-    ].filter((label) => label !== undefined && label.text && label.text.trim() !== '');
+    const allLabels: LabelWithType[] = useMemo(
+        () =>
+            [
+                ...(card.tags ?? [])
+                    .sort((a, b) => a.localeCompare(b))
+                    .map((tag) => ({ text: tag, type: 'tag' as const })),
+                ...(card.technology ?? [])
+                    .sort((a, b) => a.localeCompare(b))
+                    .map((tech) => ({ text: tech, type: 'technology' as const })),
+                ...(card.keywords ?? [])
+                    .sort((a, b) => a.localeCompare(b))
+                    .map((kw) => ({ text: kw, type: 'keyword' as const }))
+            ].filter((label) => label !== undefined && label.text && label.text.trim() !== ''),
+        [card.tags, card.technology, card.keywords]
+    );
     const [isOverflowing, setIsOverflowing] = useState(false);
     const labelsRef = useRef<HTMLDivElement>(null);
 
@@ -72,15 +79,7 @@ function Card({ card }: CardProps) {
                                 ))}
                             </p>
                             <p className="text-m text-gray-700 dark:text-gray-300">
-                                {(() => {
-                                    const replaced = card.semestr
-                                        .replace(/_/g, ' ')
-                                        .replace(/podzim/gi, 'autumn');
-                                    return (
-                                        replaced.charAt(0).toUpperCase() +
-                                        replaced.slice(1).toLowerCase()
-                                    );
-                                })()}
+                                {formatLabel(card.semestr)}
                             </p>
                         </div>
                         <hr className="mt-3 mb-2 border-gray-300 dark:border-gray-600"></hr>

@@ -3,7 +3,7 @@ import Card from '../components/Card';
 import FilterPanel from '../components/FilterPanel';
 import { useState, useMemo } from 'react';
 import { useCards } from '../hooks/useCards';
-import { type FilterType } from '../types/filterOptions';
+import { type FilterType, type FilterMode } from '../types/filterType';
 import { Link } from 'react-router';
 import {
     matchesSearch,
@@ -21,8 +21,8 @@ const PAGE_SIZE = 12;
 export function Gallery() {
     const cards = useCards();
     const [search, setSearch] = useState('');
-    const [techMode, setTechMode] = useState<'OR' | 'AND'>('OR');
-    const [catMode, setCatMode] = useState<'OR' | 'AND'>('OR');
+    const [techMode, setTechMode] = useState<FilterMode>('OR');
+    const [catMode, setCatMode] = useState<FilterMode>('OR');
     const [page, setPage] = useState(1);
 
     const [selectedFilters, setSelectedFilters] = useState<Record<FilterType, string[]>>({
@@ -50,11 +50,11 @@ export function Gallery() {
         setPage(1);
     };
 
-    const handleTechModeChange = (mode: 'OR' | 'AND') => {
+    const handleTechModeChange = (mode: FilterMode) => {
         setTechMode(mode);
         setPage(1);
     };
-    const handleCatModeChange = (mode: 'OR' | 'AND') => {
+    const handleCatModeChange = (mode: FilterMode) => {
         setCatMode(mode);
         setPage(1);
     };
