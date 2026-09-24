@@ -3,7 +3,7 @@ import { type FilterType } from '../types/filterType';
 import { formatLabel } from '../utils/formatLabel';
 
 const colorMap: Record<FilterType, string> = {
-    semestr:
+    semester:
         'bg-blue-50 text-blue-600 border hover:text-blue-800 hover:bg-blue-100 dark:bg-transparent dark:text-gray-100 dark:border-blue-500 dark:hover:bg-gray-900 dark:hover:text-blue-400',
     tag: 'bg-amber-50 text-amber-600 border hover:text-amber-800 hover:bg-amber-100 dark:bg-transparent dark:text-gray-100 dark:border-amber-500 dark:hover:bg-gray-900 dark:hover:text-amber-400',
     technology:
@@ -11,7 +11,7 @@ const colorMap: Record<FilterType, string> = {
 };
 
 const selectedColorMap: Record<FilterType, string> = {
-    semestr:
+    semester:
         'text-blue-900 bg-blue-200 border dark:bg-blue-900 dark:text-gray-100 dark:border-blue-400',
     tag: 'text-amber-900 bg-amber-200 border dark:bg-amber-900 dark:text-gray-100 dark:border-amber-400',
     technology:
@@ -31,7 +31,7 @@ function FilterGroup({
     selected,
     onToggle,
     sorted = true,
-    type = 'semestr'
+    type = 'semester'
 }: FilterGroupProps) {
     const sortedItems = sorted ? [...items].sort((a, b) => a.localeCompare(b)) : items;
     return (

@@ -61,7 +61,7 @@ class ImageExtractor:
                         target_path = os.path.join(output_folder, new_filename)
                         with docx_zip.open(file) as source, open(target_path, "wb") as target:
                             target.write(source.read())
-                        print(f"Извлечено: {file}")
+                        print(f"Extracted: {file}")
                         index += 1
         except Exception as e:
             print(f"Error extracting images from {docx_path}: {e}")

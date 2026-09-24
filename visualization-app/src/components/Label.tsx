@@ -1,6 +1,6 @@
 import { formatLabel } from '../utils/formatLabel';
 
-export type LabelType = 'keyword' | 'tag' | 'technology' | 'semestr';
+export type LabelType = 'keyword' | 'tag' | 'technology' | 'semester';
 
 type LabelProps = {
     text: string;
@@ -13,7 +13,7 @@ const colorMap = {
     tag: 'bg-amber-50 text-amber-600 border dark:bg-transparent dark:text-gray-100 dark:border-amber-500',
     technology:
         'bg-green-50 text-green-600 border dark:bg-transparent dark:text-gray-100 dark:border-teal-500',
-    semestr:
+    semester:
         'bg-blue-50 text-blue-600 border dark:bg-transparent dark:text-gray-100 dark:border-blue-500'
 };
 

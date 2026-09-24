@@ -21,7 +21,7 @@ export function CardsProvider({ children }: { children: ReactNode }) {
                           : [],
                     keywords: Array.isArray(entry.keywords) ? entry.keywords : [],
                     name: entry.name ?? '',
-                    semestr: entry.semester ?? '',
+                    semester: entry.semester ?? '',
                     tags: Array.isArray(entry.tags) ? entry.tags.map((t: string) => t.trim()) : [],
                     technology: Array.isArray(entry.technology)
                         ? entry.technology.map((t: string) => t.trim())

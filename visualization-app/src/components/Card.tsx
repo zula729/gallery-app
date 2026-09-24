@@ -79,7 +79,7 @@ function Card({ card }: CardProps) {
                                 ))}
                             </p>
                             <p className="text-m text-gray-700 dark:text-gray-300">
-                                {formatLabel(card.semestr)}
+                                {formatLabel(card.semester)}
                             </p>
                         </div>
                         <hr className="mt-3 mb-2 border-gray-300 dark:border-gray-600"></hr>

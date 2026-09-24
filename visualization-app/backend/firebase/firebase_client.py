@@ -158,17 +158,17 @@ class FirebaseClient:
         - author
         - keywords
         - name
-        - semestr
+        - semester
         - tags
 
         Logs all incomplete entries.
         """
         data = self.fetch_all()
         missing = {}
-        
+
         for fid, entry in data.items():
             missing_keys = [
-                key for key in ("text", "author", "keywords", "name", "semestr", "tags")
+                key for key in ("text", "author", "keywords", "name", "semester", "tags")
                 if not entry.get(key)
             ]
             if missing_keys:

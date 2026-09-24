@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import type { CardType } from '../types/CardType';
 
-const FIELDS = ['tags', 'technology', 'semestr'] as const;
+const FIELDS = ['tags', 'technology', 'semester'] as const;
 type Field = (typeof FIELDS)[number];
 
 function addValue(map: Map<string, string>, raw: unknown) {
@@ -21,7 +21,7 @@ export function useFilterOptions(cards: CardType[]): Record<Field, string[]> {
         const maps: Record<Field, Map<string, string>> = {
             tags: new Map(),
             technology: new Map(),
-            semestr: new Map()
+            semester: new Map()
         };
 
         cards.forEach((card) => {
@@ -33,7 +33,7 @@ export function useFilterOptions(cards: CardType[]): Record<Field, string[]> {
             technology: Array.from(maps.technology.values()).sort((a, b) =>
                 a.localeCompare(b, 'cs')
             ),
-            semestr: Array.from(maps.semestr.values()).sort((a, b) => a.localeCompare(b, 'cs'))
+            semester: Array.from(maps.semester.values()).sort((a, b) => a.localeCompare(b, 'cs'))
         };
     }, [cards]);
 }

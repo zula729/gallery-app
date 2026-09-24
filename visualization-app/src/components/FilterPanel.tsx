@@ -16,7 +16,7 @@ function FilterPanel({
     onCatModeChange
 }: FilterPanelProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const { tags, technology, semestr } = useFilterOptions(cards);
+    const { tags, technology, semester } = useFilterOptions(cards);
     const technologyLookup = useMemo(() => buildOptionLookup(technology), [technology]);
     const technologyFrequency = useMemo(() => {
         const freq: Record<string, number> = {};
@@ -40,7 +40,7 @@ function FilterPanel({
     }, [technology, technologyFrequency]);
 
     const totalSelected =
-        selected.tag.length + selected.technology.length + selected.semestr.length;
+        selected.tag.length + selected.technology.length + selected.semester.length;
 
     return (
         <div>
@@ -131,10 +131,10 @@ function FilterPanel({
                 <div className="pt-4 font-semibold text-gray-900 dark:text-gray-100">
                     Semester
                     <FilterGroup
-                        items={semestr}
-                        selected={selected.semestr}
-                        onToggle={(cat) => onToggle('semestr', cat)}
-                        type={'semestr'}
+                        items={semester}
+                        selected={selected.semester}
+                        onToggle={(cat) => onToggle('semester', cat)}
+                        type={'semester'}
                     />
                 </div>
             </div>

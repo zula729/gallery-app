@@ -94,7 +94,7 @@ function ProjectDetails() {
                 </div>
                 <p className="font-semibold text-gray-700 dark:text-gray-300 mb-2">Semester</p>
                 <div className="flex flex-wrap gap-2 ml-2 mb-6">
-                    <Label key={card.semestr} text={card.semestr} type={'semestr'}></Label>
+                    <Label key={card.semester} text={card.semester} type={'semester'}></Label>
                 </div>
                 <p className="font-semibold text-gray-700 dark:text-gray-300 mb-2">Keywords</p>
                 <div className="flex flex-wrap gap-2 ml-2 mb-6">

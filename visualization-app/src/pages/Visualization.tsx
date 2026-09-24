@@ -4,7 +4,7 @@ import { useFilterOptions } from '../hooks/useFilterOptions';
 
 export function Visualization() {
     const cards = useCards();
-    const { tags, technology, semestr } = useFilterOptions(cards);
+    const { tags, technology, semester } = useFilterOptions(cards);
 
     return (
         <main className="flex-1 p-8 ml-4">
@@ -29,7 +29,7 @@ export function Visualization() {
                     <StackedBarChart
                         cards={cards}
                         options={technology}
-                        semesters={semestr}
+                        semesters={semester}
                         cardField="technology"
                         dataKey="tech"
                         minTotal={5}
@@ -46,7 +46,7 @@ export function Visualization() {
                     <StackedBarChart
                         cards={cards}
                         options={tags}
-                        semesters={semestr}
+                        semesters={semester}
                         cardField="tags"
                         dataKey="tag"
                         height={500}

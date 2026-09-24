@@ -49,7 +49,7 @@ const StackedBarChart = ({
         cards.forEach((card) => {
             (card[cardField] as string[] | undefined)?.forEach((value) => {
                 const match = resolveOption(optionsLookup, value);
-                const semester = card.semestr ?? 'unknown';
+                const semester = card.semester ?? 'unknown';
 
                 if (match && selectedSemesters.includes(semester)) {
                     if (!freq[match]) freq[match] = {};

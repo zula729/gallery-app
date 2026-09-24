@@ -3,7 +3,7 @@ export type CardType = {
     author: string[];
     keywords: string[];
     name: string;
-    semestr: string;
+    semester: string;
     tags: string[];
     technology: string[];
     images: string[];

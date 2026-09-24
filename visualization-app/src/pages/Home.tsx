@@ -6,14 +6,14 @@ import { useMemo } from 'react';
 export function Home() {
     const cards = useCards();
     const count = cards.length;
-    const { semestr } = useFilterOptions(cards);
+    const { semester } = useFilterOptions(cards);
 
     const latestYear = useMemo(() => {
-        const years = semestr
+        const years = semester
             .map((s) => parseInt(s.match(/\d{4}/)?.[0] ?? '', 10))
             .filter((y) => !Number.isNaN(y));
         return years.length > 0 ? Math.max(...years) : '—';
-    }, [semestr]);
+    }, [semester]);
     return (
         <main className="flex-1 ml-4 min-h-screen relative">
             <div>
@@ -30,7 +30,7 @@ export function Home() {
                     <div className="flex flex-row gap-4 mb-6 pr-10 max-w-8/10">
                         <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 basis-md">
                             <p className="text-xl font-semibold text-amber-600 dark:text-amber-400">
-                                {semestr.length}
+                                {semester.length}
                             </p>
                             <p className="text-gray-400 dark:text-gray-500 text-xs mt-1">
                                 Semesters

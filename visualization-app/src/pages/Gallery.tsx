@@ -28,7 +28,7 @@ export function Gallery() {
     const [selectedFilters, setSelectedFilters] = useState<Record<FilterType, string[]>>({
         tag: [],
         technology: [],
-        semestr: []
+        semester: []
     });
     const toggleCategory = (type: FilterType, cat: string) => {
         setSelectedFilters((prev) => ({
@@ -41,7 +41,7 @@ export function Gallery() {
     };
 
     const clearFilters = () => {
-        setSelectedFilters({ tag: [], technology: [], semestr: [] });
+        setSelectedFilters({ tag: [], technology: [], semester: [] });
         setPage(1);
     };
 
@@ -59,13 +59,13 @@ export function Gallery() {
         setPage(1);
     };
     const filtered = useMemo(() => {
-        const { tag, technology, semestr } = selectedFilters;
+        const { tag, technology, semester } = selectedFilters;
         return cards.filter(
             (c) =>
                 matchesSearch(c, search) &&
                 matchesTechnology(c, technology, techMode) &&
                 matchesTags(c, tag, catMode) &&
-                matchesSemester(c, semestr)
+                matchesSemester(c, semester)
         );
     }, [cards, search, selectedFilters, techMode, catMode]);
 

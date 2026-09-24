@@ -34,5 +34,5 @@ export function matchesTags(card: CardType, selectedTags: string[], mode: 'OR' |
 }
 
 export function matchesSemester(card: CardType, selectedSemesters: string[]): boolean {
-    return selectedSemesters.length === 0 || selectedSemesters.includes(card.semestr);
+    return selectedSemesters.length === 0 || selectedSemesters.includes(card.semester);
 }
