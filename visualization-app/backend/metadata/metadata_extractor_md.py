@@ -22,6 +22,7 @@ class MarkdownExtractor:
             token_pattern=r"(?u)\b[^\W\d_]{2,}\b"
         )
         self.ner = pipeline("ner", model="dslim/bert-base-NER", aggregation_strategy="simple")
+        self._tags = JsonYamlManager.load_yaml(TAGS_YAML)
 
     def _get_field(self, content: dict, key: str, default: str = "") -> str:
         """
@@ -74,11 +75,13 @@ class MarkdownExtractor:
             list[str]: Matched keywords
         """
         try:
-            tags = JsonYamlManager.load_yaml(TAGS_YAML)
+            tags = self._tags
+            text_lower = content.lower()
             found_keywords = set()
             for _, examples in tags.items():
                 for example in examples:
-                    if example.lower() in content:
+                    pattern = rf"(?<!\w){re.escape(example.lower())}(?!\w)"
+                    if re.search(pattern, text_lower):
                         found_keywords.add(example)
             return list(found_keywords)
         except Exception as e:
@@ -126,11 +129,13 @@ class MarkdownExtractor:
         Returns:
             list[str]: List of detected tags
         """
-        tags = JsonYamlManager.load_yaml(TAGS_YAML)
+        tags = self._tags
+        text_lower = text.lower()
         found_tags = set()
         for tag, examples in tags.items():
             for example in examples:
-                if example.lower() in text:
+                pattern = rf"(?<!\w){re.escape(example.lower())}(?!\w)"
+                if re.search(pattern, text_lower):
                     found_tags.add(tag)
         return list(found_tags)
 

@@ -7,7 +7,6 @@ ANIMALS:
     - nymphs
 
 FOOD:
-    - recepie
     - food
     - spaghetti
     - popcorn
@@ -49,7 +48,6 @@ MEDICINE:
     - cancer
     - pandemic
     - diabetes
-    - heartdisease
     - doctor
     - cardiovascular
     - health
@@ -125,7 +123,6 @@ DEMOGRAPHY:
 
 SPORT:
     - bike
-    - logosfootball
     - football
     - bikes
     - championship
@@ -159,7 +156,7 @@ MOVIES:
     - popcorn
     - anime
     - titanic
-    - startrek
+    - star trek
     - dialogue
     - pokemon
     - ratings
