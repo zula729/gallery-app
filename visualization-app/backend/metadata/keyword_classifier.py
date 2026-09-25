@@ -1,7 +1,5 @@
 import logging
 from sentence_transformers import SentenceTransformer, util
-
-from firebase import FirebaseClient
 from utils import JsonYamlManager
 
 logger = logging.getLogger(__name__)
@@ -23,7 +21,7 @@ class KeywordClassifier:
         self.model = SentenceTransformer('all-mpnet-base-v2')
         self.score_threshold = score_threshold
 
-    def run_categorize(self, yaml_path: str, firebase: FirebaseClient) -> None:
+    def run_categorize(self, yaml_path: str, db_data: dict) -> None:
         """
         Categorizes undefined keywords from Firebase into predefined categories.
 
@@ -37,25 +35,24 @@ class KeywordClassifier:
         Returns:
             None
         """
-        db_keywords = self._extract_firebase_keywords(firebase)
+        db_keywords = self._extract_keywords_from_data(db_data)
         tags = JsonYamlManager.load_yaml(yaml_path)
         tag_keywords = self._extract_tag_keywords(tags)
         undefined_keywords = db_keywords - tag_keywords
         result_clean = self._classify_keywords(undefined_keywords, tags)
         JsonYamlManager.save_yaml(result_clean)
 
-    def _extract_firebase_keywords(self, firebase: FirebaseClient) -> set[str]:
+    def _extract_keywords_from_data(self, db_data: dict) -> set[str]:
         """
-        Extracts all unique keywords present in the Firebase database records.
+        Extracts all unique keywords present in already-fetched Firebase records.
 
         Args:
-            firebase (FirebasePushPDF): Instantiated Firebase client wrapper object.
+            db_data (dict): Firebase database records {folder_id: entry}
 
         Returns:
             set[str]: A set of all unique keyword strings found across database records.
         """
         keywords = set()
-        db_data = firebase.fetch_all()
         for _, data in db_data.items():
             kw_list = data.get('keywords') or []
             keywords.update(kw_list)
@@ -99,19 +96,18 @@ class KeywordClassifier:
 
         kw_embeddings = self.model.encode(keywords, convert_to_tensor=True)
 
+        known_embeddings_by_category = {
+            category: self.model.encode(known_words, convert_to_tensor=True)
+            for category, known_words in tags.items() if known_words
+        }
+
         for idx, keyword in enumerate(keywords):
             best_score = -1.0
             best_category = "UNDEFINED"
 
-            for category, known_words in tags.items():
-                if not known_words:
-                    continue
-                
-                known_embeddings = self.model.encode(known_words, convert_to_tensor=True)
-                
+            for category, known_embeddings in known_embeddings_by_category.items():
                 cos_scores = util.cos_sim(kw_embeddings[idx], known_embeddings)[0]
                 max_score = float(cos_scores.max())
-
                 if max_score > best_score:
                     best_score = max_score
                     best_category = category
