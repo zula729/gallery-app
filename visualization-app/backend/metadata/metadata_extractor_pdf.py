@@ -157,4 +157,4 @@ class MetadataExtractor:
             }
         except Exception as e:
             print(f"Error processing {file_path}: {e}")
-            return {"author": "", "technology": "", "tags": "", "text": ""}
+            return {"author": [], "technology": [], "tags": [], "text": ""}

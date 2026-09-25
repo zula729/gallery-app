@@ -42,7 +42,7 @@ class FirebaseClient:
                 self.ref.child(folder_id).delete()
                 logger.info(f"Deleted: {folder_id}")
 
-    def filter_keywords_by_yaml(self, yaml_path: str, dry_run: bool = True) -> None:
+    def filter_keywords_by_yaml(self, yaml_path: str, dry_run: bool = True) -> int:
         """
         Filters keywords in database using allowed values from YAML.
 
@@ -53,7 +53,7 @@ class FirebaseClient:
         Returns:
             int: Total number of removed keywords
         """
-        categories = JsonYamlManager.load_categories(yaml_path)
+        categories = JsonYamlManager.load_yaml(yaml_path)
         allowed: set[str] = self._get_allowed_keywords(categories)
 
         db_data = self.fetch_all()
@@ -77,7 +77,7 @@ class FirebaseClient:
         """
         allowed = set()
         for examples in categories.values():
-            allowed.update(self._ensure_list(examples))
+            allowed.update(examples or [])
         return allowed
 
     def _filter_entry_keywords(self, folder_id: str, entry: dict, allowed: set[str], dry_run: bool) -> int:
@@ -95,13 +95,13 @@ class FirebaseClient:
         """
         kw_list = entry.get("keywords", [])
         to_remove = [kw for kw in kw_list if kw not in allowed]
-        if not kw_list or not to_remove:
-            logger.warning(f"")
- 
-        if not dry_run:
+        if to_remove:
+            logger.info(f"{folder_id}: {len(to_remove)} keyword(s) to remove: {to_remove}")
+
+        if not dry_run and to_remove:
             cleaned = [kw for kw in kw_list if kw in allowed]
-            self._merge_and_push(folder_id, {"keywords": cleaned})
- 
+            self.ref.child(folder_id).update({"keywords": cleaned})
+
         return len(to_remove)
 
     def find_missing_folders(self, root_dir: Path):
@@ -144,7 +144,11 @@ class FirebaseClient:
         """
         local_ids = {}
         for semester in root_dir.iterdir():
+            if not semester.is_dir(): 
+                continue
             for folder in semester.iterdir():
+                if not folder.is_dir(): 
+                    continue
                 folder_id = folder.name[:6]
                 local_ids[folder_id] = folder.name
         return local_ids
@@ -165,7 +169,7 @@ class FirebaseClient:
         """
         data = self.fetch_all()
         missing = {}
-
+        
         for fid, entry in data.items():
             missing_keys = [
                 key for key in ("text", "author", "keywords", "name", "semester", "tags")

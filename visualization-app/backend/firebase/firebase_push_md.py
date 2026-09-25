@@ -47,6 +47,7 @@ class FirebasePushMD:
             dict: Parsed sections {section_name: content}
             None: If file cannot be read
         """
+        
         try:
             with open(file_path, encoding="utf-8") as f:
                 content = f.read()
@@ -102,6 +103,8 @@ class FirebasePushMD:
         extractor = MarkdownExtractor()
         for file_path in files:
             content = self.parse_sections(file_path)
+            if content is None: 
+                continue
             data_to_send = extractor.extract_metadata(content)
             data_to_send.update({"semester": PathParser.extract_semester(file_path)})
 
@@ -122,6 +125,8 @@ class FirebasePushMD:
         extractor = MarkdownExtractor()
         for file_path in files:
             content = self.parse_sections(file_path)
+            if content is None: 
+                continue
             keywords = extractor.extract_keywords(content)
             if keywords is None:
                 logging.warning(f"NONE VALUE TO DATA BASE: {file_path}")

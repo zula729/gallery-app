@@ -68,7 +68,7 @@ class PathParser:
         """
         for part in path.parts:
             p = part.lower()
-            if p.startswith("__macosx") or p.startswith("._") or p == ".ds_store" or p == "__MACOSX":
+            if p.startswith("__macosx") or p.startswith("._") or p == ".ds_store":
                 return True
         return False
 

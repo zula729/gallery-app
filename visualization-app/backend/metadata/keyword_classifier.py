@@ -1,7 +1,7 @@
 import logging
 from sentence_transformers import SentenceTransformer, util
 
-from firebase import FirebasePushPDF
+from firebase import FirebaseClient
 from utils import JsonYamlManager
 
 logger = logging.getLogger(__name__)
@@ -23,7 +23,7 @@ class KeywordClassifier:
         self.model = SentenceTransformer('all-mpnet-base-v2')
         self.score_threshold = score_threshold
 
-    def run_categorize(self, yaml_path: str, firebase: FirebasePushPDF) -> None:
+    def run_categorize(self, yaml_path: str, firebase: FirebaseClient) -> None:
         """
         Categorizes undefined keywords from Firebase into predefined categories.
 
@@ -44,7 +44,7 @@ class KeywordClassifier:
         result_clean = self._classify_keywords(undefined_keywords, tags)
         JsonYamlManager.save_yaml(result_clean)
 
-    def _extract_firebase_keywords(self, firebase: FirebasePushPDF) -> set[str]:
+    def _extract_firebase_keywords(self, firebase: FirebaseClient) -> set[str]:
         """
         Extracts all unique keywords present in the Firebase database records.
 
@@ -57,7 +57,7 @@ class KeywordClassifier:
         keywords = set()
         db_data = firebase.fetch_all()
         for _, data in db_data.items():
-            kw_list = data.get('keywords')
+            kw_list = data.get('keywords') or []
             keywords.update(kw_list)
         return keywords
 
@@ -92,6 +92,7 @@ class KeywordClassifier:
             dict: A deep copy of the original tags dictionary updated with the newly classified words.
         """
         import copy
+        keywords = sorted(keywords)
         result = copy.deepcopy(tags)
         if "UNDEFINED" not in result:
             result["UNDEFINED"] = []
