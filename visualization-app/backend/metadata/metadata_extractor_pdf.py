@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 from keybert import KeyBERT
@@ -6,6 +7,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 
 from utils import PathParser, JsonYamlManager
 from utils.paths import TECH_TERMS_YAML, TAGS_YAML
+
+logger = logging.getLogger(__name__)
 
 
 class MetadataExtractor:
@@ -80,7 +83,7 @@ class MetadataExtractor:
             merged = set(keywords + extracted_keywords)
             return {"keywords": list(merged)} 
         except Exception as e:
-            print(f"Error processing keywords: {e}")
+            logger.error(f"Error processing keywords: {e}")
             return None
 
     def extract_tags(self, text: str) -> list[str]:
@@ -125,7 +128,7 @@ class MetadataExtractor:
                         found_keywords.add(example)
             return list(found_keywords)
         except Exception as e:
-            print(f"Error processing known keywords: {e}")
+            logger.error(f"Error processing known keywords: {e}")
             return []
 
     def extract_metadata(self, file_path: Path
@@ -156,5 +159,5 @@ class MetadataExtractor:
                 "text": text
             }
         except Exception as e:
-            print(f"Error processing {file_path}: {e}")
+            logger.error(f"Error processing {file_path}: {e}")
             return {"author": [], "technology": [], "tags": [], "text": ""}

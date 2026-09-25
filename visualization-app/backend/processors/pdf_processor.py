@@ -46,7 +46,7 @@ def rename(root_dir: Path, prefix: str) -> None:
         if "report" in pdf.name.lower():
             new_path = pdf.with_name(f"{prefix}_{pdf.name}")
             pdf.rename(new_path)
-            print(f"Renamed: {pdf.name} -> {new_path.name}")\
+            logger.info(f"Renamed: {pdf.name} -> {new_path.name}")
 
 def no_report_name(source_dir: Path) -> None:
     """
@@ -62,7 +62,7 @@ def no_report_name(source_dir: Path) -> None:
     """
     for pdf in source_dir.rglob("*.pdf"):
         if not "report" in pdf.name.lower():
-            print(f"Found: {pdf.name}, {pdf.parent}\n")
+            logger.info(f"Found: {pdf.name}, {pdf.parent}")
 
 
 def convert_pdf_to_svg(source_dir: Path) -> None:
@@ -82,7 +82,7 @@ def convert_pdf_to_svg(source_dir: Path) -> None:
         if PathParser.is_macos_artifact(pdf):
             continue
         if "repaired" in pdf.name.lower():
-            print(f"Skipped: {pdf.name}")
+            logger.info(f"Skipped: {pdf.name}")
             continue
         output_folder = pdf.parent / "svg_pages" 
         output_folder.mkdir(parents=True, exist_ok=True)

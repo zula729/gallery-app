@@ -114,9 +114,9 @@ class KeywordClassifier:
 
             if best_score >= self.score_threshold:
                 result[best_category].append(keyword)
-                logging.info(f"{keyword} -> {best_category} (score: {best_score:.2f})")
+                logger.info(f"{keyword} -> {best_category} (score: {best_score:.2f})")
             else:
                 result["UNDEFINED"].append(keyword)
-                logging.info(f"{keyword} -> UNDEFINED (best score: {best_score:.2f})")
+                logger.info(f"{keyword} -> UNDEFINED (best score: {best_score:.2f})")
 
         return result

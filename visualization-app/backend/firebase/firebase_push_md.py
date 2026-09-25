@@ -42,7 +42,7 @@ class FirebasePushMD(FirebaseClient):
                 result[heading] = body if body else None
             return result
         except Exception as e:
-            logging.error(f"Error reading file {file_path} : {e}")
+            logger.error(f"Error reading file {file_path} : {e}")
             return None
     
     def _merge_and_push(self, folder_id: str, data: dict[str, list[str]]) -> None:
@@ -91,7 +91,7 @@ class FirebasePushMD(FirebaseClient):
 
             folder_id = PathParser.extract_folder_id(file_path)
             if not folder_id:
-                logging.error(f"Error: {file_path}")
+                logger.error(f"Error: {file_path}")
                 continue
             self._merge_and_push(folder_id, data_to_send)
 
@@ -110,11 +110,11 @@ class FirebasePushMD(FirebaseClient):
                 continue
             keywords = extractor.extract_keywords(content)
             if keywords is None:
-                logging.warning(f"NONE VALUE TO DATA BASE: {file_path}")
+                logger.warning(f"NONE VALUE TO DATA BASE: {file_path}")
                 continue
             folder_id = PathParser.extract_folder_id(file_path)
             if not folder_id:
-                logging.warning(f"Error: {file_path}")
+                logger.warning(f"Error: {file_path}")
                 continue
             self._merge_and_push(folder_id, keywords)
     
@@ -140,10 +140,10 @@ class FirebasePushMD(FirebaseClient):
 
                 urls_by_folder.setdefault(folder_id, []).append(blob.public_url)
             except Exception as e:
-                logging.error(f"Error uploading {file_path.name}: {e}")
+                logger.error(f"Error uploading {file_path.name}: {e}")
 
         for folder_id, urls in urls_by_folder.items():
             try:
                 self._merge_and_push(folder_id, {"images": urls})
             except Exception as e:
-                logging.error(f"Error updating database for {folder_id}: {e}")
+                logger.error(f"Error updating database for {folder_id}: {e}")

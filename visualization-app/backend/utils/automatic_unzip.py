@@ -1,10 +1,13 @@
 import zipfile
+import logging
 from pathlib import Path
 import sys
 
 if sys.platform == "win32":
     import io
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
+logger = logging.getLogger(__name__)
 
 root_dir = Path("")  # Change this to your target directory
 
@@ -27,9 +30,9 @@ def unzip_all_automatically(directory: Path):
         try:
             with zipfile.ZipFile(zip_path, 'r') as zip_ref:
                 zip_ref.extractall(extract_to)
-                print(f"Unzipped: {zip_path.name} -> {extract_to.name}")
+                logger.info(f"Unzipped: {zip_path.name} -> {extract_to.name}")
         except Exception as e:
-            print(f"Error extracting {zip_path.name}: {e}")
+            logger.error(f"Error extracting {zip_path.name}: {e}")
 
 if __name__ == "__main__":
     unzip_all_automatically(root_dir)

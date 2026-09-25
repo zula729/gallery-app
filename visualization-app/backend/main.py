@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 from pipeline import Pipeline
 
@@ -10,4 +11,5 @@ def main() -> None:
     pipeline.run_upload()
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     main()

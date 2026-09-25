@@ -2,7 +2,10 @@ import os
 import zipfile
 import xml.etree.ElementTree as ET
 import base64
+import logging
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 
 class ImageExtractor:
@@ -61,10 +64,10 @@ class ImageExtractor:
                         target_path = os.path.join(output_folder, new_filename)
                         with docx_zip.open(file) as source, open(target_path, "wb") as target:
                             target.write(source.read())
-                        print(f"Extracted: {file}")
+                        logger.info(f"Extracted: {file}")
                         index += 1
         except Exception as e:
-            print(f"Error extracting images from {docx_path}: {e}")
+            logger.error(f"Error extracting images from {docx_path}: {e}")
 
     def _extract_from_svg(self, svg_path):
         """
@@ -84,7 +87,7 @@ class ImageExtractor:
             output_folder.mkdir(parents=True, exist_ok=True)
             tree = ET.parse(svg_path)
         except Exception as e:
-            print(f"Error parsing SVG file {svg_path}: {e}")
+            logger.error(f"Error parsing SVG file {svg_path}: {e}")
             return None
 
         root = tree.getroot()
@@ -93,7 +96,7 @@ class ImageExtractor:
 
         for i, img in enumerate(images):
             if not self._is_above_size_threshold(img.get('href') or img.get('{http://www.w3.org/1999/xlink}href')):
-                print(f"Skipped image, too small (id: {img.get('id')}), {svg_path}")
+                logger.info(f"Skipped image, too small (id: {img.get('id')}), {svg_path}")
                 continue
             img_data = img.get('href') or img.get('{http://www.w3.org/1999/xlink}href')
             if not img_data or not img_data.startswith('data:image'):
@@ -108,7 +111,7 @@ class ImageExtractor:
                 with open(file_path, 'wb') as f:
                     f.write(content)
             except Exception as e:
-                print(f"Error {i}: {e}")
+                logger.error(f"Error {i}: {e}")
 
     def process_files(self, files: list[Path]):
         """
@@ -130,4 +133,4 @@ class ImageExtractor:
                 elif file_path.suffix.lower() == '.svg':
                     self._extract_from_svg(file_path)
             except Exception as e:
-                print(f"Error processing {file_path}: {e}")
+                logger.error(f"Error processing {file_path}: {e}")

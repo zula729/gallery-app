@@ -52,7 +52,7 @@ class FirebasePushPDF(FirebaseClient):
             data_to_send = extractor.extract_metadata(file_path)
             folder_id = PathParser.extract_folder_id(file_path)
             if not folder_id:
-                logging.warning(f"Error: {file_path}")
+                logger.warning(f"Error: {file_path}")
                 continue
             self._merge_and_push(folder_id, data_to_send)
 
@@ -69,7 +69,7 @@ class FirebasePushPDF(FirebaseClient):
             text = doc_processor.read_text(file_path).lower()
             keywords = (extractor.extract_keywords(text))
             if keywords is None or keywords == "":
-                logging.warning(f"NONE VALUE TO DATA BASE: {file_path}")
+                logger.warning(f"NONE VALUE TO DATA BASE: {file_path}")
                 continue
             
             folder_id = PathParser.extract_folder_id(file_path)
@@ -97,10 +97,10 @@ class FirebasePushPDF(FirebaseClient):
 
                 urls_by_folder.setdefault(folder_id, []).append(blob.public_url)
             except Exception as e:
-                logging.error(f"Error uploading {file_path.name}: {e}")
+                logger.error(f"Error uploading {file_path.name}: {e}")
 
         for folder_id, urls in urls_by_folder.items():
             try:
                 self._merge_and_push(folder_id, {"images": urls})
             except Exception as e:
-                logging.error(f"Error updating database for {folder_id}: {e}")
+                logger.error(f"Error updating database for {folder_id}: {e}")
