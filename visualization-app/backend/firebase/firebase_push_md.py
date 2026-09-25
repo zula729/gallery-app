@@ -1,8 +1,8 @@
-import firebase_admin
-from firebase_admin import credentials, db, storage
+from firebase_admin import storage
 from pathlib import Path
 from utils import PathParser
 import re
+from firebase import FirebaseClient
 
 from pathlib import Path
 
@@ -11,26 +11,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class FirebasePushMD:
-    """
-    Handles uploading project data (metadata, keywords, images)
-    to Firebase Realtime Database and Firebase Storage.
-    """
-
-    DB_URL = "https://visualization-88a6b-default-rtdb.europe-west1.firebasedatabase.app/"
-    REF_PATH = "Keywords from projects"
-    BUCKET_NAME = "visualization-88a6b.firebasestorage.app"
-    DEFAULT_CRED = Path(__file__).parent.parent / "credentials.json"
-
-    def __init__(self, cred_path: Path = DEFAULT_CRED):
-        """
-        Initializes Firebase app (if not already initialized)
-        and creates a reference to the database path.
-        """
-        if not firebase_admin._apps:
-            cred = credentials.Certificate(cred_path)
-            firebase_admin.initialize_app(cred, {"databaseURL": self.DB_URL, "storageBucket": self.BUCKET_NAME})
-        self.ref = db.reference(self.REF_PATH)
+class FirebasePushMD(FirebaseClient):
     
     def parse_sections(self, file_path: Path) -> dict[str, str | None]:
         """

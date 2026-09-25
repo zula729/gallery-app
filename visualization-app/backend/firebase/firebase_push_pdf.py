@@ -2,33 +2,13 @@ import firebase_admin
 import logging
 from firebase_admin import credentials, db, storage
 from pathlib import Path
-
+from firebase import FirebaseClient
 from utils import PathParser
 
 logger = logging.getLogger(__name__)
 
 
-class FirebasePushPDF:
-    """
-    Handles uploading project data (metadata, keywords)
-    to Firebase Realtime Database.
-    """
-
-    DB_URL = "https://visualization-88a6b-default-rtdb.europe-west1.firebasedatabase.app/"
-    REF_PATH = "Keywords from projects"
-    BUCKET_NAME = "visualization-88a6b.firebasestorage.app"
-    DEFAULT_CRED = Path(__file__).parent.parent / "credentials.json"
-
-    def __init__(self, cred_path: Path = DEFAULT_CRED):
-        """
-        Initializes Firebase app (if not already initialized)
-        and creates a reference to the database path.
-        """
-        if not firebase_admin._apps:
-            cred = credentials.Certificate(cred_path)
-            firebase_admin.initialize_app(cred, {"databaseURL": self.DB_URL, "storageBucket": self.BUCKET_NAME})
-        self.ref = db.reference(self.REF_PATH)
-
+class FirebasePushPDF(FirebaseClient):
     def _merge_and_push(self, folder_id: str, data: dict[str, list[str]]) -> None:
         """
         Merges new data with existing Firebase data and updates it.
