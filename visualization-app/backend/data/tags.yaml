@@ -126,10 +126,6 @@ SPORT:
     - football
     - bikes
     - championship
-    - manager
-    - locals
-    - greatest
-    - ball
     - wrestling
     - runner
 
@@ -161,10 +157,7 @@ MOVIES:
     - pokemon
     - ratings
     - popularity
-    - genres
     - fandom
-    - users
-    - community
 
 TECHNOLOGY:
     - laptop
@@ -200,14 +193,12 @@ SLOVAKIA:
 GEOGRAPHY:
     - geospatial
     - antarctica
-    - global
     - colombia
     - delhi
     - migration
     - immigration
     - geografické
     - tourists
-    - apartment
     - antarctica
     - czech
     - slovak
@@ -227,19 +218,14 @@ ENERGY:
 
 LIFESTYLE:
     - sleep
-    - bed
     - bedtime
     - asleep
-    - indoors
     - emotional
     - productivity
     - time management
 
 BUSINESS:
     - rebranding
-    - rich
-    - valuable
-    - cheapest
     - software
     - developer
 
