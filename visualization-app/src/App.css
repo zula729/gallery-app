@@ -10,3 +10,8 @@ html.dark,
 html.dark body {
     background-color: #101828;
 }
+
+.recharts-wrapper svg,
+.recharts-wrapper svg * {
+    outline: none;
+}
