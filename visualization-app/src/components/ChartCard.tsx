@@ -68,8 +68,6 @@ export function ChartCard({
         [cards, options, semesters, selectedSemesters, cardField, dataKey, minTotal, mode]
     );
 
-    // A category can disappear from the chart (semester deselected, minTotal, chart type switch),
-    // so keep only selections that are still visible
     const visibleSelected = selectedCategories.filter((category) =>
         data.some((row) => row[dataKey] === category)
     );
@@ -170,28 +168,59 @@ export function ChartCard({
                     Click a column to select it and open the matching projects in the gallery
                 </p>
             ) : (
-                <div className="flex flex-wrap items-center gap-2 mt-2 px-4 py-2 rounded-lg bg-indigo-50 dark:bg-indigo-950">
-                    <ModeToggle mode={filterMode} onChange={setFilterMode} />
-                    {selectedCategories.map((category) => (
-                        <span
-                            key={category}
-                            className="flex items-center gap-1 pl-3 pr-2 py-0.5 rounded-full text-sm font-medium
-                                       bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200"
-                        >
-                            {formatLabel(category)}
-                        </span>
-                    ))}
-                    <button
-                        onClick={openInGallery}
-                        disabled={matchingCount === 0 || selectedSemesters.length === 0}
-                        className="ml-auto flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-semibold cursor-pointer
-                                   bg-indigo-600 text-white hover:bg-indigo-700 transition-colors
-                                   disabled:opacity-40 disabled:cursor-not-allowed"
-                    >
-                        Show {matchingCount} {matchingCount === 1 ? 'project' : 'projects'} in
-                        gallery
-                        <ArrowRight size={16} />
-                    </button>
+                <div className="mt-4 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <div className="flex items-center justify-between gap-4 px-6 py-3 border-b border-gray-100 dark:border-gray-800">
+                        <div className="flex items-center gap-2 text-sm">
+                            <span className="font-medium text-gray-600 dark:text-gray-400">
+                                Selected{' '}
+                                {cardField === 'technology' ? 'technologies' : 'categories'}
+                            </span>
+                            <span className="text-gray-400 dark:text-gray-500">·</span>
+                            <button
+                                onClick={() => setSelectedCategories([])}
+                                className="font-medium text-indigo-600 dark:text-indigo-400 cursor-pointer hover:text-indigo-700 dark:hover:text-indigo-300"
+                            >
+                                Clear
+                            </button>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <span className="text-sm text-gray-500 dark:text-gray-400">Match</span>
+                            <ModeToggle mode={filterMode} onChange={setFilterMode} />
+                        </div>
+                    </div>
+                    <div className="flex flex-row items-center justify-between gap-4 px-6 py-4 ">
+                        <div className="flex flex-wrap items-center gap-2">
+                            {selectedCategories.map((category) => (
+                                <span
+                                    key={category}
+                                    className="flex items-center gap-1.5 rounded-full text-sm font-medium p-1 pl-2 pr-2
+                                               bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200"
+                                >
+                                    {formatLabel(category)}
+                                </span>
+                            ))}
+                        </div>
+                        <div className="flex items-center gap-5">
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+                                    {matchingCount}
+                                </span>
+                                <span className="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                                    {matchingCount === 1 ? 'project matches' : 'projects match'}
+                                </span>
+                            </div>
+                            <button
+                                onClick={openInGallery}
+                                disabled={matchingCount === 0 || selectedSemesters.length === 0}
+                                className="flex items-center gap-2 px-5 py-3 rounded-xl text-base font-semibold cursor-pointer
+                                           bg-[#8884D8] text-white hover:bg-[#7d78db] transition-colors
+                                           disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap shrink-0"
+                            >
+                                Open gallery
+                                <ArrowRight size={18} />
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
