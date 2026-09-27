@@ -21,8 +21,8 @@ export function Visualization() {
                     height={500}
                 />
                 <ChartCard
-                    title="Tag Distribution"
-                    description="Frequency of tags across projects"
+                    title="Category Distribution"
+                    description="Frequency of categories across projects"
                     cards={cards}
                     options={tags}
                     semesters={semester}
