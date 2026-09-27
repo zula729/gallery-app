@@ -11,10 +11,8 @@ import {
     matchesTags,
     matchesSemester
 } from '../utils/filterCards';
-import { ChevronsLeft } from 'lucide-react';
-import { ChevronsRight } from 'lucide-react';
-import { ArrowRight } from 'lucide-react';
-import { ArrowLeft, X } from 'lucide-react';
+import { ChevronsLeft, ChevronsRight, ArrowRight, ArrowLeft } from 'lucide-react';
+
 import {
     buildGalleryQuery,
     parseGalleryQuery,
@@ -29,7 +27,6 @@ export function Gallery() {
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(1);
 
-    // Filters and AND/OR modes live in the URL so they can be linked to (e.g. from the visualization page)
     const [searchParams, setSearchParams] = useSearchParams();
     const {
         filters: selectedFilters,
@@ -95,26 +92,9 @@ export function Gallery() {
                     </p>
                 </div>
             </div>
-            <h3 className="text-lg font-semibold pt-4 mr-25 text-gray-900 dark:text-gray-100">
-                Search <Searchbar value={search} onChange={handleSearchChange} />
-            </h3>
-            {fromVisualization && (
-                <div className="flex items-center gap-3 mt-4 mr-25 px-4 py-2 rounded-lg text-sm bg-indigo-50 dark:bg-indigo-950 text-indigo-800 dark:text-indigo-200">
-                    <span>
-                        Showing <strong>{filtered.length}</strong>{' '}
-                        {filtered.length === 1 ? 'project' : 'projects'} selected in{' '}
-                        <Link to="/visualization" className="underline hover:no-underline">
-                            Visualization
-                        </Link>
-                    </span>
-                    <button
-                        onClick={clearFilters}
-                        className="ml-auto flex items-center gap-1 cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400"
-                    >
-                        <X size={16} /> Clear
-                    </button>
-                </div>
-            )}
+            <div className="pt-6">
+                <Searchbar value={search} onChange={handleSearchChange} />
+            </div>
             <div>
                 <FilterPanel
                     defaultOpen={fromVisualization}
