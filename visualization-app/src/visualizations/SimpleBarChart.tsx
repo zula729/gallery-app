@@ -6,15 +6,15 @@ import {
     CartesianGrid,
     Tooltip,
     Legend,
-    ResponsiveContainer,
     ReferenceArea
 } from 'recharts';
+
 import { useEffect, useMemo, useState } from 'react';
 import type { CardType } from '../types/CardType';
 import { formatLabel } from '../utils/formatLabel';
 import { buildOptionLookup, resolveOption } from '../utils/matchOption';
 
-interface StackedBarChartProps {
+interface SimpleBarChartProps {
     cards: CardType[];
     options: string[];
     semesters: string[];
@@ -26,19 +26,18 @@ interface StackedBarChartProps {
 }
 
 const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7f7f', '#a4de6c'];
-
 const BAND_COLOR = '#9ca3af';
 
-const StackedBarChart = ({
+const SimpleBarChart = ({
     cards,
     options,
     semesters,
     cardField,
     dataKey,
-    minTotal = 0,
+    minTotal = 3,
     height = 450,
     yAxisStep = 20
-}: StackedBarChartProps) => {
+}: SimpleBarChartProps) => {
     const [selectedSemesters, setSelectedSemesters] = useState<string[]>(semesters);
     useEffect(() => {
         setSelectedSemesters(semesters);
@@ -78,7 +77,7 @@ const StackedBarChart = ({
             });
         });
 
-        return { data: formatted, maxValue: Math.ceil(max / yAxisStep) * yAxisStep + yAxisStep };
+        return { data: formatted, maxValue: Math.ceil(max / (yAxisStep / 2)) * (yAxisStep / 2) };
     }, [
         cards,
         selectedSemesters,
@@ -108,10 +107,10 @@ const StackedBarChart = ({
                                 toggle(semester, selectedSemesters, setSelectedSemesters)
                             }
                             className={`
-                                p-0.5 pl-3 pr-3 pb-1 rounded-full border-2 font-semibold cursor-pointer
-                                transition-all duration-150 hover:brightness-110 hover:scale-102
-                                ${isActive ? 'text-white' : 'bg-transparent'}
-                            `}
+                                    p-0.5 pl-3 pr-3 pb-1 rounded-full border-2 font-semibold cursor-pointer
+                                    transition-all duration-150 hover:brightness-110 hover:scale-102
+                                    ${isActive ? 'text-white' : 'bg-transparent'}
+                                `}
                             style={{
                                 borderColor: COLORS[i % COLORS.length],
                                 background: isActive ? COLORS[i % COLORS.length] : 'transparent',
@@ -123,49 +122,48 @@ const StackedBarChart = ({
                     );
                 })}
             </div>
-            <ResponsiveContainer width="100%" height={height}>
-                <BarChart
-                    data={data}
-                    margin={{ top: 10, right: 10, left: 5, bottom: 5 }}
-                    barCategoryGap="15%"
-                >
-                    {data.map((item, i) =>
-                        i % 2 === 1 ? (
-                            <ReferenceArea
-                                key={String(item[dataKey])}
-                                x1={String(item[dataKey])}
-                                x2={String(item[dataKey])}
-                                fill={BAND_COLOR}
-                                fillOpacity={0.12}
-                                strokeOpacity={0}
-                            />
-                        ) : null
-                    )}
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                    <XAxis
-                        dataKey={dataKey}
-                        angle={-45}
-                        textAnchor="end"
-                        height={100}
-                        niceTicks="snap125"
-                        tickFormatter={formatLabel}
-                    />
-                    <YAxis width={50} domain={[0, maxValue]} niceTicks="snap125" />
-                    <Tooltip cursor={{ fill: BAND_COLOR, fillOpacity: 0.25 }} />
-                    <Legend verticalAlign="top" height={36} />
-                    {semesters.map((semester, i) => (
-                        <Bar
-                            key={semester}
-                            dataKey={semester}
-                            name={formatLabel(semester)}
-                            stackId="a"
-                            fill={COLORS[i % COLORS.length]}
+            <BarChart
+                style={{ width: '100%', maxWidth: '100%', height }}
+                responsive
+                data={data}
+                margin={{ top: 10, right: 10, left: 5, bottom: 5 }}
+                barCategoryGap="15%"
+            >
+                {data.map((item, i) =>
+                    i % 2 === 1 ? (
+                        <ReferenceArea
+                            key={String(item[dataKey])}
+                            x1={String(item[dataKey])}
+                            x2={String(item[dataKey])}
+                            fill={BAND_COLOR}
+                            fillOpacity={0.12}
+                            strokeOpacity={0}
                         />
-                    ))}
-                </BarChart>
-            </ResponsiveContainer>
+                    ) : null
+                )}
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis
+                    dataKey={dataKey}
+                    angle={-45}
+                    textAnchor="end"
+                    height={100}
+                    niceTicks="snap125"
+                    tickFormatter={formatLabel}
+                />
+                <YAxis width={50} domain={[0, maxValue]} niceTicks="snap125" />
+                <Tooltip cursor={{ fill: BAND_COLOR, fillOpacity: 0.25 }} />
+                <Legend verticalAlign="top" height={36} />
+                {semesters.map((semester, i) => (
+                    <Bar
+                        key={semester}
+                        dataKey={semester}
+                        name={formatLabel(semester)}
+                        fill={COLORS[i % COLORS.length]}
+                    />
+                ))}
+            </BarChart>
         </div>
     );
 };
 
-export default StackedBarChart;
+export default SimpleBarChart;
