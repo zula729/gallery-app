@@ -4,7 +4,7 @@ import FilterPanel from '../components/FilterPanel';
 import { useState, useMemo } from 'react';
 import { useCards } from '../hooks/useCards';
 import { type FilterType, type FilterMode } from '../types/filterType';
-import { Link } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import {
     matchesSearch,
     matchesTechnology,
@@ -14,34 +14,45 @@ import {
 import { ChevronsLeft } from 'lucide-react';
 import { ChevronsRight } from 'lucide-react';
 import { ArrowRight } from 'lucide-react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, X } from 'lucide-react';
+import {
+    buildGalleryQuery,
+    parseGalleryQuery,
+    FROM_VISUALIZATION,
+    type GalleryQuery
+} from '../utils/galleryQuery';
 
 const PAGE_SIZE = 12;
 
 export function Gallery() {
     const cards = useCards();
     const [search, setSearch] = useState('');
-    const [techMode, setTechMode] = useState<FilterMode>('OR');
-    const [catMode, setCatMode] = useState<FilterMode>('OR');
     const [page, setPage] = useState(1);
 
-    const [selectedFilters, setSelectedFilters] = useState<Record<FilterType, string[]>>({
-        tag: [],
-        technology: [],
-        semester: []
-    });
-    const toggleCategory = (type: FilterType, cat: string) => {
-        setSelectedFilters((prev) => ({
-            ...prev,
-            [type]: prev[type].includes(cat)
-                ? prev[type].filter((c) => c !== cat)
-                : [...prev[type], cat]
-        }));
+    // Filters and AND/OR modes live in the URL so they can be linked to (e.g. from the visualization page)
+    const [searchParams, setSearchParams] = useSearchParams();
+    const {
+        filters: selectedFilters,
+        tagMode: catMode,
+        techMode
+    } = useMemo(() => parseGalleryQuery(searchParams), [searchParams]);
+    const fromVisualization = searchParams.get('from') === FROM_VISUALIZATION;
+
+    const updateQuery = (changes: Partial<GalleryQuery>) => {
+        setSearchParams(
+            buildGalleryQuery({ filters: selectedFilters, tagMode: catMode, techMode, ...changes })
+        );
         setPage(1);
     };
 
+    const toggleCategory = (type: FilterType, cat: string) => {
+        const current = selectedFilters[type];
+        const next = current.includes(cat) ? current.filter((c) => c !== cat) : [...current, cat];
+        updateQuery({ filters: { ...selectedFilters, [type]: next } });
+    };
+
     const clearFilters = () => {
-        setSelectedFilters({ tag: [], technology: [], semester: [] });
+        setSearchParams({});
         setPage(1);
     };
 
@@ -50,14 +61,8 @@ export function Gallery() {
         setPage(1);
     };
 
-    const handleTechModeChange = (mode: FilterMode) => {
-        setTechMode(mode);
-        setPage(1);
-    };
-    const handleCatModeChange = (mode: FilterMode) => {
-        setCatMode(mode);
-        setPage(1);
-    };
+    const handleTechModeChange = (mode: FilterMode) => updateQuery({ techMode: mode });
+    const handleCatModeChange = (mode: FilterMode) => updateQuery({ tagMode: mode });
     const filtered = useMemo(() => {
         const { tag, technology, semester } = selectedFilters;
         return cards.filter(
@@ -70,6 +75,8 @@ export function Gallery() {
     }, [cards, search, selectedFilters, techMode, catMode]);
 
     const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+
+    if (page > totalPages) setPage(totalPages);
 
     const paginated = useMemo(() => {
         const start = (page - 1) * PAGE_SIZE;
@@ -91,8 +98,26 @@ export function Gallery() {
             <h3 className="text-lg font-semibold pt-4 mr-25 text-gray-900 dark:text-gray-100">
                 Search <Searchbar value={search} onChange={handleSearchChange} />
             </h3>
+            {fromVisualization && (
+                <div className="flex items-center gap-3 mt-4 mr-25 px-4 py-2 rounded-lg text-sm bg-indigo-50 dark:bg-indigo-950 text-indigo-800 dark:text-indigo-200">
+                    <span>
+                        Showing <strong>{filtered.length}</strong>{' '}
+                        {filtered.length === 1 ? 'project' : 'projects'} selected in{' '}
+                        <Link to="/visualization" className="underline hover:no-underline">
+                            Visualization
+                        </Link>
+                    </span>
+                    <button
+                        onClick={clearFilters}
+                        className="ml-auto flex items-center gap-1 cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400"
+                    >
+                        <X size={16} /> Clear
+                    </button>
+                </div>
+            )}
             <div>
                 <FilterPanel
+                    defaultOpen={fromVisualization}
                     selected={selectedFilters}
                     onToggle={toggleCategory}
                     onClear={clearFilters}
