@@ -13,14 +13,16 @@ export function categoryBands(
     return data.map((item, i) => {
         const category = String(item[dataKey]);
         const isSelected = selectedCategories.includes(category);
-        if (!isSelected && i % 2 === 0) return null;
+        const isDarkBand = i % 2 === 1;
+        if (!isSelected && !isDarkBand) return null;
+        const selectedOpacity = isDarkBand ? 0.3 : 0.18;
         return (
             <ReferenceArea
                 key={category}
                 x1={category}
                 x2={category}
                 fill={isSelected ? SELECTED_COLOR : BAND_COLOR}
-                fillOpacity={isSelected ? 0.2 : 0.12}
+                fillOpacity={isSelected ? selectedOpacity : 0.12}
                 strokeOpacity={0}
                 ifOverflow="visible"
             />
