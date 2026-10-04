@@ -2,7 +2,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'rec
 
 import { useMemo } from 'react';
 import { formatLabel } from '../utils/formatLabel';
-import { BAND_COLOR, COLORS, categoryBands } from './chartTheme';
+import { BAND_COLOR, COLORS, LINE_COLOR, categoryBands } from './chartTheme';
 import { maxSemesterCount } from './categoryData';
 import type { BarChartProps } from './StackedBarChart';
 
@@ -39,16 +39,26 @@ const SimpleBarChart = ({
             }}
         >
             {categoryBands(data, dataKey, selectedCategories)}
-            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={LINE_COLOR} />
             <XAxis
                 dataKey={dataKey}
+                axisLine={{ stroke: LINE_COLOR }}
+                tickLine={{ stroke: LINE_COLOR }}
+                tick={{ fill: LINE_COLOR }}
                 angle={-45}
                 textAnchor="end"
                 height={100}
                 niceTicks="snap125"
                 tickFormatter={formatLabel}
             />
-            <YAxis width={50} domain={[0, maxValue]} niceTicks="snap125" />
+            <YAxis
+                width={50}
+                domain={[0, maxValue]}
+                niceTicks="snap125"
+                axisLine={{ stroke: LINE_COLOR }}
+                tickLine={{ stroke: LINE_COLOR }}
+                tick={{ fill: LINE_COLOR }}
+            />
             <Tooltip
                 cursor={{ fill: BAND_COLOR, fillOpacity: 0.25 }}
                 labelFormatter={(label) => formatLabel(String(label))}

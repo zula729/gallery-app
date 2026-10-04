@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { ArrowRight, ChartColumn, ChartColumnStacked } from 'lucide-react';
 import StackedBarChart from '../visualizations/StackedBarChart';
 import SimpleBarChart from '../visualizations/SimpleBarChart';
-import { COLORS } from '../visualizations/chartTheme';
+import { COLORS, SEMESTER_TEXT_CLASS } from '../visualizations/chartTheme';
 import { buildCategoryData } from '../visualizations/categoryData';
 import type { CardType } from '../types/CardType';
 import { formatLabel } from '../utils/formatLabel';
@@ -106,19 +106,19 @@ export function ChartCard({
     };
 
     return (
-        <div className="border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-md">
+        <div className="border border-gray-200 dark:border-[#3d3d3d] rounded-xl p-6 shadow-md">
             <div className="flex items-start justify-between mb-4">
                 <div>
-                    <h3 className="text-lg font-semibold mb-1 text-gray-900 dark:text-gray-100">
+                    <h3 className="text-lg font-semibold mb-1 text-gray-900 dark:text-dark-text">
                         {title}
                     </h3>
                     <p className="text-sm text-gray-400 dark:text-gray-500">{description}</p>
                 </div>
                 <button
                     onClick={() => setMode(mode === 'stacked' ? 'grouped' : 'stacked')}
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600
-                               text-sm text-gray-700 dark:text-gray-300 cursor-pointer
-                               hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-300 dark:border-[#3d3d3d]
+                               text-sm text-gray-700 dark:text-dark-text cursor-pointer
+                               hover:bg-gray-100 dark:hover:bg-dark-surface transition-colors"
                     title="Switch chart type"
                 >
                     {mode === 'stacked' ? (
@@ -139,12 +139,12 @@ export function ChartCard({
                             className={`
                                 p-0.5 pl-3 pr-3 pb-1 rounded-full border-2 font-semibold cursor-pointer
                                 transition-all duration-150 hover:brightness-110 hover:scale-102
-                                ${isActive ? 'text-white' : 'bg-transparent'}
+                                ${isActive ? SEMESTER_TEXT_CLASS : 'bg-transparent'}
                             `}
                             style={{
                                 borderColor: COLORS[i % COLORS.length],
                                 background: isActive ? COLORS[i % COLORS.length] : 'transparent',
-                                color: isActive ? '#fff' : COLORS[i % COLORS.length]
+                                color: isActive ? undefined : COLORS[i % COLORS.length]
                             }}
                         >
                             {formatLabel(semester)}
@@ -202,7 +202,7 @@ export function ChartCard({
                         </div>
                         <div className="flex items-center gap-5">
                             <div className="flex items-baseline gap-2">
-                                <span className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+                                <span className="text-3xl font-bold text-gray-900 dark:text-dark-text">
                                     {matchingCount}
                                 </span>
                                 <span className="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">

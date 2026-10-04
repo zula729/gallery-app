@@ -84,7 +84,7 @@ export function Gallery() {
         <main className="flex-1 p-8 ml-4">
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-4xl font-semibold text-gray-900 dark:text-gray-100">
+                    <h2 className="text-4xl font-semibold text-gray-900 dark:text-dark-text">
                         Gallery
                     </h2>
                     <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">
@@ -130,22 +130,22 @@ export function Gallery() {
                     <button
                         onClick={() => setPage(1)}
                         disabled={page === 1}
-                        className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 cursor-pointer 
+                        className="p-2 rounded-lg bg-slate-100 dark:bg-dark-surface cursor-pointer 
                         disabled:cursor-not-allowed disabled:opacity-40
-                        hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-gray-100
+                        hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-dark-text
                         disabled:hover:bg-slate-100 dark:disabled:hover:bg-slate-800 disabled:hover:text-inherit
-                        text-gray-700 dark:text-gray-300"
+                        text-gray-700 dark:text-dark-text"
                     >
                         <ChevronsLeft size={20} />
                     </button>
                     <button
                         onClick={() => setPage((p) => Math.max(1, p - 1))}
                         disabled={page === 1}
-                        className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 cursor-pointer 
+                        className="p-2 rounded-lg bg-slate-100 dark:bg-dark-surface cursor-pointer 
                         disabled:cursor-not-allowed disabled:opacity-40
-                        hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-gray-100
+                        hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-dark-text
                         disabled:hover:bg-slate-100 dark:disabled:hover:bg-slate-800 disabled:hover:text-inherit
-                        text-gray-700 dark:text-gray-300"
+                        text-gray-700 dark:text-dark-text"
                     >
                         <ArrowLeft size={20} />
                     </button>
@@ -154,10 +154,10 @@ export function Gallery() {
                         <button
                             key={num}
                             onClick={() => setPage(num)}
-                            className={`px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 cursor-pointer text-medium font-semibold ${
+                            className={`px-3 py-1 rounded-lg bg-slate-100 dark:bg-dark-surface cursor-pointer text-medium font-semibold ${
                                 num === page
-                                    ? 'bg-slate-300 dark:bg-slate-600 text-black dark:text-white'
-                                    : 'text-gray-500 dark:text-gray-400 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-gray-100'
+                                    ? 'bg-slate-300 dark:bg-slate-600 text-black dark:text-dark-text'
+                                    : 'text-gray-500 dark:text-gray-400 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-dark-text'
                             }`}
                         >
                             {num}
@@ -168,22 +168,22 @@ export function Gallery() {
                         onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                         disabled={page === totalPages}
                         className="
-                        p-2 rounded-lg bg-slate-100 dark:bg-slate-800 cursor-pointer 
+                        p-2 rounded-lg bg-slate-100 dark:bg-dark-surface cursor-pointer 
                         disabled:cursor-not-allowed disabled:opacity-40
-                        hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-gray-100
+                        hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-dark-text
                         disabled:hover:bg-slate-100 dark:disabled:hover:bg-slate-800 disabled:hover:text-inherit
-                        text-gray-700 dark:text-gray-300"
+                        text-gray-700 dark:text-dark-text"
                     >
                         <ArrowRight size={20} />
                     </button>
                     <button
                         onClick={() => setPage(totalPages)}
                         disabled={page === totalPages}
-                        className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 cursor-pointer 
+                        className="p-2 rounded-lg bg-slate-100 dark:bg-dark-surface cursor-pointer 
                         disabled:cursor-not-allowed disabled:opacity-40
-                        hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-gray-100
+                        hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-dark-text
                         disabled:hover:bg-slate-100 dark:disabled:hover:bg-slate-800 disabled:hover:text-inherit
-                        text-gray-700 dark:text-gray-300"
+                        text-gray-700 dark:text-dark-text"
                     >
                         <ChevronsRight size={20} />
                     </button>

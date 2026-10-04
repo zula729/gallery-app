@@ -15,11 +15,11 @@ function Searchbar({ value, onChange }: SearchbarProps) {
                 Search
             </label>
             <div className="mt-3 flex items-center gap-3 border-b-2 border-gray-800 dark:border-gray-300 pb-2 focus-within:border-gray-500 dark:focus-within:border-gray-100 transition-colors">
-                <Search className="h-5 w-5 shrink-0 text-gray-800 dark:text-gray-200" aria-hidden />
+                <Search className="h-5 w-5 shrink-0 text-gray-800 dark:text-dark-text" aria-hidden />
                 <input
                     id="gallery-search"
                     type="search"
-                    className="flex-1 bg-transparent text-small font-normal text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none [&::-webkit-search-cancel-button]:hidden"
+                    className="flex-1 bg-transparent text-small font-normal text-gray-900 dark:text-dark-text placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none [&::-webkit-search-cancel-button]:hidden"
                     placeholder="search for projects..."
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
@@ -28,7 +28,7 @@ function Searchbar({ value, onChange }: SearchbarProps) {
                     <button
                         type="button"
                         onClick={() => onChange('')}
-                        className="shrink-0 text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 cursor-pointer"
+                        className="shrink-0 text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-dark-text cursor-pointer"
                     >
                         Clear
                     </button>

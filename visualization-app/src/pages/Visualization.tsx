@@ -8,6 +8,13 @@ export function Visualization() {
 
     return (
         <main className="flex-1 p-8 ml-4">
+            <h2 className="text-4xl font-semibold text-gray-900 dark:text-dark-text">
+                Visualization
+            </h2>
+            <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">
+                Overview of technology and category distribution across projects
+            </p>
+
             <div className="space-y-6 pt-4">
                 <ChartCard
                     title="Technology Distribution"

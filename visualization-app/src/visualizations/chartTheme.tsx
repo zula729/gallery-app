@@ -1,8 +1,11 @@
 import { ReferenceArea } from 'recharts';
 
 export const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7f7f', '#a4de6c'];
+// Text on active semester buttons: light mode / dark mode
+export const SEMESTER_TEXT_CLASS = 'text-[#FFFFFF] dark:text-[#3D3D3D]';
 
 export const BAND_COLOR = '#9ca3af';
+export const LINE_COLOR = '#666666';
 export const SELECTED_COLOR = '#6366f1';
 
 export function categoryBands(

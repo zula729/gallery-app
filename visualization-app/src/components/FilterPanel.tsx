@@ -49,7 +49,7 @@ function FilterPanel({
             <div className="flex items-center gap-2">
                 <button
                     onClick={() => setIsOpen((prev) => !prev)}
-                    className="text-gray-700 dark:text-gray-300 mt-2 font-semibold cursor-pointer"
+                    className="text-gray-700 dark:text-dark-text mt-2 font-semibold cursor-pointer"
                 >
                     {isOpen ? '▲' : '▼'} Filters {totalSelected > 0 && `(${totalSelected})`}
                 </button>
@@ -67,7 +67,7 @@ function FilterPanel({
                 className={`overflow-hidden transition-all duration-400 ease-in-out mr-25
                 ${isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'}`}
             >
-                <div className="pt-4 font-semibold flex items-center gap-3 text-gray-900 dark:text-gray-100">
+                <div className="pt-4 font-semibold flex items-center gap-3 text-gray-900 dark:text-dark-text">
                     Categories
                     <ModeToggle mode={catMode} onChange={onCatModeChange} />
                 </div>
@@ -77,7 +77,7 @@ function FilterPanel({
                     onToggle={(cat) => onToggle('tag', cat)}
                     type={'tag'}
                 />
-                <div className="pt-4 font-semibold flex items-center gap-3 text-gray-900 dark:text-gray-100">
+                <div className="pt-4 font-semibold flex items-center gap-3 text-gray-900 dark:text-dark-text">
                     Technology
                     <ModeToggle mode={techMode} onChange={onTechModeChange} />
                 </div>
@@ -88,7 +88,7 @@ function FilterPanel({
                     sorted={false}
                     type={'technology'}
                 />
-                <div className="pt-4 font-semibold text-gray-900 dark:text-gray-100">
+                <div className="pt-4 font-semibold text-gray-900 dark:text-dark-text">
                     Semester
                     <FilterGroup
                         items={semester}

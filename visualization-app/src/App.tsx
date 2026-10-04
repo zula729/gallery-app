@@ -10,7 +10,7 @@ function App() {
     return (
         <CardsProvider>
             <HashRouter>
-                <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900">
+                <div className="flex flex-col min-h-screen bg-white dark:bg-dark-bg">
                     <div className="flex flex-1">
                         <div className="sticky top-0 self-start h-screen">
                             <Sidebar />
