@@ -34,7 +34,7 @@ function Sidebar() {
                             ${
                                 isActive
                                     ? 'bg-[#FFF7D6] dark:bg-amber-800/40 text-amber-700 dark:text-[#FFE082]'
-                                    : 'text-gray-500 dark:text-dark-text hover:bg-gray-50 dark:hover:bg-dark-surface hover:text-gray-900 dark:hover:text-[#EBEBEB]'
+                                    : 'text-gray-500 dark:text-dark-text dark:hover:bg-dark-surface hover:text-gray-900 dark:hover:text-[#EBEBEB]'
                             }`}
                             onClick={() => navigate(val.link)}
                         >
@@ -47,7 +47,7 @@ function Sidebar() {
             <button
                 onClick={toggleTheme}
                 className="mt-auto group flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer mb-2 transition-all
-                text-gray-500 dark:text-dark-text hover:bg-gray-50 dark:hover:bg-dark-surface hover:text-gray-900 dark:hover:text-dark-text"
+                text-gray-500 dark:text-dark-text dark:hover:bg-dark-surface hover:text-gray-900 dark:hover:text-[#EBEBEB]"
             >
                 <div className="pr-2">
                     {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
