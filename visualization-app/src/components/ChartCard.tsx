@@ -158,6 +158,7 @@ export function ChartCard({
                 dataKey={dataKey}
                 height={height}
                 yAxisStep={yAxisStep}
+                categoryType={cardField}
                 selectedCategories={selectedCategories}
                 onCategoryClick={(category) =>
                     setSelectedCategories(toggleValue(selectedCategories, category))
@@ -196,7 +197,7 @@ export function ChartCard({
                                     className="flex items-center gap-1.5 rounded-full text-sm font-medium p-1 pl-2 pr-2
                                                bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200"
                                 >
-                                    {formatLabel(category)}
+                                    {formatLabel(category, cardField)}
                                 </span>
                             ))}
                         </div>

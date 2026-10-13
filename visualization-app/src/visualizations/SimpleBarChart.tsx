@@ -13,7 +13,8 @@ const SimpleBarChart = ({
     selectedCategories = [],
     onCategoryClick,
     height = 450,
-    yAxisStep = 20
+    yAxisStep = 20,
+    categoryType
 }: BarChartProps) => {
     const maxValue = useMemo(() => {
         const max = maxSemesterCount(data, semesters);
@@ -49,7 +50,7 @@ const SimpleBarChart = ({
                 textAnchor="end"
                 height={100}
                 niceTicks="snap125"
-                tickFormatter={formatLabel}
+                tickFormatter={(value) => formatLabel(String(value), categoryType)}
             />
             <YAxis
                 width={50}
@@ -61,7 +62,7 @@ const SimpleBarChart = ({
             />
             <Tooltip
                 cursor={{ fill: BAND_COLOR, fillOpacity: 0.25 }}
-                labelFormatter={(label) => formatLabel(String(label))}
+                labelFormatter={(label) => formatLabel(String(label), categoryType)}
             />
             <Legend verticalAlign="top" height={36} />
             {semesters.map((semester, i) => (
