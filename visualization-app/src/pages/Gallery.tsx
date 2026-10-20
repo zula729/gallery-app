@@ -132,7 +132,7 @@ export function Gallery() {
                         disabled={page === 1}
                         className="p-2 rounded-lg bg-slate-100 dark:bg-dark-surface cursor-pointer 
                         disabled:cursor-not-allowed disabled:opacity-40
-                        hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-dark-text
+                        hover:bg-[#EBEBEB] dark:hover:bg-[#3D3D3D] hover:text-gray-900 dark:hover:text-dark-text
                         disabled:hover:bg-slate-100 dark:disabled:hover:bg-slate-800 disabled:hover:text-inherit
                         text-gray-700 dark:text-dark-text"
                     >
@@ -143,7 +143,7 @@ export function Gallery() {
                         disabled={page === 1}
                         className="p-2 rounded-lg bg-slate-100 dark:bg-dark-surface cursor-pointer 
                         disabled:cursor-not-allowed disabled:opacity-40
-                        hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-dark-text
+                        hover:bg-[#EBEBEB] dark:hover:bg-[#3D3D3D] hover:text-gray-900 dark:hover:text-dark-text
                         disabled:hover:bg-slate-100 dark:disabled:hover:bg-slate-800 disabled:hover:text-inherit
                         text-gray-700 dark:text-dark-text"
                     >
@@ -156,8 +156,8 @@ export function Gallery() {
                             onClick={() => setPage(num)}
                             className={`px-3 py-1 rounded-lg bg-slate-100 dark:bg-dark-surface cursor-pointer text-medium font-semibold ${
                                 num === page
-                                    ? 'bg-slate-300 dark:bg-slate-600 text-black dark:text-dark-text'
-                                    : 'text-gray-500 dark:text-gray-400 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-dark-text'
+                                    ? 'bg-zinc-300 dark:bg-zinc-600 text-black dark:text-dark-text'
+                                    : 'text-zinc-500 dark:text-gray-400 hover:bg-[#EBEBEB] dark:hover:bg-[#3D3D3D] hover:text-zinc-900 dark:hover:text-dark-text'
                             }`}
                         >
                             {num}
@@ -170,7 +170,7 @@ export function Gallery() {
                         className="
                         p-2 rounded-lg bg-slate-100 dark:bg-dark-surface cursor-pointer 
                         disabled:cursor-not-allowed disabled:opacity-40
-                        hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-dark-text
+                        hover:bg-[#EBEBEB] dark:hover:bg-[#3D3D3D] hover:text-gray-900 dark:hover:text-dark-text
                         disabled:hover:bg-slate-100 dark:disabled:hover:bg-slate-800 disabled:hover:text-inherit
                         text-gray-700 dark:text-dark-text"
                     >
@@ -181,7 +181,7 @@ export function Gallery() {
                         disabled={page === totalPages}
                         className="p-2 rounded-lg bg-slate-100 dark:bg-dark-surface cursor-pointer 
                         disabled:cursor-not-allowed disabled:opacity-40
-                        hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-gray-900 dark:hover:text-dark-text
+                        hover:bg-[#EBEBEB] dark:hover:bg-[#3D3D3D] hover:text-gray-900 dark:hover:text-dark-text
                         disabled:hover:bg-slate-100 dark:disabled:hover:bg-slate-800 disabled:hover:text-inherit
                         text-gray-700 dark:text-dark-text"
                     >
