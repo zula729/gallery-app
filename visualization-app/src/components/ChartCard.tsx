@@ -181,7 +181,7 @@ export function ChartCard({
                             <span className="text-gray-400 dark:text-gray-500">·</span>
                             <button
                                 onClick={() => setSelectedCategories([])}
-                                className="font-medium text-indigo-600 dark:text-indigo-400 cursor-pointer hover:text-indigo-700 dark:hover:text-indigo-300"
+                                className="font-medium text-red-600 dark:text-red-400 cursor-pointer hover:text-red-700 dark:hover:text-red-300"
                             >
                                 Clear
                             </button>
@@ -197,7 +197,7 @@ export function ChartCard({
                                 <span
                                     key={category}
                                     className="flex items-center gap-1.5 rounded-full text-sm font-medium p-1 pl-2 pr-2
-                                               bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200"
+                                               bg-[#FFF7D6] text-[#BE550A] dark:bg-[#4F2B13] dark:text-[#FFE082]"
                                 >
                                     {formatLabel(category, cardField)}
                                 </span>
@@ -216,7 +216,8 @@ export function ChartCard({
                                 onClick={openInGallery}
                                 disabled={matchingCount === 0 || selectedSemesters.length === 0}
                                 className="flex items-center gap-2 px-5 py-3 rounded-xl text-base font-semibold cursor-pointer
-                                           bg-[#8884D8] text-white hover:bg-[#7d78db] transition-colors
+                                           bg-[#FFF7D6] text-[#BE550A] hover:bg-[#FFEFAD] dark:bg-[#4F2B13] 
+                                           dark:text-[#FFE082] dark:hover:bg-[#733F1C] transition-colors
                                            disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap shrink-0"
                             >
                                 Open gallery

@@ -11,7 +11,7 @@ import {
 import { useMemo } from 'react';
 import { formatLabel } from '../utils/formatLabel';
 import { BAND_COLOR, LINE_COLOR, categoryBands } from './chartTheme';
-import { useChartColors } from '../hooks/useChartColors';
+import { useChartColors, useSelectedColor } from '../hooks/useChartColors';
 import { maxSemesterCount, type CategoryRow } from './categoryData';
 
 export interface BarChartProps {
@@ -36,6 +36,7 @@ const StackedBarChart = ({
     categoryType
 }: BarChartProps) => {
     const colors = useChartColors();
+    const selectedColor = useSelectedColor();
     const maxValue = useMemo(() => {
         const max = maxSemesterCount(data, semesters);
         return Math.ceil(max / yAxisStep) * yAxisStep + yAxisStep;
@@ -54,7 +55,7 @@ const StackedBarChart = ({
                     }
                 }}
             >
-                {categoryBands(data, dataKey, selectedCategories)}
+                {categoryBands(data, dataKey, selectedCategories, selectedColor)}
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={LINE_COLOR} />
                 <XAxis
                     dataKey={dataKey}
