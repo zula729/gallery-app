@@ -1,8 +1,9 @@
 import { ReferenceArea } from 'recharts';
 
-export const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7f7f', '#a4de6c'];
+export const COLORS = ['#FFCF70', '#ff7f7f', '#82ca9d', '#8884d8', '#0CCCC8'];
+export const COLORS_DARK = ['#B87A00', '#B04646', '#628C3B', '#57548F', '#099A98'];
 // Text on active semester buttons: light mode / dark mode
-export const SEMESTER_TEXT_CLASS = 'text-[#FFFFFF] dark:text-[#3D3D3D]';
+export const SEMESTER_TEXT_CLASS = 'text-[#FFFFFF] dark:text-[#C1BDBE]';
 
 export const BAND_COLOR = '#9ca3af';
 export const LINE_COLOR = '#666666';

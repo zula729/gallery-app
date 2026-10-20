@@ -2,7 +2,8 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'rec
 
 import { useMemo } from 'react';
 import { formatLabel } from '../utils/formatLabel';
-import { BAND_COLOR, COLORS, LINE_COLOR, categoryBands } from './chartTheme';
+import { BAND_COLOR, LINE_COLOR, categoryBands } from './chartTheme';
+import { useChartColors } from '../hooks/useChartColors';
 import { maxSemesterCount } from './categoryData';
 import type { BarChartProps } from './StackedBarChart';
 
@@ -16,6 +17,7 @@ const SimpleBarChart = ({
     yAxisStep = 20,
     categoryType
 }: BarChartProps) => {
+    const colors = useChartColors();
     const maxValue = useMemo(() => {
         const max = maxSemesterCount(data, semesters);
         return Math.ceil(max / (yAxisStep / 2)) * (yAxisStep / 2);
@@ -70,7 +72,7 @@ const SimpleBarChart = ({
                     key={semester}
                     dataKey={semester}
                     name={formatLabel(semester)}
-                    fill={COLORS[i % COLORS.length]}
+                    fill={colors[i % colors.length]}
                 />
             ))}
         </BarChart>

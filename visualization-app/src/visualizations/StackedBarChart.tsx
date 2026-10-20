@@ -10,7 +10,8 @@ import {
 } from 'recharts';
 import { useMemo } from 'react';
 import { formatLabel } from '../utils/formatLabel';
-import { BAND_COLOR, COLORS, LINE_COLOR, categoryBands } from './chartTheme';
+import { BAND_COLOR, LINE_COLOR, categoryBands } from './chartTheme';
+import { useChartColors } from '../hooks/useChartColors';
 import { maxSemesterCount, type CategoryRow } from './categoryData';
 
 export interface BarChartProps {
@@ -34,6 +35,7 @@ const StackedBarChart = ({
     yAxisStep = 20,
     categoryType
 }: BarChartProps) => {
+    const colors = useChartColors();
     const maxValue = useMemo(() => {
         const max = maxSemesterCount(data, semesters);
         return Math.ceil(max / yAxisStep) * yAxisStep + yAxisStep;
@@ -84,7 +86,7 @@ const StackedBarChart = ({
                         dataKey={semester}
                         name={formatLabel(semester)}
                         stackId="a"
-                        fill={COLORS[i % COLORS.length]}
+                        fill={colors[i % colors.length]}
                     />
                 ))}
             </BarChart>

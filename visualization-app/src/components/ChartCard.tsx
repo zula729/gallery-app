@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router';
 import { ArrowRight, ChartColumn, ChartColumnStacked } from 'lucide-react';
 import StackedBarChart from '../visualizations/StackedBarChart';
 import SimpleBarChart from '../visualizations/SimpleBarChart';
-import { COLORS, SEMESTER_TEXT_CLASS } from '../visualizations/chartTheme';
+import { SEMESTER_TEXT_CLASS } from '../visualizations/chartTheme';
+import { useChartColors } from '../hooks/useChartColors';
 import { buildCategoryData } from '../visualizations/categoryData';
 import type { CardType } from '../types/CardType';
 import { formatLabel } from '../utils/formatLabel';
@@ -45,6 +46,7 @@ export function ChartCard({
     defaultMode = 'stacked'
 }: ChartCardProps) {
     const navigate = useNavigate();
+    const colors = useChartColors();
     const [mode, setMode] = useState<ChartMode>(defaultMode);
     const Chart = mode === 'stacked' ? StackedBarChart : SimpleBarChart;
 
@@ -142,9 +144,9 @@ export function ChartCard({
                                 ${isActive ? SEMESTER_TEXT_CLASS : 'bg-transparent'}
                             `}
                             style={{
-                                borderColor: COLORS[i % COLORS.length],
-                                background: isActive ? COLORS[i % COLORS.length] : 'transparent',
-                                color: isActive ? undefined : COLORS[i % COLORS.length]
+                                borderColor: colors[i % colors.length],
+                                background: isActive ? colors[i % colors.length] : 'transparent',
+                                color: isActive ? undefined : colors[i % colors.length]
                             }}
                         >
                             {formatLabel(semester)}
