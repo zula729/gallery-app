@@ -13,15 +13,17 @@ class PathParser:
         """
         Extracts the semester name from the path.
 
-        Looks for a folder starting with 'podzim' (case-insensitive).
+        Looks for a folder starting with 'podzim' or 'autumn' (case-insensitive)
+        and returns it as 'Autumn' followed by the rest of the folder name.
 
         Returns:
-            str: Semester name (e.g. 'podzim2026')
+            str: Semester name (e.g. 'Autumn2026')
             None: If no semester folder is found
         """
         for part in path.parts:
-            if part.lower().startswith("podzim"):
-                return part
+            match = re.match(r'^(podzim|autumn)(.*)$', part, re.IGNORECASE)
+            if match:
+                return f"Autumn{match.group(2)}"
         return None
 
     @staticmethod
