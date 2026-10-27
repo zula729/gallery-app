@@ -1,4 +1,4 @@
-ANIMALS:
+Animals:
     - dog
     - hound
     - breeds
@@ -6,7 +6,7 @@ ANIMALS:
     - dogs
     - nymphs
 
-FOOD:
+Food:
     - food
     - spaghetti
     - popcorn
@@ -27,7 +27,7 @@ FOOD:
     - italian
     - waitress
 
-TRANSPORT:
+Transport:
     - ferrari
     - race
     - traffic
@@ -40,8 +40,7 @@ TRANSPORT:
     - uber
     - trip
     - pilot
-
-MEDICINE:
+Medicine:
     - genes
     - chromosomal
     - lab
@@ -70,8 +69,7 @@ MEDICINE:
     - tobacco abuse
     - public health
     - nuclei
-
-POLITICS:
+Politics:
     - republican
     - economics
     - politician
@@ -86,8 +84,7 @@ POLITICS:
     - trade
     - voters
     - politics
-
-SOCIAL_MEDIA:
+Social_media:
     - trends
     - popular
     - tweet
@@ -97,15 +94,13 @@ SOCIAL_MEDIA:
     - popularity
     - tweets
     - reddit
-
-BOOK:
+Book:
     - fantasy
     - book
     - kingkiller
     - supernatural
     - romance
-
-DEMOGRAPHY:
+Demography:
     - gender
     - demography
     - female
@@ -118,30 +113,26 @@ DEMOGRAPHY:
     - police
     - religion
     - sexuality
-
-SPORT:
+Sport:
     - bike
     - football
     - bikes
     - championship
     - wrestling
     - runner
-
-DISASTER:
+Disaster:
     - accidents
     - earthquakes
     - pollution
     - tectonic
     - seismic
-
-MUSIC:
+Music:
     - spotify
     - songs
     - reggae
     - blues
     - musical
-
-MOVIES:
+Movies:
     - movie
     - cinema
     - imdb
@@ -156,20 +147,17 @@ MOVIES:
     - ratings
     - popularity
     - fandom
-
-TECHNOLOGY:
+Technology:
     - laptop
     - pc
     - computer
     - tablet
     - display
-
-CLIMATE:
+Climate:
     - climate
     - weather
     - warming
-
-GAMES:
+Games:
     - games
     - rpg
     - playtime
@@ -177,18 +165,15 @@ GAMES:
     - competitive
     - grenades
     - match
-
-CZECHIA:
+Czechia:
     - czech
     - bohemia
     - brno
     - moravian
-
-SLOVAKIA:
+Slovakia:
     - slovak
     - bratislava
-
-GEOGRAPHY:
+Geography:
     - geospatial
     - antarctica
     - colombia
@@ -201,46 +186,39 @@ GEOGRAPHY:
     - slovak
     - brno
     - bratislava
-
-SPACE:
+Space:
     - nasa
     - meteorites
     - meteors
-
-ENERGY:
+Energy:
     - solar
     - photovoltaic
     - renewable
     - green
-
-LIFESTYLE:
+Lifestyle:
     - sleep
     - bedtime
     - asleep
     - emotional
     - productivity
     - time management
-
-BUSINESS:
+Business:
     - rebranding
     - software
     - developer
-
-ELECTION:
+Election:
     - parties
     - elections
     - candidates
     - voters
-
-FLIGHTS:
+Flights:
     - aviation
     - airline
     - airport
     - pilot
     - flight
     - plane
-
-AI_NLP:
+AI_nlp:
     - llm
     - empathy
     - bias
@@ -249,8 +227,7 @@ AI_NLP:
     - ai
     - social groups
     - machine learning
-
-ENVIRONMENT:
+Environment:
     - waste
     - recycling
     - pollution
