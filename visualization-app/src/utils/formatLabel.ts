@@ -1,4 +1,3 @@
-export function formatLabel(value: string, type?: unknown): string {
-    if (type === 'technology') return value;
+export function formatLabel(value: string): string {
     return value.replace(/_/g, ' ');
 }

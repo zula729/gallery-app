@@ -47,7 +47,7 @@ function FilterGroup({
                                 : `${colorMap[type]}`
                         }`}
                 >
-                    {formatLabel(item, type)}
+                    {formatLabel(item)}
                 </button>
             ))}
         </div>
