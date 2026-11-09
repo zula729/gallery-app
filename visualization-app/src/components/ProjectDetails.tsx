@@ -86,7 +86,7 @@ function ProjectDetails() {
                         <Label key={tags} text={tags} type={'tag'}></Label>
                     ))}
                 </div>
-                <p className="font-semibold text-gray-700 dark:text-dark-text mb-2">Technologies</p>
+                <p className="font-semibold text-gray-700 dark:text-dark-text mb-2">Technology</p>
                 <div className="flex flex-wrap gap-2 ml-2 mb-6">
                     {(card.technology ?? []).map((technology) => (
                         <Label key={technology} text={technology} type={'technology'}></Label>
