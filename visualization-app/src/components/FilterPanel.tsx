@@ -15,7 +15,8 @@ function FilterPanel({
     catMode,
     onTechModeChange,
     onCatModeChange,
-    defaultOpen = false
+    defaultOpen = false,
+    matchCount
 }: FilterPanelProps) {
     const [isOpen, setIsOpen] = useState(defaultOpen);
     const { tags, technology, semester } = useFilterOptions(cards);
@@ -60,6 +61,14 @@ function FilterPanel({
                     >
                         <Trash size={16} />
                     </button>
+                )}
+                {totalSelected > 0 && matchCount !== undefined && (
+                    <span className="mt-2 ml-1 pl-3 border-l border-gray-300 dark:border-gray-600 text-sm text-gray-500 dark:text-gray-400">
+                        <span className="font-semibold text-gray-900 dark:text-dark-text">
+                            {matchCount}
+                        </span>{' '}
+                        of {cards.length} {cards.length === 1 ? 'project matches' : 'projects match'}
+                    </span>
                 )}
             </div>
 

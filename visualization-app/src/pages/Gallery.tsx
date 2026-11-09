@@ -102,6 +102,7 @@ export function Gallery() {
                     onToggle={toggleCategory}
                     onClear={clearFilters}
                     cards={cards}
+                    matchCount={filtered.length}
                     techMode={techMode}
                     catMode={catMode}
                     onTechModeChange={handleTechModeChange}

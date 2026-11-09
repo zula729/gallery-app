@@ -12,4 +12,5 @@ export type FilterPanelProps = {
     onTechModeChange: (mode: FilterMode) => void;
     onCatModeChange: (mode: FilterMode) => void;
     defaultOpen?: boolean;
+    matchCount?: number;
 };
