@@ -17,17 +17,6 @@ export function Visualization() {
 
             <div className="space-y-6 pt-4">
                 <ChartCard
-                    title="Technology Distribution"
-                    description="Frequency of technologies used across projects"
-                    cards={cards}
-                    options={technology}
-                    semesters={semester}
-                    cardField="technology"
-                    dataKey="tech"
-                    minTotal={5}
-                    height={500}
-                />
-                <ChartCard
                     title="Category Distribution"
                     description="Frequency of categories across projects"
                     cards={cards}
@@ -37,6 +26,17 @@ export function Visualization() {
                     dataKey="tag"
                     height={500}
                     yAxisStep={10}
+                />
+                <ChartCard
+                    title="Technology Distribution"
+                    description="Frequency of technologies used across projects"
+                    cards={cards}
+                    options={technology}
+                    semesters={semester}
+                    cardField="technology"
+                    dataKey="tech"
+                    minTotal={5}
+                    height={500}
                 />
             </div>
         </main>
